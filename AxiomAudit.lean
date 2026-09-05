@@ -1,0 +1,13 @@
+import CommutatorTheorem
+import CommutatorTheorem.Epsilon.BTRSClosedAssembly
+
+#print axioms CommutatorTheorem.fillmore
+#print axioms CommutatorTheorem.zeroDiag_commutator_bound_diagonal
+#print axioms CommutatorTheorem.zeroDiag_commutator_bound
+#print axioms CommutatorTheorem.theorem_3i
+#print axioms CommutatorTheorem.main_commutator_theorem
+#print axioms CommutatorTheorem.main_commutator_theorem_normal
+#print axioms CommutatorTheorem.bourgain_tzafriri_iterated
+#print axioms CommutatorTheorem.BTRSAnalyticCoreAssembly.bourgainTzafriri_of_rsBaseDeletion
+#print axioms CommutatorTheorem.BTRSClosedAssembly.exactMDPRealRootedness
+#print axioms CommutatorTheorem.BTRSClosedAssembly.bourgainTzafriri_of_rootMotion

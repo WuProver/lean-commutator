@@ -1,0 +1,901 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage{booktabs,tabularx}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!45!black,citecolor=blue!45!black,urlcolor=blue!45!black]{hyperref}
+\hypersetup{pdftitle={A dimension-independent commutator bound via trace-mass splitting},pdfauthor={Anonymous}}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\C}{\mathbb C}
+\newcommand{\R}{\mathbb R}
+\newcommand{\tr}{\operatorname{tr}}
+\newcommand{\Rea}{\operatorname{Re}}
+\newcommand{\Ima}{\operatorname{Im}}
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\codim}{\operatorname{codim}}
+\newcommand{\Span}{\operatorname{span}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\comm}[2]{[#1,#2]}
+\newcommand{\HM}{\mathrm{HM}}
+\numberwithin{equation}{section}
+\setcounter{tocdepth}{1}
+\allowdisplaybreaks[1]
+\title{A dimension-independent commutator bound\\via trace-mass splitting}
+\author{Anonymous}
+\date{September 5, 2026\\\small Anonymous review draft}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+We prove a dimension-independent operator-norm bound for a
+single commutator representing a complex trace-zero matrix. The argument splits
+according to the trace norm of the rotated Hermitian parts. In the high-mass case,
+a numerical-range argument produces an invertible off-diagonal compression of
+proportional rank. A matrix Riccati equation solves an identity-corner core, and
+finitely many similarities absorb the remaining diagonal blocks. In the low-mass
+case, spectral rearrangement, simultaneous hollowisation, and the
+Marcus--Spielman--Srivastava vector theorem give an equal-rank, trace-preserving
+paving with compression norm of order $R^{-1}$. A finite-block Sylvester
+construction then closes a strong induction. All commutator factors act on the
+original space. We give explicit, very large constants and a complete Lean
+formalization of the theorem in the Euclidean operator norm.
+\end{abstract}
+
+\noindent\textbf{Formal verification.}
+The companion Lean project proves Theorem~\ref{thm:main}, including the
+dimension-independent quantifiers and the Euclidean operator norm. The final
+kernel dependency audit returns only Lean's three standard logical axioms;
+see Appendix~\ref{sec:formal}. Published inputs are identified at their points
+of use. This anonymous manuscript has not been submitted to arXiv.
+
+\tableofcontents
+\clearpage
+
+\section{Introduction and main theorem}
+For $A\in M_n(\C)$, write $\norm A$ for its operator norm on Euclidean space and
+$\comm BC=BC-CB$. The quantitative commutator problem asks how economically one
+can represent a trace-zero matrix by a single commutator. Johnson, Ozawa, and
+Schechtman proved that, for each $\varepsilon>0$, a bound
+$K_\varepsilon n^\varepsilon\norm A$ is possible; their first factor can be chosen
+normal \cite{JOS}. Ravichandran and Srivastava obtained the bound
+$300\exp(9\sqrt{\log n})\norm A$ \cite[Corollary 2]{RS}. The theorem considered here
+allows both factors to be arbitrary complex matrices.
+
+\begin{theorem}[Main theorem]\label{thm:main}
+There is an absolute finite constant $K>0$ such that, for every integer $n\ge1$
+and every $A\in M_n(\C)$ with $\tr A=0$, there exist $B,C\in M_n(\C)$ satisfying
+\begin{equation}\label{eq:main}
+ A=\comm BC,\qquad \norm B\norm C\le K\norm A.
+\end{equation}
+The same $K$ works for every $n$.
+\end{theorem}
+
+The construction has two branches. Set
+\begin{equation}\label{eq:globalparameters}
+ s=8192,\qquad R=s^2=2^{26},\qquad b=8sR=2^{42},\qquad t_0=2/R.
+\end{equation}
+A matrix with large trace norm in every rotated Hermitian direction is handled
+directly, with a constant $K_H(t_0)$. Otherwise it admits $R$ trace-zero
+compressions of norm at most $319/R$ times its own norm. Reassembly costs a factor
+$8s$ on the largest child budget, and
+\[
+ 8s\frac{319}{R}=\frac{2552}{8192}<\frac12.
+\]
+This strict inequality is the quantitative reason the induction closes.
+
+\subsection{Conventions and elementary norm estimates}
+All spaces are finite-dimensional complex Hilbert spaces. A compression to a
+subspace $V$ means $P_VA|_V$; no invariance of $V$ is implicit. Rectangular blocks
+carry their operator norms. The trace is unnormalized, and
+$|H|=(H^2)^{1/2}$ for Hermitian $H$. We use
+\[
+ \Rea A=(A+A^*)/2,\qquad \Ima A=(A-A^*)/(2i),
+ \qquad \chi(S)=\norm S\norm{S^{-1}}.
+\]
+Unitary conjugation preserves the norm and trace. A similarity multiplies a
+commutator product budget by at most $\chi(S)^2$.
+
+We shall use a basic block estimate repeatedly. If an operator $T=(T_{ij})$ has
+zero diagonal in an orthogonal decomposition with $k$ blocks and
+$\norm{T_{ij}}\le c$ for $i\ne j$, then
+\begin{equation}\label{eq:offnorm}
+ \norm T\le c(k-1).
+\end{equation}
+Indeed, for $x=(x_j)$, the vector of component norms of $Tx$ is bounded
+coordinatewise by $c(\mathbf1\mathbf1^\top-I)(\norm{x_j})_j$. The scalar matrix
+has Euclidean operator norm $k-1$ when $k\ge2$; the case $k=1$ is immediate.
+Also, the norm of a block diagonal operator is the largest block norm, and the
+norm of a general block matrix is at most the sum of its block norms.
+
+\subsection{External inputs}
+Besides finite-dimensional spectral theory, the Toeplitz--Hausdorff theorem,
+compact convexity, and the Banach fixed-point theorem, the proof uses three
+specific published inputs: the two-dimensional Steinitz rearrangement theorem,
+the simultaneous hollowisation theorem of Damm and Fa\ss bender, and the
+independent-vector theorem of Marcus, Spielman, and Srivastava. Their exact
+forms are stated in Section~\ref{sec:low}.
+The two-commutator decomposition in the next section is elementary and allows
+its first factors to depend on the input matrix.
+
+\section{An elementary two-commutator decomposition}\label{sec:sumtwo}
+\begin{lemma}\label{lem:hermitian}
+Let $m\ge1$. If $G\in M_m(\C)$ is Hermitian and $\tr G=0$, there are a unitary $u$ and a matrix
+$V$ such that $G=\comm uV$ and $\norm V\le\norm G$.
+\end{lemma}
+\begin{proof}
+For $m=1$, take $u=I$ and $V=0$. Otherwise diagonalize $G$ unitarily and denote
+its real eigenvalues by $\lambda_1,\ldots,\lambda_m$. They sum to zero and lie in
+$[-a,a]$, where $a=\norm G$. They can be ordered so that every partial sum
+$s_j=\sum_{i=1}^j\lambda_i$ belongs to $[-a,a]$. To see this, if the current sum
+is positive, choose a remaining negative term; such a term exists because the
+remaining terms have negative sum. If the current sum is negative, choose a
+positive term. At zero choose any remaining term. In each case the new sum
+stays in $[-a,a]$. This constructs the required ordering, including zero terms.
+
+In this ordered eigenbasis, let
+\[
+ u=\sum_{j=1}^{m-1}E_{j,j+1}+E_{m,1},\qquad
+ V=\sum_{j=1}^{m-1}s_jE_{j+1,j}.
+\]
+The first matrix is unitary, $\norm V=\max_{j<m}|s_j|\le a$, and multiplication
+gives
+\[
+ uV=\diag(s_1,\ldots,s_{m-1},0),\qquad
+ Vu=\diag(0,s_1,\ldots,s_{m-1}).
+\]
+Their difference is $\diag(\lambda_1,\ldots,\lambda_m)$, since $s_m=0$.
+Conjugate both factors back to the original basis.
+\end{proof}
+
+\begin{corollary}\label{cor:sumtwo}
+Let $m\ge1$. Every trace-zero $H\in M_m(\C)$ has a representation
+\begin{equation}\label{eq:sumtwo}
+ H=\comm uV+\comm kT,\qquad
+ u,k\text{ unitary},\qquad
+ \max(\norm V,\norm T)\le\norm H.
+\end{equation}
+\end{corollary}
+\begin{proof}
+Write $H=H_1+iH_2$ with $H_1,H_2$ Hermitian, trace zero, and of norm at most
+$\norm H$. Apply Lemma~\ref{lem:hermitian} to obtain
+$H_1=\comm uV$ and $H_2=\comm kW$, and set $T=iW$.
+\end{proof}
+
+\begin{remark}
+The quantifiers in \eqref{eq:sumtwo} are $\forall H\,\exists u,k,V,T$. We do not
+assert that one pair $u,k$ works uniformly for all $H$ in a fixed dimension, or
+that the factors vary continuously with $H$. Neither property is needed below:
+the four factors are chosen once before the Riccati equation is solved.
+\end{remark}
+
+\section{Solving an identity-corner core}\label{sec:riccati}
+For $a\ge1$, define the following scalar quantities:
+\begin{equation}\label{eq:P}
+\begin{aligned}
+ p&=2a,& d_0&=5a,& q&=5a+1,& d_1&=14a+1,\\
+ L_0&=q^2+(2a+1)q+d_1,& L_1&=2q+2a+1,&
+ \lambda&=2\max(L_0,L_1),\\[-2pt]
+ P(a)&=(1+q)^4(\lambda+3)\bigl((\lambda+5)p+2\bigr).
+\end{aligned}
+\end{equation}
+All of these are finite and nondecreasing in $a$.
+
+\begin{proposition}\label{prop:core}
+Let $m\ge1$, $a\ge1$, and
+\[
+ M=\begin{pmatrix}A&I_m\\F&D\end{pmatrix},\qquad
+ \tr M=0,\qquad \norm M\le a.
+\]
+Then $M$ is a single commutator in $M_{2m}(\C)$ with factor norm product at most
+$P(a)$.
+\end{proposition}
+\begin{proof}
+Since $\tr(A+D)=0$, Corollary~\ref{cor:sumtwo} supplies fixed factors such that
+\[
+ A+D=\comm uV+\comm kT,\qquad
+ \norm u=\norm k=1,\qquad \norm V,\norm T\le p.
+\]
+Set
+\begin{equation}\label{eq:defects}
+ U=\lambda I+u,\qquad D_0=\comm uV-A,\qquad
+ D_1=\comm kV+D_0u-k+\comm u{Tk}-F.
+\end{equation}
+The block compression bounds imply $\norm A,\norm D,\norm F\le a$, whence
+\[
+ \norm{D_0}\le2p+a=d_0,\qquad
+ \norm{D_1}\le2p+d_0+1+2p+a=d_1.
+\]
+On the closed ball $\mathcal B=\{Q:\norm{Q-D_0}\le1\}$ consider
+\begin{equation}\label{eq:fixedpoint}
+ \Psi(Q)=D_0+\lambda^{-1}
+       \bigl(Q^2-DQ+Q(A-u)+D_1\bigr).
+\end{equation}
+Every $Q\in\mathcal B$ has norm at most $q$, so
+\[
+ \norm{\Psi(Q)-D_0}\le L_0/\lambda\le\tfrac12.
+\]
+For $Q,Q'\in\mathcal B$, the noncommutative identity
+$Q^2-Q'^2=(Q-Q')Q+Q'(Q-Q')$ gives
+\[
+ \norm{\Psi(Q)-\Psi(Q')}\le
+ \frac{2q+2a+1}{\lambda}\norm{Q-Q'}\le\tfrac12\norm{Q-Q'}.
+\]
+The ball is complete. The Banach fixed-point theorem gives an exact fixed point
+$Q\in\mathcal B$.
+
+Define
+\begin{equation}\label{eq:companions}
+ B_c=\begin{pmatrix}U&I\\k&0\end{pmatrix},\qquad
+ C_c=\begin{pmatrix}
+ V&T\\ A+Q-\comm uV+Tk&V+I-UT
+ \end{pmatrix},\qquad
+ S=\begin{pmatrix}I&0\\Q&I\end{pmatrix}.
+\end{equation}
+To verify the order of all factors, put
+\[
+ F_0=\comm kV+D_0U-k+\comm u{Tk}
+     =\lambda D_0+D_1+F.
+\]
+Direct multiplication, using $A+D=\comm uV+\comm kT$, yields
+\begin{equation}\label{eq:fourblocks}
+\begin{aligned}
+ \comm{B_c}{C_c}
+  &=\begin{pmatrix}A+Q&I\\F_0-QU&D-Q\end{pmatrix},\\
+ S^{-1}MS
+  &=\begin{pmatrix}A+Q&I\\F+DQ-QA-Q^2&D-Q\end{pmatrix}.
+\end{aligned}
+\end{equation}
+The bottom-left blocks agree precisely when
+\[
+ Q^2-DQ+Q(A-U)+F_0-F=0,
+\]
+which is equivalent to \eqref{eq:fixedpoint}. Consequently
+\begin{equation}\label{eq:corecomm}
+ M=\comm{SB_cS^{-1}}{SC_cS^{-1}}.
+\end{equation}
+
+It remains to bound the factors. The block norm sum gives
+$\norm{B_c}\le\lambda+3$. The bottom-left block of $C_c$ equals $Q-D_0+Tk$,
+of norm at most $1+p$, and the bottom-right block has norm at most
+$1+(\lambda+2)p$. Thus
+\[
+ \norm{C_c}\le(\lambda+5)p+2,\qquad
+ \norm S,\norm{S^{-1}}\le1+q.
+\]
+Equation~\eqref{eq:corecomm} now gives the claimed $P(a)$.
+\end{proof}
+
+\section{Absorbing a bounded number of remaining blocks}\label{sec:shears}
+\begin{lemma}[Sylvester equation with separated centers]\label{lem:sylvester}
+Let $U$ and $V$ act on possibly different Hilbert spaces, and let $z,w\in\C$.
+If $\eta=\norm U+\norm V<|z-w|$, then, for every rectangular $Y$, the equation
+\[
+ (z-w)X+UX-XV=Y
+\]
+has a solution with
+$\norm X\le\norm Y/(|z-w|-\eta)$.
+\end{lemma}
+\begin{proof}
+On the space of rectangular operators with its operator norm, the map
+$\mathcal E(X)=UX-XV$ has norm at most $\eta$. The inverse of
+$(z-w)I+\mathcal E$ is the norm-convergent Neumann series
+\[
+ \frac1{z-w}\sum_{j=0}^\infty
+       \left(-\frac{\mathcal E}{z-w}\right)^j,
+\]
+whose norm is at most $(|z-w|-\eta)^{-1}$.
+\end{proof}
+
+\begin{proposition}\label{prop:absorb}
+Let a trace-zero matrix $A$ have an orthogonal block decomposition of sizes
+$r,r,s_3,\ldots,s_b$, where $b\ge2$, $r\ge1$, and $1\le s_j\le r$.
+Suppose $A_{12}=I_r$ and
+$\norm A\le a$, with $a\ge1$. Put
+\begin{equation}\label{eq:iterate}
+ \beta(x)=x(x+2)^2,\qquad f(x)=\beta(x)(1+\beta(x))^2,
+ \qquad \widehat a=f^{\circ(b-2)}(a),\qquad k=b-1.
+\end{equation}
+The function $f$ is nondecreasing and satisfies $f(x)\ge x$ for $x\ge1$.
+Then $A$ has a same-dimensional single-commutator representation of cost at most
+\begin{equation}\label{eq:absorb}
+ (\widehat a/a)^2 k\bigl(4P(\widehat a)+2k\widehat a\bigr).
+\end{equation}
+\end{proposition}
+\begin{proof}
+Write $E_{ij}(X)$ for the operator supported in block $(i,j)$. Fix $j\ge3$ and
+an isometric embedding $J:\C^{s_j}\longrightarrow\C^r$, so that $J^*J=I$.
+First use
+\[
+ X=J-A_{1j},\qquad S_1=I+E_{2j}(X),\qquad A'=S_1^{-1}AS_1.
+\]
+Since $E_{2j}(X)^2=0$, the inverse of $S_1$ is $I-E_{2j}(X)$. The first block
+row is unchanged by the left multiplication, and therefore
+\[
+ A'_{1j}=A_{1j}+A_{12}X=J,\qquad A'_{12}=I.
+\]
+Only diagonal blocks $2$ and $j$ can change. Indeed, in the expansion
+$S_1^{-1}AS_1=A+AE_{2j}(X)-E_{2j}(X)A-E_{2j}(X)AE_{2j}(X)$,
+the last term is supported in block $(2,j)$.
+
+Next set
+\[
+ Y=A'_{jj}J^*,\qquad S_2=I+E_{j1}(Y),\qquad A''=S_2^{-1}A'S_2.
+\]
+Right multiplication changes only the first block column, while left
+multiplication subtracts $Y$ times the first block row from row $j$. Hence
+\begin{equation}\label{eq:shearzero}
+ A''_{jj}=A'_{jj}-YA'_{1j}=0,\qquad A''_{12}=I.
+\end{equation}
+Only diagonal blocks $1$ and $j$ can change in this step. Previously eliminated
+outside diagonal blocks remain zero. Applying these two shears for every
+$j=3,\ldots,b$ eliminates all outside diagonal blocks while preserving the
+identity corner.
+
+For the quantitative bounds, suppose the current norm is at most $x\ge1$.
+Then $\norm X\le x+1$ and
+\[
+ \chi(S_1)\le(x+2)^2,\qquad \norm{A'}\le\beta(x).
+\]
+Since $\norm Y\le\beta(x)$,
+\[
+ \chi(S_2)\le(1+\beta(x))^2,\qquad \norm{A''}\le f(x).
+\]
+The product $S$ of all these shears consequently satisfies
+\begin{equation}\label{eq:telescope}
+ \widehat A=S^{-1}AS,\qquad
+ \norm{\widehat A}\le\widehat a,\qquad
+ \chi(S)\le\prod_{j=0}^{b-3}
+ \frac{f^{\circ(j+1)}(a)}{f^{\circ j}(a)}=\widehat a/a.
+\end{equation}
+Empty products have value one when $b=2$.
+
+Merge the first two blocks into one core $M$. Since every other diagonal block
+is zero and similarity preserves trace, $\tr M=0$. Proposition~\ref{prop:core}
+gives $M=\comm{B_0}{C_0}$ with product at most $P(\widehat a)$. Its identity
+corner ensures $M\ne0$. Rescale the two factors inversely to arrange
+\[
+ \norm{B_0}=1/4,\qquad \norm{C_0}\le4P(\widehat a).
+\]
+There are now $k$ blocks. Let
+\[
+ \widehat B=\diag(B_0,I,2I,\ldots,(k-1)I),\qquad
+ \widehat C_{11}=C_0,\quad \widehat C_{jj}=0\ (j>1).
+\]
+For distinct blocks solve
+$\widehat B_{ii}\widehat C_{ij}-\widehat C_{ij}\widehat B_{jj}=\widehat A_{ij}$
+using Lemma~\ref{lem:sylvester}. The centers are distinct integers and the only
+non-scalar perturbation has norm $1/4$. Thus
+$\norm{\widehat C_{ij}}\le2\widehat a$ and
+\[
+ \norm{\widehat B}\le k,\qquad
+ \norm{\widehat C}\le4P(\widehat a)+2(k-1)\widehat a
+\]
+by \eqref{eq:offnorm}. These choices give
+$\comm{\widehat B}{\widehat C}=\widehat A$. Conjugating back and applying
+\eqref{eq:telescope} proves \eqref{eq:absorb}.
+\end{proof}
+
+\section{The high trace-mass branch}\label{sec:high}
+For $0<t\le1$, say that $A\in M_n(\C)$ satisfies $\HM(t)$ if
+\begin{equation}\label{eq:HM}
+ \tr|\Rea(e^{i\theta}A)|\ge tn\norm A\quad\text{for every }\theta\in\R.
+\end{equation}
+
+\begin{lemma}[A disk in compressed numerical ranges]\label{lem:disk}
+Suppose $\tr A=0$, $\norm A=1$, and $A$ satisfies $\HM(t)$. If $W$ has
+codimension $d\le tn/4$, then the numerical range of $T=P_WA|_W$ contains the
+closed disk of radius $\rho=t/4$ centered at zero.
+\end{lemma}
+\begin{proof}
+For every $\theta$, the Hermitian matrix $H_\theta=\Rea(e^{i\theta}A)$ has norm
+at most one and trace zero. Its positive eigenvalues therefore have sum at
+least $tn/2$. Write the eigenvalues in decreasing order. Since $d<tn/2$, at
+least $d+1$ eigenvalues are positive; moreover
+\[
+ tn/2\le d+(n-d)\lambda_{d+1}(H_\theta).
+\]
+It follows that
+\[
+ \lambda_{d+1}(H_\theta)\ge
+ \frac{tn/2-d}{n-d}\ge t/4.
+\]
+The min--max principle yields
+$\lambda_{\max}(P_WH_\theta|_W)\ge t/4$. The numerical range is compact and
+convex by the Toeplitz--Hausdorff theorem. Its support in each direction is
+this largest eigenvalue, so it contains the stated disk. Equivalently, use the
+supporting-half-plane description of the ordinary numerical range; see
+\cite[Section 2]{LiSze}.
+\end{proof}
+
+\begin{lemma}[A neutral vector with a large image]\label{lem:neutral}
+If the numerical range of $T$ contains both $\rho$ and $-\rho$, where $\rho>0$,
+then there is a unit vector $v$ such that
+\begin{equation}\label{eq:neutral}
+ v^*Tv=0,\qquad \norm{Tv}\ge\rho.
+\end{equation}
+\end{lemma}
+\begin{proof}
+Choose unit vectors $x_+,x_-$ with expectations $\rho,-\rho$. The density matrix
+$D_*=(x_+x_+^*+x_-x_-^*)/2$ has trace one, satisfies $\tr(TD_*)=0$, and obeys
+$\tr(T^*TD_*)\ge\rho^2$ by Cauchy--Schwarz.
+
+On the compact convex set
+\[
+ \mathcal D=\{D\ge0:\tr D=1,\ \tr((\Rea T)D)=0,
+                  \ \tr((\Ima T)D)=0\},
+\]
+maximize the real linear functional $\tr(T^*TD)$. The set of maximizers is a
+nonempty compact face, so it has an extreme point that is also extreme in
+$\mathcal D$. Every extreme point of $\mathcal D$ has rank one. In fact, if an
+extreme $D$ had rank $s\ge2$, the Hermitian operators on its support would form
+a real vector space of dimension $s^2\ge4$. The three displayed real linear
+constraints admit a nonzero supported Hermitian perturbation $E$ in their
+common kernel. Because $D$ is strictly positive on its support, both
+$D+\eta E$ and $D-\eta E$ belong to $\mathcal D$ for sufficiently small
+$\eta>0$, a contradiction. The maximizing extreme point is thus $vv^*$, and
+its objective value is at least that of $D_*$.
+\end{proof}
+
+\begin{proposition}\label{prop:high}
+Every trace-zero matrix satisfying $\HM(t)$ has a same-dimensional single
+commutator representation with factor product at most $K_H(t)\norm A$, where
+\begin{equation}\label{eq:KH}
+\begin{gathered}
+ L=\lceil16/t\rceil,\qquad a_*=f^{\circ L}(4/t),\qquad k_*=L+1,\\
+ K_H(t)=a_*^2k_*\bigl(4P(a_*)+2k_*a_*\bigr)<\infty.
+\end{gathered}
+\end{equation}
+\end{proposition}
+\begin{proof}
+The zero matrix is immediate. Normalize $\norm A=1$, and set
+$\rho=t/4$ and $r=\lceil tn/16\rceil$. We construct orthonormal
+$v_1,\ldots,v_r$ such that all $v_i^*Av_j$ vanish and the vectors $Av_i$ are
+pairwise orthogonal with norms at least $\rho$.
+
+After selecting $v_1,\ldots,v_j$, work in
+\[
+ W_j=\Span\{v_i,Av_i,A^*v_i,A^*Av_i:1\le i\le j\}^{\perp}.
+\]
+For $0\le j\le r-1$ we have
+$\codim W_j\le4j<tn/4$. Lemmas~\ref{lem:disk} and \ref{lem:neutral}, applied
+to $P_{W_j}A|_{W_j}$, give a unit $v_{j+1}\in W_j$ with
+\[
+ v_{j+1}^*Av_{j+1}=0,\qquad
+ \norm{Av_{j+1}}\ge\norm{P_{W_j}Av_{j+1}}\ge\rho.
+\]
+Orthogonality to $v_i$ preserves orthonormality; orthogonality to $Av_i$ and
+$A^*v_i$ makes both mixed matrix coefficients vanish; orthogonality to
+$A^*Av_i$ makes $Av_{j+1}$ perpendicular to $Av_i$. This proves the induction.
+
+Let $V=\Span\{v_i\}$ and $W=A(V)$. The construction implies $V\perp W$ and
+$\dim V=\dim W=r$; in particular $2r\le n$. In the ordered bases
+$w_i=Av_i/\norm{Av_i}$ of $W$, followed by $v_i$ of $V$, the $(1,2)$ block of
+$A$ is
+\[
+ D=\diag(\norm{Av_1},\ldots,\norm{Av_r}),\qquad \rho I\le D\le I.
+\]
+The similarity $S_0=\diag(I_r,D^{-1},I_{\rm rest})$ has condition number at
+most $4/t$. In $S_0^{-1}AS_0$, the $(1,2)$ block equals $I_r$ and the norm is
+at most $a_0=4/t$.
+
+Partition the remaining space into blocks of positive size at most $r$. Since
+$r\ge tn/16$, the number of outside blocks is at most $L=\lceil16/t\rceil$.
+Apply Proposition~\ref{prop:absorb}. The iterated norm bound is at most $a_*$,
+and after including $S_0$ the total similarity condition number is at most
+$(4/t)(a_*/a_0)=a_*$. There are at most $k_*$ blocks after merging the core.
+Its proof gives precisely the bound \eqref{eq:KH}. Finally undo the scalar
+normalization.
+\end{proof}
+
+\section{The low trace-mass branch}\label{sec:low}
+The key point of this branch is a complete paving whose individual traces are
+exactly zero and whose ranks are equal.
+
+\subsection{Rearrangement, hollowisation, and vector selection}
+We use the following form of the Steinitz theorem: if $u_1,\ldots,u_N\in\R^2$
+sum to zero and $\norm{u_i}_\infty\le1$, they can be reordered so that every
+partial sum has $\ell_\infty$ norm at most $2$. This is the $d=2$ instance of
+\cite[Theorem 1.2]{Barany}.
+
+Damm and Fa\ss bender prove that three trace-zero Hermitian matrices can be
+simultaneously conjugated by a unitary so that the first two have zero diagonal
+and the third has at most two nonzero diagonal entries
+\cite[Proposition 13(b)]{DF}. The last two entries need not vanish.
+
+\begin{lemma}\label{lem:flatbasis}
+Let $H,G$ be Hermitian operators on $\C^R$, with $R\ge2$, and let $E\ge0$.
+There is an orthonormal basis $v_1,\ldots,v_R$ such that
+\begin{equation}\label{eq:flatbasis}
+ v_a^*Hv_a=\frac{\tr H}{R},\quad
+ v_a^*Gv_a=\frac{\tr G}{R},\quad
+ v_a^*Ev_a\le\frac{2\tr E}{R}\quad(1\le a\le R).
+\end{equation}
+\end{lemma}
+\begin{proof}
+Subtract the scalar mean from each of the three matrices and apply the cited
+simultaneous hollowisation theorem. In the resulting basis the first two means
+are attained at every vector. All but possibly two of the diagonal entries of
+$E$ equal $\mu=\tr E/R$. The remaining two entries have sum $2\mu$ and are
+nonnegative; each is therefore at most $2\mu$. This argument also covers
+$R=2$.
+\end{proof}
+
+We also use the following theorem of Marcus, Spielman, and Srivastava
+\cite[Theorem 1.4]{MSS}. If independent, finitely supported random vectors $x_i$
+in a complex Hilbert space satisfy
+\begin{equation}\label{eq:MSSassumptions}
+ \sum_i\mathbb E x_ix_i^*=I,\qquad
+ \mathbb E\norm{x_i}^2\le\varepsilon,
+\end{equation}
+where $\varepsilon>0$, some outcome satisfies
+\begin{equation}\label{eq:MSSconclusion}
+ \norm{\sum_i x_ix_i^*}\le(1+\sqrt\varepsilon)^2.
+\end{equation}
+The same conclusion holds if the covariance sum is merely at most $I$.
+Indeed, spectrally decompose its positive semidefinite deficit and split each
+eigenvalue into finitely many pieces at most $\varepsilon$. Add the corresponding
+deterministic vectors, apply the theorem, and then discard their positive
+semidefinite contributions. No upper restriction on $\varepsilon$ is required.
+
+\subsection{Paving with exact quotas in every group}
+\begin{lemma}\label{lem:transversals}
+Let $D\ge0$ and let $h$ be a nonnegative integer. Suppose vectors are indexed
+by finitely many groups of size $R=2^h$ and satisfy
+\[
+ \sum_i f_if_i^*\le I,\qquad \norm{f_i}^2\le D/R.
+\]
+Their indices can be partitioned into $R$ transversals, each containing exactly
+one index from each group, such that every transversal $J$ satisfies
+\begin{equation}\label{eq:transversalbound}
+ \norm{\sum_{i\in J}f_if_i^*}\le\frac{C_D}{R},\qquad
+ C_D=\bigl[1+2(\sqrt2+1)\sqrt D\bigr]^2.
+\end{equation}
+\end{lemma}
+\begin{proof}
+If $D=0$ all the vectors vanish, so any transversal partition works. Assume
+$D>0$ and write $\delta=D/R$. Consider a node containing equally many indices
+from each group, an even number per group, whose frame operator is at most
+$LI$. Pair the indices within each group. For a pair of vectors $a,b$, choose
+independently and uniformly one of the four vectors
+\begin{equation}\label{eq:fourchoices}
+ \sqrt2(a\oplus b),\quad \sqrt2(a\oplus(-b)),\quad
+ \sqrt2(b\oplus a),\quad \sqrt2(b\oplus(-a)).
+\end{equation}
+For the random vector $w$ so obtained, the off-diagonal expected covariance
+blocks cancel. On summing over the pairs,
+\[
+ \sum\mathbb E ww^*
+   =\diag\left(\sum_i f_if_i^*,\sum_i f_if_i^*\right)\le LI,
+ \qquad \mathbb E\norm w^2\le4\delta.
+\]
+When $L>0$, apply \eqref{eq:MSSconclusion} to $w/\sqrt L$ with
+$\varepsilon=4\delta/L$. Some outcome has
+\[
+ \norm{\sum ww^*}\le(\sqrt L+2\sqrt\delta)^2.
+\]
+Its two diagonal blocks equal twice the frame operators of two complementary
+halves, each containing one member of each pair. Consequently both children
+have frame operator bounded by
+\begin{equation}\label{eq:binaryrecurrence}
+ L_{\rm next}I,\qquad L_{\rm next}=\tfrac12(\sqrt L+2\sqrt\delta)^2.
+\end{equation}
+If $L=0$, the vectors at the node are zero and can be divided arbitrarily.
+
+Repeat this operation at every node for $h$ levels, starting with $L_0=1$.
+At depth $j$ every node contains $R/2^j$ indices from each original group.
+Thus the leaves are disjoint transversals covering all indices. Taking square
+roots in \eqref{eq:binaryrecurrence} and summing the geometric progression gives
+\[
+ \sqrt{L_h}
+ \le 2^{-h/2}+\sqrt{2\delta}\sum_{j=0}^{h-1}2^{-j/2}
+ =R^{-1/2}+2(\sqrt2+1)\sqrt{D/R}(1-R^{-1/2}),
+\]
+which implies \eqref{eq:transversalbound}. The construction partitions indices,
+so repeated or zero vector values cause no ambiguity.
+\end{proof}
+
+\subsection{Trace-preserving small compressions}
+\begin{proposition}\label{prop:low}
+Let $h\ge1$ and $k\ge1$ be integers, set $R=2^h$ and $n=kR$, and suppose
+$\tr A=0$ and, for some
+$\theta\in\R$,
+\begin{equation}\label{eq:lowmass}
+ \tr|\Rea(e^{i\theta}A)|\le2k\norm A.
+\end{equation}
+There are $R$ mutually orthogonal rank-$k$ projections $P_\ell$ summing to $I$
+such that
+\begin{equation}\label{eq:lowconclusion}
+ \tr(P_\ell AP_\ell)=0,\qquad
+ \norm{P_\ell AP_\ell}\le\frac{319}{R}\norm A.
+\end{equation}
+\end{proposition}
+\begin{proof}
+The case $A=0$ is immediate. Normalize and rotate so that
+$\norm A=1$ and $A=H+iG$, where $H,G$ are trace-zero Hermitian matrices and
+\[
+ E=|H|\le I,\qquad \tr E\le2k.
+\]
+Choose an orthonormal eigenbasis $e_i$ of $G$, with eigenvalues $\lambda_i$.
+Set
+\[
+ d_i=e_i^*Ee_i,\qquad \mu=\frac{\tr E}{kR}.
+\]
+Since $|\lambda_i|\le1$, $0\le d_i,\mu\le1$, the real vectors
+$(\lambda_i,d_i-\mu)$ sum to zero and have $\ell_\infty$ norm at most one.
+Apply Steinitz rearrangement and divide the reordered list into $k$ consecutive
+groups of size $R$. Each group sum is a difference of two partial sums. The
+corresponding orthogonal spectral subspaces $V_j$ therefore satisfy
+\begin{equation}\label{eq:grouptraces}
+ |\tr G_j|\le4,\qquad \tr E_j\le R\mu+4\le6,
+\end{equation}
+where subscripts denote compression to $V_j$. The spaces $V_j$ reduce $G$.
+
+Apply Lemma~\ref{lem:flatbasis} to $H_j,G_j,E_j$ in each $V_j$. This gives an
+orthonormal basis $v_{j,a}$ with
+\begin{equation}\label{eq:groupbasis}
+ v_{j,a}^*Hv_{j,a}=\tr H_j/R,\qquad
+ v_{j,a}^*Gv_{j,a}=\tr G_j/R,\qquad
+ v_{j,a}^*Ev_{j,a}\le12/R.
+\end{equation}
+For $f_{j,a}=E^{1/2}v_{j,a}$ we have
+\[
+ \sum_{j,a}f_{j,a}f_{j,a}^*=E\le I,\qquad \norm{f_{j,a}}^2\le12/R.
+\]
+Lemma~\ref{lem:transversals} with $D=12$ gives $R$ transversals. Let $P_\ell$
+project onto the span of the original basis vectors in transversal $\ell$.
+These projections are orthogonal, sum to $I$, and have rank $k$.
+
+Equation~\eqref{eq:groupbasis} implies that the trace of each compression of
+$A$ is
+\[
+ \frac1R\sum_j(\tr H_j+i\tr G_j)=\frac{\tr A}{R}=0.
+\]
+Since distinct $V_j$ reduce $G$, the compression $P_\ell GP_\ell$ is diagonal
+in its selected basis, and \eqref{eq:grouptraces} gives
+$\norm{P_\ell GP_\ell}\le4/R$. Furthermore
+\[
+ \norm{P_\ell EP_\ell}
+ =\norm{E^{1/2}P_\ell E^{1/2}}
+ =\norm{\sum_{(j,a)\in\ell}f_{j,a}f_{j,a}^*}\le C_{12}/R.
+\]
+The first equality follows from $\norm{X^*X}=\norm{XX^*}$ for
+$X=E^{1/2}P_\ell$. Since $-E\le H\le E$, order and the Hermitian norm formula
+imply $\norm{P_\ell HP_\ell}\le C_{12}/R$. Thus
+\[
+ \norm{P_\ell AP_\ell}\le(C_{12}+4)/R<319/R.
+\]
+For completeness, $\sqrt2<1.415$ and $\sqrt{12}<3.465$ give
+$1+2(\sqrt2+1)\sqrt{12}<17.736$, whose square is less than $315$.
+Undo the rotation and normalization to obtain \eqref{eq:lowconclusion}.
+\end{proof}
+
+\section{Finite-block assembly and the global induction}\label{sec:assembly}
+\begin{lemma}\label{lem:assembly}
+With $s,R,b$ as in \eqref{eq:globalparameters}, suppose $A$ is decomposed into
+$1\le r\le2R-1$ nonempty orthogonal blocks and every diagonal block has a
+representation $A_{ii}=\comm{U_i}{V_i}$ of cost
+$p_i=\norm{U_i}\norm{V_i}$. Then $A=\comm BC$ in its original dimension, with
+\begin{equation}\label{eq:assembly}
+ \norm B\norm C\le8s\max_i p_i+b\norm A.
+\end{equation}
+\end{lemma}
+\begin{proof}
+For a nonzero diagonal block, inversely rescale its two factors to make
+$\norm{U_i}=1/4$ and $\norm{V_i}=4p_i$. For a zero block use two zero factors;
+this only decreases its cost. Choose distinct centers $z_i$ from the square grid
+\[
+ \{x+iy:x,y\in\{-s+\tfrac12,-s+\tfrac32,\ldots,s-\tfrac12\}\}.
+\]
+There are $4s^2=4R$ centers, with pairwise distance at least one. Define
+\[
+ B=\diag(z_iI+U_i),\qquad C_{ii}=V_i.
+\]
+Since $|z_i|\le\sqrt2(s-1/2)$, we have $\norm B<2s$. For each $i\ne j$ solve
+\[
+ (z_i-z_j)C_{ij}+U_iC_{ij}-C_{ij}U_j=A_{ij}.
+\]
+Lemma~\ref{lem:sylvester} applies with perturbation norm at most $1/2$, giving
+$\norm{C_{ij}}\le2\norm{A_{ij}}\le2\norm A$. The block equations give
+$\comm BC=A$, and \eqref{eq:offnorm} implies
+\[
+ \norm C\le4\max_i p_i+2(r-1)\norm A.
+\]
+Multiply by $2s$ and use $r-1\le2R$ to obtain \eqref{eq:assembly}.
+No normality assumption on any $U_i$ is used.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+Let $K_H=K_H(t_0)$ be defined by \eqref{eq:KH}, and set
+\begin{equation}\label{eq:K}
+ K=\max\{8sK_H+b,\,2b\}
+  =\max\{65536K_H+2^{42},\,2^{43}\}.
+\end{equation}
+This is a finite absolute constant. We argue by strong induction on $n$.
+The zero matrix has the required representation, which also covers dimension
+one. For a nonzero $A$, put $a=\norm A>0$.
+
+First choose an orthonormal basis in which $A$ has zero diagonal. Here is a
+short justification. The average of the diagonal expectations in any
+orthonormal basis is zero. By convexity of the numerical range, zero is a
+vector expectation. Choose a unit vector with this expectation; the
+compression to its orthogonal complement still has trace zero. Repeat in the
+smaller dimension. This also follows from \cite[Corollary 14]{DF}.
+
+If $n<R$, use the $n$ zero singleton diagonal blocks in
+Lemma~\ref{lem:assembly}; the cost is at most $ba\le Ka$.
+If $n\ge R$, write
+\[
+ n=kR+q,\qquad k\ge1,\quad0\le q<R.
+\]
+Retain $N=kR$ vectors of the zero-diagonal basis and write $A_0$ for the
+compression to their span. The other $q$ vectors are retained as zero
+singleton diagonal blocks. Then $\tr A_0=0$ and $\norm{A_0}\le a$. All
+off-diagonal interactions remain part of $A$ and will be handled by the
+assembly lemma.
+
+If $A_0=0$, every diagonal block in this decomposition is zero, and the
+assembly lemma applies directly. Otherwise there are two cases.
+
+If $A_0$ satisfies $\HM(t_0)$, Proposition~\ref{prop:high} gives a
+representation of $A_0$ of cost at most $K_H\norm{A_0}\le K_Ha$. Assembling
+this block with the $q$ zero singletons gives cost at most
+$(8sK_H+b)a\le Ka$. The condition is tested with $A_0$'s own norm. When
+$q=0$, this step is still a direct application of the high-mass proposition;
+it does not appeal to induction in dimension $n$.
+
+If $A_0$ fails $\HM(t_0)$, some $\theta$ satisfies
+\[
+ \tr|\Rea(e^{i\theta}A_0)|
+ <t_0N\norm{A_0}=2k\norm{A_0}.
+\]
+Proposition~\ref{prop:low} supplies $R$ trace-zero blocks $T_i$ of dimension
+$k<n$, with $\norm{T_i}\le(319/R)a$. Strong induction gives commutator
+representations of these blocks of cost at most $(319K/R)a$. Together with
+the $q$ zero singletons there are $R+q\le2R-1$ blocks. Applying
+Lemma~\ref{lem:assembly} gives
+\[
+ \norm B\norm C
+ \le\left(\frac{8s\cdot319}{R}K+b\right)a
+ =\left(\frac{2552}{8192}K+b\right)a
+ \le Ka,
+\]
+because $2552/8192<1/2$ and $K\ge2b$. This closes the induction.
+\end{proof}
+
+\begin{remark}[Size and scope of the bound]
+The iterate in \eqref{eq:KH} makes \eqref{eq:K} extremely large. Its role is to
+establish a finite bound, not to optimize it. The number of shear operations
+depends only on the fixed $t_0$, not on $n$. The final factors need not be
+normal. Auxiliary doubled spaces occur only in the vector-selection argument;
+the commutator representation itself always acts on the original space.
+\end{remark}
+
+\appendix
+\section{Complete Lean formalization}\label{sec:formal}
+The companion project contains a complete proof of the main theorem. Its
+principal declaration, in \texttt{NoEpsilon/Main.lean}, is
+\begin{center}\texttt{NoEpsilon.uniformCommutatorBound},\end{center}
+which proves the proposition
+\texttt{NoEpsilon.UniformCommutatorBound}. The declaration quantifies over one
+positive constant $K$, then over every dimension $n$ and every trace-zero
+complex $n\times n$ matrix. Its factors are matrices of that same dimension.
+The Lean theorem also includes the empty dimension.
+
+The scoped matrix norm is the Euclidean operator norm. A second audited
+statement spells out the norm as the norm of the continuous linear operator
+on Euclidean space:
+\begin{center}\small
+\texttt{NoEpsilon.uniformCommutatorBound\_euclideanOperatorNorm}.
+\end{center}
+Thus the formal result concerns operator norms, rather than entrywise or
+Frobenius norms.
+
+The checked environment is Lean \texttt{4.30.0-rc1}, with mathlib commit
+\begin{center}\small\texttt{0c154d67103f74be3a0f2c509f72ccbf5be9f2a7}.\end{center}
+The complete dependency chain has proof terms, including the following steps:
+\begin{itemize}
+\item The adaptive two-commutator decomposition, the Riccati fixed point,
+      and the identity-corner estimate $P(a)$.
+\item Compressed numerical ranges, neutral vectors with large images,
+      the proportional-rank bridge, and its coordinate completion.
+\item Finite rectangular shear elimination with its trace and condition-number
+      bounds, followed by the complete high-mass commutator construction.
+\item Two-dimensional Steinitz rearrangement and exact grouping, together
+      with the three-Hermitian diagonal-control theorem.
+\item Finite complex-vector MSS selection: the mixed characteristic
+      polynomial identity, real stability, quantitative barrier estimates,
+      interlacing selection, covariance-deficit padding, and scaling.
+\item The paired selection theorem, the entire balanced quota tree, and
+      the trace-zero low-mass paving with bound $319/R$.
+\item Rectangular Sylvester inversion, finite-block assembly with arbitrary
+      first factors, all remainder coordinates, and the final dimension induction.
+\end{itemize}
+In particular, the Steinitz, hollowisation, and MSS inputs cited in the
+mathematical exposition are proved within the formal dependency chain; they
+are not supplied as additional mathematical axioms. Intermediate reductions
+with explicitly supplied branch hypotheses are retained as reusable lemmas,
+but those hypotheses are discharged before the principal theorem is invoked.
+
+The project build and kernel dependency audit completed successfully. The
+principal theorem and its explicit Euclidean-operator-norm version depend only
+on
+\begin{center}\texttt{propext},\quad\texttt{Classical.choice},\quad
+\texttt{Quot.sound}.\end{center}
+These are Lean's standard logical axioms. The audited dependency closures
+contain no \texttt{sorryAx} or additional mathematical axiom. The source project
+records the exact commands, audit output, and source hashes in its
+\texttt{verification/} directory. The formalization uses some alternate
+proofs of intermediate results; the kernel checks its precise theorem
+statements and proof terms, while this manuscript supplies the informal
+mathematical exposition.
+
+\section{Points requiring particular care in review}
+The logical dependencies in the proof are
+\[
+\begin{gathered}
+ \text{Hermitian decomposition}\ \longrightarrow\ \text{identity-corner core},\\
+ \text{compressed numerical ranges}\ \longrightarrow\
+ \text{proportional bridge}\ \longrightarrow\ \text{high-mass bound},\\
+ \text{Steinitz + hollowisation + paired vector selection}
+ \ \longrightarrow\ \text{low-mass paving},\\
+ \text{high-mass bound + low-mass paving + Sylvester assembly}
+ \ \longrightarrow\ \text{strong induction}.
+\end{gathered}
+\]
+The rank-one argument in Lemma~\ref{lem:neutral} has exactly three real affine
+constraints. The orthogonal-vector construction uses all four families
+$v_i,Av_i,A^*v_i,A^*Av_i$. Lemma~\ref{lem:flatbasis} does not assert simultaneous
+constant diagonals for all three Hermitian matrices. The binary selection in
+Lemma~\ref{lem:transversals} controls both complementary children and partitions
+indices, not merely vector values. Finally, the induction checks the retained
+compression against its own norm and accounts for all remainder blocks.
+
+\begin{thebibliography}{9}
+\bibitem{Barany}
+I.~B\'ar\'any,
+\emph{A matrix version of the Steinitz lemma},
+arXiv:2308.10102v2 (2024).
+\url{https://arxiv.org/abs/2308.10102v2}.
+
+\bibitem{DF}
+T.~Damm and H.~Fa\ss bender,
+\emph{Simultaneous hollowisation, joint numerical range, and stabilization by noise},
+arXiv:1910.08813v2 (2020).
+\url{https://arxiv.org/abs/1910.08813v2}.
+
+\bibitem{JOS}
+W.~B.~Johnson, N.~Ozawa, and G.~Schechtman,
+\emph{A quantitative version of the commutator theorem for zero trace matrices},
+arXiv:1202.0986 (2012).
+\url{https://arxiv.org/abs/1202.0986}.
+
+\bibitem{LiSze}
+C.-K.~Li and N.-S.~Sze,
+\emph{Canonical forms, higher rank numerical ranges, totally isotropic subspaces,
+and matrix equations},
+arXiv:0706.1536 (2007).
+\url{https://arxiv.org/abs/0706.1536}.
+
+\bibitem{MSS}
+A.~W.~Marcus, D.~A.~Spielman, and N.~Srivastava,
+\emph{Interlacing families II: Mixed characteristic polynomials and the
+Kadison--Singer problem},
+arXiv:1306.3969v4 (2014).
+\url{https://arxiv.org/abs/1306.3969v4}.
+
+\bibitem{RS}
+M.~Ravichandran and N.~Srivastava,
+\emph{Asymptotically optimal multi-paving},
+arXiv:1706.03737v2 (2017).
+\url{https://arxiv.org/abs/1706.03737v2}.
+\end{thebibliography}
+\end{document}

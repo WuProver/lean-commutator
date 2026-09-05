@@ -1,0 +1,36 @@
+{
+  "verified_at_utc": "2026-09-05T10:38:19.613837+00:00",
+  "desktop_directory": "/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon",
+  "cold_project_build_passed": true,
+  "default_build_targets": [
+    "CommutatorTheorem",
+    "NoEpsilon"
+  ],
+  "dependency_cache": "Independent local files; no project build cache was copied.",
+  "unchanged_lean_source_files": 142,
+  "checked_declarations": 91,
+  "main_declaration": {
+    "declaration": "NoEpsilon.uniformCommutatorBound",
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ]
+  },
+  "lean_toolchain": "leanprover/lean4:v4.30.0-rc1",
+  "import_paths": {
+    "LEAN_PATH": "/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/Cli/.lake/build/lib/lean:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/batteries/.lake/build/lib/lean:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/Qq/.lake/build/lib/lean:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/aesop/.lake/build/lib/lean:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/importGraph/.lake/build/lib/lean:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/plausible/.lake/build/lib/lean:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/mathlib/.lake/build/lib/lean:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/build/lib/lean:/Users/tsuki/.elan/toolchains/leanprover--lean4---v4.30.0-rc1/lib/lean",
+    "LEAN_SRC_PATH": "/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/Cli:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/Cli:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/batteries:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/batteries:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/Qq:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/Qq:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/aesop:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/aesop:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/proofwidgets:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/proofwidgets:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/proofwidgets:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/importGraph:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/importGraph:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/LeanSearchClient:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/LeanSearchClient:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/plausible:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/plausible:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/mathlib:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/mathlib:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/mathlib:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/mathlib:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/mathlib:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon/.lake/packages/mathlib:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon:/Users/tsuki/Desktop/CommutatorTheorem_NoEpsilon:/Users/tsuki/.elan/toolchains/leanprover--lean4---v4.30.0-rc1/src/lean/lake"
+  },
+  "internal_dependency_symlinks": [
+    ".lake/packages/mathlib/scripts/bench/size/run.py",
+    ".lake/packages/mathlib/scripts/bench/build/fake-root/bin/lean.py",
+    ".lake/packages/batteries/docs/README.md"
+  ],
+  "log_sha256": {
+    "desktop_build.log": "9c457fc926d77cbc2594ab4553c3bab8c3067bd887267981ae79bc5aafcad2aa",
+    "desktop_verify.log": "e79652642e748416d353fdd9043bc9154c042ca7dc2dd70c8d1228d41489eed3",
+    "axioms.log": "098825277a404aeda5efec0ada12b08d6cea3779d58b460498bc3a5465318abb",
+    "main_statement.log": "97ed2e0f88a8cfe7977a9ae478856fc242b9fc603dd71a0374b1ce7560ab9094"
+  }
+}

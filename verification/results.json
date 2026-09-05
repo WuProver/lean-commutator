@@ -1,0 +1,844 @@
+{
+  "verified_at_utc": "2026-09-05T10:37:20.745734+00:00",
+  "scope": "Complete NoEpsilon theorem, expanded original statement, Euclidean norm, and components",
+  "full_UniformCommutatorBound_proved": true,
+  "main_declaration": "NoEpsilon.uniformCommutatorBound",
+  "lean_toolchain": "leanprover/lean4:v4.30.0-rc1",
+  "commands": [
+    {
+      "command": [
+        "/Users/tsuki/.elan/toolchains/leanprover--lean4---v4.30.0-rc1/bin/lake",
+        "build",
+        "NoEpsilon"
+      ],
+      "exit_code": 0,
+      "log": "build.log"
+    },
+    {
+      "command": [
+        "/Users/tsuki/.elan/toolchains/leanprover--lean4---v4.30.0-rc1/bin/lake",
+        "env",
+        "lean",
+        "NoEpsilon/AxiomAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "axioms.log"
+    },
+    {
+      "command": [
+        "/Users/tsuki/.elan/toolchains/leanprover--lean4---v4.30.0-rc1/bin/lake",
+        "env",
+        "lean",
+        "NoEpsilon/FinalVerification.lean"
+      ],
+      "exit_code": 0,
+      "log": "main_statement.log"
+    }
+  ],
+  "checked_declarations": [
+    {
+      "declaration": "NoEpsilon.lowerShear_mul_inverse",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.identityCorner_shear",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.companion_commutator_of_riccati",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.identityCorner_eq_commutator_of_fixedPoint",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.Shear.two_step_elimination",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.Shear.two_step_elimination_with_remainder",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.Shear.conjugate_entry_of_zero_row_column",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.norm_quadratic_le",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.norm_quadratic_sub_le",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.exists_riccati_fixedPoint",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.exists_riccati_fixedPoint_large_scale",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.exists_riccati_fixedPoint_explicit",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.exists_identityCorner_commutator",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.norm_ringCommutator_le",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.norm_conjugation_product_le",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.norm_fromBlocks_le",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.norm_lowerShear_le",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.norm_lowerShearInverse_le",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.norm_riccatiConstant_le",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.norm_identityCorner_factors_le",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.exists_identityCorner_commutator_bounded",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.exists_hermitian_split",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.exists_zero_sum_real_ordering",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.diagonal_difference_is_bounded_commutator",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.real_diagonal_bounded_commutator",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.hermitianUnitaryCommutatorBound",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.adaptiveTwoCommutatorBound",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.identityCorner_bounded_from_trace",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.identityCorner_bounded_from_whole_norm",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.exists_scalar_add_lipschitz_solution",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.exists_sylvester_solution_scalar_centers",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.exists_assembly_centers",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.submatrix_operator_norm_le",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.BlockAssembly.norm_blockDiagonal_le",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.BlockAssembly.norm_le_card_mul_block_bound",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.BlockAssembly.normalize_factors",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.BlockAssembly.assemble_normalized",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.BlockAssembly.assemble_fixed_constants",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.BlockAssembly.assemble_reindexed",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.MSSSelection.paired_covariance",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.MSSSelection.paired_covariance_deficit",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.MSSSelection.paired_children_bound_of_outcome",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.MSSSelection.paired_index_partition",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.MSSSelection.paired_vectors_independent",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.MSSSelection.paired_covariance_expectation",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.MSSSelection.paired_energy_expectation_le",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.exists_neutral_large_image_of_opposite_rayleigh",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.exists_unit_neutral_large_image_of_numericalRange",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.convex_unitNumericalRange",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.closedBall_subset_unitNumericalRange_of_support",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.highMass_compression_contains_disk_of_card",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.highMass_range_has_large_neutral",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.Steinitz.exists_complex_permutation",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.MixedCharacteristic.det_add_vecMulVec",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.MixedCharacteristic.weighted_rank_one_mixed_characteristic_step",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.MSSStability.UpperStable.sub_pderiv",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.MSSStability.psdPencil_fold_sub_pderiv_upperStable",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.MSSStability.psdPencil_initial_logDerivative",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.Absorption.eliminate_one",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.Absorption.eliminate_finset",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.Absorption.identity_corner_absorption",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.BlockAssembly.assemble_any",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.exists_bounded_fibers",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.Absorption.diagonal_corner_absorption",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.highMass_exists_neutral_frame",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.highMass_bounded_commutator",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.SteinitzGrouping.exists_trace_controlled_groups",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.MSSBarrier.mixedBarrierDerivative_nonpos",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.MSSBarrier.barrier_antitone_aboveRoots",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.MSSBarrier.aboveRoots_sub_pderiv",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.ThreeHermitian.exists_unit_common_neutral",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.ThreeHermitian.exists_almost_hollow",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.ThreeHermitian.exists_diagonal_control",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.MSSPartialFractions.partial_fractions_of_natDegree_le",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "CommutatorTheorem.NoEpsilon.uniform_bound_of_shrinking_split",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "CommutatorTheorem.NoEpsilon.candidate_budget_closes",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "CommutatorTheorem.NoEpsilon.candidate_global_constant",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.MSSBarrierStep.quantitative_barrier_step",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.MSSPencilBarrier.psdPencil_fold_eval_ne_zero",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.MSSFinite.finite_mss",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.MSSPadding.finite_mss_le",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.MSSScaled.finite_mss_scaled",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.LowMassPaving.pairedHalfSelection",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.normalized_low_mass_paving",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.low_mass_input",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.GlobalAssembly.assemble_with_leftovers",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.uniformCommutatorBound_of_lowMassPaving",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.lowMassPavingInput_proved",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.uniformCommutatorBound_iff_euclideanOperatorNorm",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.uniformCommutatorBound",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "declaration": "NoEpsilon.uniformCommutatorBound_euclideanOperatorNorm",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    }
+  ],
+  "source_sha256": {
+    "NoEpsilon.lean": "4ce73ad25d32a002cbb106e39b7c596aa151ccb1e62ecf96b4c020c30d63764d",
+    "NoEpsilon/AbsorptionCore.lean": "1b3f1069ccf5d38cbcd689fa58ac7b615296147d9b2bb2a95d46c0c07489fd1a",
+    "NoEpsilon/AxiomAudit.lean": "f3d284d164180948ea01e29dac3a928aea43ea584bef75842c90d759f21963c2",
+    "NoEpsilon/BlockAlgebra.lean": "00b9b9b492e7233a1d5da2adaa720509eced332355f4351ebcc867ad10605951",
+    "NoEpsilon/BlockAssembly.lean": "9c97e915f3ee61bd663463253598ba1f14f98d901c44386deba6526ed739a050",
+    "NoEpsilon/BlockCompression.lean": "759a1fdc92d03c9870a3c2ae755a553d1c978d173f1961924381c53291b4d40b",
+    "NoEpsilon/CoreTheorem.lean": "e762322b32f34282db69ccec691c5a3d5f4ddd857281dc7d4a2f4b98841e120f",
+    "NoEpsilon/CyclicCommutator.lean": "22268eab764a5518f91de4a2aa843c34140a460aed8c1662bad04739e30857cc",
+    "NoEpsilon/DiagonalAbsorption.lean": "140b716992c51d642f5fd1ebf4f5bb8b99a8f89f638bccd697318f4d56d04131",
+    "NoEpsilon/FinalVerification.lean": "848baa957b99fa347e4e5e6673b555354ae8c8c29b2a19b0080fee45c5be4e0f",
+    "NoEpsilon/FiniteAbsorption.lean": "13fc37e3f27a519f200fb4fc909de07e83656682c5645605016d4b1b14faaf10",
+    "NoEpsilon/FinitePartition.lean": "f9eae87b2866ffe800ff1d803c3e9ffd9b35ec0856ba256d8274d4fbdd4a4676",
+    "NoEpsilon/GlobalAssembly.lean": "75893ca6a350f41a1fe97800f700bc38cdbc7af6cb305c69a657835c4254e9d4",
+    "NoEpsilon/GlobalInduction.lean": "d141377ca7cdb12759a7db570b9445dcc6b7f7ed2efccc5a40d02d855919a330",
+    "NoEpsilon/GlobalReduction.lean": "ced4df4c5b63a40e2cb7602237f79576598a261120e834c91ad8e567cc3a58eb",
+    "NoEpsilon/Goal.lean": "75d1f7f771e3c57b31850d9ac1819c8c198f1671ec4c2b1baa8f9c5bf8ef8f2a",
+    "NoEpsilon/GoalSemantics.lean": "0b25b722720a6a2569f0d4a3b2faefe2e5cd8aa05cd3217f8f7c3b456a7dd614",
+    "NoEpsilon/GridCenters.lean": "530afa936b6cb50296c20708827593ff78c5b37296a10bbebd60ae0c6dc5c64f",
+    "NoEpsilon/HermitianSplit.lean": "86ee3559812408ba9afb545265f17232efd6a43123f2582e5e59bc818ff244f8",
+    "NoEpsilon/HighMassBridge.lean": "79a7a582113892578f37d8be57ac109212382f5cd059b46cb4fee3893d1c52b9",
+    "NoEpsilon/HighMassCompression.lean": "4d00f69b47495e5b85a8b92afc4fbac8842b94d65b6addffb277d2e393646108",
+    "NoEpsilon/HighMassCoordinates.lean": "a26006ee13af23489cb61bab508b348653402ca85fa20e29cebec24c4a6713dc",
+    "NoEpsilon/HighMassGeometry.lean": "7e4eda2e77f51872618b2ed6fffbe9381904af7ac35b1f57b88c7218cc2c0d3c",
+    "NoEpsilon/HighMassGreedy.lean": "2f08b9f99b80acc0b0f812e6a27fa19b92f787e377f5ff56897cb699014aa291",
+    "NoEpsilon/HighMassSpectrum.lean": "591a1143631c04c788ab74e343c70ace595b9a585ee017053c08f9a9945bbda6",
+    "NoEpsilon/HighMassSubspace.lean": "1042611d7bc5bb42dff454d92671566cb45e81da25a1dbcd2136dba2da5a7bb3",
+    "NoEpsilon/HighMassTheorem.lean": "5a2a6cb6af004416684afe7c6d57ced69b03dbd24bc1160f7b6d9b1e7e6c674a",
+    "NoEpsilon/IdentityCorner.lean": "df5d75bdb2485100fa872f83f3333edba9d624c798479415540f8c8e7f4f4626",
+    "NoEpsilon/LowMassBasis.lean": "891e74fe9430115084d27a34fccbdb603fb44bf781917f58cc6104888e1e4e41",
+    "NoEpsilon/LowMassInput.lean": "5bd27468853c3200c5fec78632089c583fe3887d0ddab94795d53f59a738eebf",
+    "NoEpsilon/LowMassPaving.lean": "976e4b12420a6c0f011acaf8d283a6d8b8c934e852eff9b378722b73ce089e78",
+    "NoEpsilon/LowMassRecurrence.lean": "4cb94b6d91cc4df37df0524b7c409a7462afe091b7bd9340daf589920345295b",
+    "NoEpsilon/LowMassTheorem.lean": "46fdb71147a6166769370728bc2d04014c73ed21d96e46f60718bf8b7a38b5fe",
+    "NoEpsilon/LowMassTransversals.lean": "112865dc604ae2ea5ce030addecca5fef7ba0c4f062c2845974eabbc7a56c75b",
+    "NoEpsilon/MSSBarrier.lean": "1ab34a4a3f5a5f94a6ee42820fd030a9afde3793a7a13a8033df996affb652e0",
+    "NoEpsilon/MSSBarrierAlgebra.lean": "86a7767837deea1db1ba6ae95604d1b65506946254ef9dbba8c2ede0a16662d7",
+    "NoEpsilon/MSSBarrierIteration.lean": "dda907d6e6539f600cdc3bb3470a2ec25664f601b3b05ffe80fe125adaa923bc",
+    "NoEpsilon/MSSBarrierStep.lean": "d478117ed1ff6da5cb76d2e8ea836de71687088dc344f17f76d1c283c114d176",
+    "NoEpsilon/MSSCharpoly.lean": "0586d4a86000413c9d2e07a0b2ff914699e1c54eba510f877551a46140dae286",
+    "NoEpsilon/MSSCrossBarrier.lean": "f1bc08c810c058409b72f7f54641244ebec0ef3028a19eee4dbe561c25669360",
+    "NoEpsilon/MSSExpectation.lean": "bf1f29cf8a81a24be51b480493e80610b3a597aa366e07b690f9b4d5cf4fbe03",
+    "NoEpsilon/MSSFinite.lean": "7e77bab4a2d09b6e44b61185186b5f847796b5745135f6cc173d2ba03fbaccde",
+    "NoEpsilon/MSSFlatten.lean": "fb178ebe29544771dca011ae7af21e84ccbfbce8a7ea174c3e0aaefa031e38ce",
+    "NoEpsilon/MSSInterlacing.lean": "ff03654548aec72216ba4d73708738f19118954dd181071b4f35d992a1b5a275",
+    "NoEpsilon/MSSOutcome.lean": "eb2c00302f12db5c268f368c2288b89aab4d4b7eb0c74731a8d687c1ab1d7731",
+    "NoEpsilon/MSSPadding.lean": "65bd84027f14c52edb8c78473d4f09151020168d91cd24963079cd9204c7a8e0",
+    "NoEpsilon/MSSPaired.lean": "5eb9255d3b502b539e03d7155f0838cc6f066e5fbfa91481f77184dcab06272d",
+    "NoEpsilon/MSSPartialFractions.lean": "205559da293ab6acd88d22484ec8bac1a09269dfa02e3295466b0c7ad1afc806",
+    "NoEpsilon/MSSPencilBarrier.lean": "1f4af10eb32dcc4e81d5322ff38c34144628683490a00a194793ecd6c88923fe",
+    "NoEpsilon/MSSPick.lean": "8b39584bb45a5b9c4302c170b8e53002cfd1a550fbb00071ccdf39a75c458a4a",
+    "NoEpsilon/MSSRealPencil.lean": "8a7941cd0f2cfb8f2e0ce91fd89d3cbe9368c2ebac52b98b5649bc2f01d22e58",
+    "NoEpsilon/MSSReducedFraction.lean": "511e78d1db19a4daa42c38094b78d349b839cdd81dc12d6eb54f4502034a90bb",
+    "NoEpsilon/MSSResidueBounds.lean": "2355b2a8201dbc421b9ef23ad8bda82a1c2ba98f0b05baf1adb7150f95e4e9c8",
+    "NoEpsilon/MSSResidues.lean": "382ab091e5d18b1f22402ac38b2a74a9d03df22f449f352490d7f556f97a9cdc",
+    "NoEpsilon/MSSScaled.lean": "fcd22a481cc4896d4fbac2e2cd308b15fbfe230c226b5e76c0e2db34c9c89679",
+    "NoEpsilon/MSSSelection.lean": "b7ad63eff232bc64aebbb9762c340c3f30653fe85a051b38bbceceb3b9d54e33",
+    "NoEpsilon/MSSSpecialization.lean": "4e83120dd6a97a797b364690f5213cdd74f8ce43f99c6c5921508302b61c12b0",
+    "NoEpsilon/MSSStability.lean": "145f73a77e8aeba47235d4fa8ee54cb3c04b687511cdc5991608827b9de2f8cb",
+    "NoEpsilon/MSSTranslation.lean": "8ac415415eca324d80d1314bfc41a50c1fedd62aef424406bde01102aed98e03",
+    "NoEpsilon/Main.lean": "9f9582abd5d6eea3d6767cdee2ed5846ac9ad53d13d6399c7f58e413aadccf43",
+    "NoEpsilon/MixedCharacteristic.lean": "f783ac5f521f828519dd79dab2deebed418e7d53fdce099f810a57b4fff4eefe",
+    "NoEpsilon/NormBounds.lean": "08f418a16699ea296f2d441476381e1fc9d347a284d788ce758388d1e31877df",
+    "NoEpsilon/OrthonormalCompletion.lean": "a3a6e911e7b9e90a5170e789ddea6d10019200be701927059787d87c1e370880",
+    "NoEpsilon/PairedCovarianceBound.lean": "762a38e8774277f9d34259827bced4a7bdf5cd2417b515b6133635b75288a4ad",
+    "NoEpsilon/PavingCoordinates.lean": "722dfaf722b2503af303f0e4df7efdf44142c1db2a3d0abfd8b891107aac3f9d",
+    "NoEpsilon/Riccati.lean": "be1fdc60c077ce56768847f7b6f222541d795c1888c00de9f7070c72209e07fa",
+    "NoEpsilon/Shear.lean": "ab71596b57e61f9ab8f7eba00edabbbe9300d355ceb6639b1c114ad00f9f4d29",
+    "NoEpsilon/Steinitz.lean": "8dc7ccf717b68090e7b61920647edb5b6799921533c92e90152e36a0fbc0e52b",
+    "NoEpsilon/SteinitzGrouping.lean": "9b6cb2879542e024da8ffb248c320b943d8f67efb56cac3df4e26f6a654c71ea",
+    "NoEpsilon/Sylvester.lean": "e52c41b4757b25da6e2371afd7859d9f33feda19076c103bd193bac424de8e7f",
+    "NoEpsilon/ThreeHermitian.lean": "d0f85dc642cf6589fd20e0a34c1d061e6573ba0073a6dce5cc71be61ea85d273",
+    "NoEpsilon/ThreeHermitianBasis.lean": "5ea9a60d0991d94f32a2c4a853db8f665c708fa87996c20e9327821b964e7b9b",
+    "NoEpsilon/UnitaryCoordinates.lean": "6ef873e303ae41dc4104ae45c645d456a99ac4d2785307194fc83aebf6f71a28",
+    "CommutatorTheorem/NoEpsilon/Induction.lean": "5ca4303d7c33a2613da3b67de57c93ed05792553dd26cf18089bbd9e2a020e2d"
+  }
+}
