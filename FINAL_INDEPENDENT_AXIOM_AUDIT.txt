@@ -1,9 +1,0 @@
-'NoEpsilon.lowMassPavingInput_proved' depends on axioms: [propext, Classical.choice, Quot.sound]
-'NoEpsilon.uniformCommutatorBound' depends on axioms: [propext, Classical.choice, Quot.sound]
-'NoEpsilon.uniformCommutatorBound_euclideanOperatorNorm' depends on axioms: [propext, Classical.choice, Quot.sound]
-NoEpsilon.uniformCommutatorBound : NoEpsilon.UniformCommutatorBound
-NoEpsilon.uniformCommutatorBound_euclideanOperatorNorm : ∃ K,
-  0 < K ∧
-    ∀ (n : ℕ) (A : Matrix (Fin n) (Fin n) ℂ),
-      A.trace = 0 →
-        ∃ B C, A = B * C - C * B ∧ ‖Matrix.toEuclideanCLM B‖ * ‖Matrix.toEuclideanCLM C‖ ≤ K * ‖Matrix.toEuclideanCLM A‖

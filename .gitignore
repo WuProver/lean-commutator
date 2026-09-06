@@ -6,3 +6,6 @@ paper/
 *.md
 !README.md
 *.command
+*.txt
+verification/
+scripts/
