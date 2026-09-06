@@ -12,10 +12,11 @@ lake build
 python3 scripts/verify_no_epsilon.py
 ```
 
-也可以双击 `编译验证.command` 完成构建与公理审计。
+也可以双击 `compile.command` 完成构建与公理审计。
 
-`lake build` 默认同时构建原有库和 `NoEpsilon` 库。
-完整主定理在 `NoEpsilon/Main.lean`，名称为 `NoEpsilon.uniformCommutatorBound`。
+`lake build` 默认同时构建 `CommutatorTheorem` 和 `PavingSeparation` 两个库，共用根目录 `.lake`。
+单独构建 `PavingSeparation` 可运行 `lake build PavingSeparation`。
+完整主定理在 `CommutatorTheorem/NoEpsilon/Main.lean`，名称为 `NoEpsilon.uniformCommutatorBound`。
 论文 PDF 和 LaTeX 在 `paper/`。
 
 ## 环境

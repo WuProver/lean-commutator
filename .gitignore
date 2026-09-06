@@ -1,3 +1,8 @@
 .lake/
 .DS_Store
 __pycache__/
+docs/
+paper/
+*.md
+!README.md
+*.command

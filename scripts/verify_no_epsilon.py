@@ -19,9 +19,9 @@ lake_path = Path(args.lake)
 if lake_path.is_absolute():
     env["PATH"] = str(lake_path.parent) + os.pathsep + env.get("PATH", "")
 commands = [
-    ("build.log", [args.lake, "build", "NoEpsilon"]),
-    ("axioms.log", [args.lake, "env", "lean", "NoEpsilon/AxiomAudit.lean"]),
-    ("main_statement.log", [args.lake, "env", "lean", "NoEpsilon/FinalVerification.lean"]),
+    ("build.log", [args.lake, "build", "CommutatorTheorem.NoEpsilon"]),
+    ("axioms.log", [args.lake, "env", "lean", "CommutatorTheorem/NoEpsilon/AxiomAudit.lean"]),
+    ("main_statement.log", [args.lake, "env", "lean", "CommutatorTheorem/NoEpsilon/FinalVerification.lean"]),
 ]
 results = []
 for filename, command in commands:
@@ -50,8 +50,8 @@ if main_name not in {item["declaration"] for item in checked}:
 main_audit = (out / "main_statement.log").read_text()
 if not re.search(r"'NoEpsilon\.uniformCommutatorBound' depends on axioms:", main_audit):
     raise SystemExit("The expanded main-statement check did not audit the main theorem")
-source_files = [root / "NoEpsilon.lean", *sorted((root / "NoEpsilon").glob("*.lean")),
-                root / "CommutatorTheorem/NoEpsilon/Induction.lean"]
+source_files = [root / "CommutatorTheorem/NoEpsilon.lean",
+                *sorted((root / "CommutatorTheorem/NoEpsilon").glob("*.lean"))]
 import hashlib
 source_hashes = {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest()
                  for p in source_files if p.exists()}
