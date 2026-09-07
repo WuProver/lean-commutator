@@ -4,28 +4,7 @@ Lean 4 formalizations of two commutator theorems for traceless complex matrices.
 All norms below are Euclidean operator norms, and both factors have the same size as the input.
 
 ## Main theorem correspondence
-
-| Paper | Main result | Lean theorem |
-|---|---|---|
-| *A dimension-independent commutator bound via trace-mass splitting*, Theorem 1.1 | There is a universal $K > 0$ such that $A = BC - CB$ and $\|B\|\,\|C\| \le K\|A\|$. No normality assumption is imposed on the factors. | [NoEpsilon.uniformCommutatorBound](CommutatorTheorem/NoEpsilon/Main.lean) |
-| Johnson–Ozawa–Schechtman, *A quantitative version of the commutator theorem for zero trace matrices*, Theorem 1 (PNAS, 2013; local reference: `epsilon.pdf`; DOI: `10.1073/pnas.1201411109`) | For every $\varepsilon > 0$, there is $K_\varepsilon > 0$ such that $A = BC - CB$, $B$ is normal, and $\|B\|\,\|C\| \le K_\varepsilon n^\varepsilon\|A\|$. | [CommutatorTheorem.main_commutator_theorem_normal](CommutatorTheorem/Epsilon/Main.lean) |
-
-In the first row, $K$ is chosen before the dimension $n$ and matrix $A$; in the second,
-$K_\varepsilon$ depends only on $\varepsilon$. Both statements apply to every traceless
-complex $n \times n$ matrix. The explicit operator-norm version of the first theorem is
-[NoEpsilon.uniformCommutatorBound_euclideanOperatorNorm](CommutatorTheorem/NoEpsilon/Main.lean).
-
-The two proofs live in [NoEpsilon](CommutatorTheorem/NoEpsilon) and
-[Epsilon](CommutatorTheorem/Epsilon), with shared unitary zero-diagonalization in
-[Shared/Fillmore.lean](CommutatorTheorem/Shared/Fillmore.lean).
-The repository also contains the accompanying [paving separation results](PavingSeparation).
-This first table summarizes the two main theorem statements; detailed intermediate
-correspondences and normalization differences are recorded in [README_CN.md](README_CN.md).
-
-The following table gives the one-to-one paper–code correspondence for the present paper.
-The numbering follows the September 5, 2026 paper, and names in `PavingSeparation` retain
-their original numbering. Theorem statements are aligned with the paper. Lemma and Proposition statements are
-not yet fully aligned because of some technical gaps, but they are broadly aligned overall.
+The following gives a one-to-one correspondence between the paper's theorems and the Lean code. The statements labeled **Theorem** are aligned with the paper. The **Lemma** and **Proposition** statements are not yet fully aligned because of some technical gaps, but they are broadly aligned overall.
 
 | Paper result | Content | Lean entry point |
 |---|---|---|
