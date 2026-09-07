@@ -1,7 +1,7 @@
 name = "CommutatorTheorem"
 version = "0.1.0"
 keywords = ["math"]
-defaultTargets = ["CommutatorTheorem", "PavingSeparation"]
+defaultTargets = ["CommutatorTheorem", "PavingSeparation", "KadisonSinger"]
 
 [leanOptions]
 pp.unicode.fun = true # pretty-prints `fun a ↦ b`
@@ -19,6 +19,12 @@ name = "CommutatorTheorem"
 
 [[lean_lib]]
 name = "PavingSeparation"
+
+[lean_lib.leanOptions]
+autoImplicit = false
+
+[[lean_lib]]
+name = "KadisonSinger"
 
 [lean_lib.leanOptions]
 autoImplicit = false
