@@ -3,7 +3,7 @@
 Lean 4 formalizations of two commutator theorems for traceless complex matrices.
 All norms below are Euclidean operator norms, and both factors have the same size as the input.
 
-## Main theorem correspondence
+## Paper–code correspondence
 
 | Paper | Main result | Lean theorem |
 |---|---|---|
@@ -19,8 +19,7 @@ The two proofs live in [NoEpsilon](CommutatorTheorem/NoEpsilon) and
 [Epsilon](CommutatorTheorem/Epsilon), with shared unitary zero-diagonalization in
 [Shared/Fillmore.lean](CommutatorTheorem/Shared/Fillmore.lean).
 The repository also contains the accompanying [paving separation results](PavingSeparation).
-This table describes the main theorem statements; detailed intermediate correspondences
-and their normalization differences are recorded in [README_CN.md](README_CN.md).
+The following gives a one-to-one correspondence between the paper's theorems and the Lean code. The statements labeled **Theorem** are aligned with the paper. The **Lemma** and **Proposition** statements are not yet fully aligned because of some technical gaps, but they are broadly aligned overall.
 
 ## Build and verify
 
