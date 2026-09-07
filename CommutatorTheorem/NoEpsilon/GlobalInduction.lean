@@ -1,6 +1,6 @@
 import CommutatorTheorem.NoEpsilon.GlobalReduction
 import CommutatorTheorem.NoEpsilon.PavingCoordinates
-import CommutatorTheorem.NoEpsilon.Induction
+import CommutatorTheorem.NoEpsilon.Budget
 
 /-! # The final dimension induction
 

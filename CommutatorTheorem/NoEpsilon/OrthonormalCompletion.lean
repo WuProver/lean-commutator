@@ -1,5 +1,6 @@
 import CommutatorTheorem.NoEpsilon.HighMassBridge
 import Mathlib.LinearAlgebra.Matrix.BaseChange
+import Mathlib.Data.Matrix.ColumnRowPartitioned
 
 /-!
 # Completing a rectangular isometry

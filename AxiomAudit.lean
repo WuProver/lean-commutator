@@ -1,6 +1,16 @@
 import CommutatorTheorem
 import CommutatorTheorem.Epsilon.BTRSClosedAssembly
 
+/-!
+# Unified commutator axiom audit
+
+Checks the epsilon-loss theorem and the dimension-independent theorem, together with
+principal intermediate results. Expected dependencies are `propext`, `Classical.choice`,
+and `Quot.sound`. PaperCorrespondence.lean separately checks the paper declaration index
+and the paving separation entry points.
+-/
+
+-- Epsilon-loss results (Johnson–Ozawa–Schechtman).
 #print axioms CommutatorTheorem.fillmore
 #print axioms CommutatorTheorem.zeroDiag_commutator_bound_diagonal
 #print axioms CommutatorTheorem.zeroDiag_commutator_bound
@@ -11,3 +21,97 @@ import CommutatorTheorem.Epsilon.BTRSClosedAssembly
 #print axioms CommutatorTheorem.BTRSAnalyticCoreAssembly.bourgainTzafriri_of_rsBaseDeletion
 #print axioms CommutatorTheorem.BTRSClosedAssembly.exactMDPRealRootedness
 #print axioms CommutatorTheorem.BTRSClosedAssembly.bourgainTzafriri_of_rootMotion
+#print axioms CommutatorTheorem.bourgain_tzafriri_central_submatrix
+
+-- Dimension-independent results (trace-mass splitting).
+#print axioms NoEpsilon.lowerShear_mul_inverse
+#print axioms NoEpsilon.identityCorner_shear
+#print axioms NoEpsilon.companion_commutator_of_riccati
+#print axioms NoEpsilon.identityCorner_eq_commutator_of_fixedPoint
+#print axioms NoEpsilon.Shear.two_step_elimination
+#print axioms NoEpsilon.Shear.two_step_elimination_with_remainder
+#print axioms NoEpsilon.Shear.conjugate_entry_of_zero_row_column
+#print axioms NoEpsilon.norm_quadratic_le
+#print axioms NoEpsilon.norm_quadratic_sub_le
+#print axioms NoEpsilon.exists_riccati_fixedPoint
+#print axioms NoEpsilon.exists_riccati_fixedPoint_large_scale
+#print axioms NoEpsilon.exists_riccati_fixedPoint_explicit
+#print axioms NoEpsilon.exists_identityCorner_commutator
+#print axioms NoEpsilon.norm_ringCommutator_le
+#print axioms NoEpsilon.norm_conjugation_product_le
+#print axioms NoEpsilon.norm_fromBlocks_le
+#print axioms NoEpsilon.norm_lowerShear_le
+#print axioms NoEpsilon.norm_lowerShearInverse_le
+#print axioms NoEpsilon.norm_riccatiConstant_le
+#print axioms NoEpsilon.norm_identityCorner_factors_le
+#print axioms NoEpsilon.exists_identityCorner_commutator_bounded
+#print axioms NoEpsilon.exists_hermitian_split
+#print axioms NoEpsilon.exists_zero_sum_real_ordering
+#print axioms NoEpsilon.diagonal_difference_is_bounded_commutator
+#print axioms NoEpsilon.real_diagonal_bounded_commutator
+#print axioms NoEpsilon.hermitianUnitaryCommutatorBound
+#print axioms NoEpsilon.adaptiveTwoCommutatorBound
+#print axioms NoEpsilon.identityCorner_bounded_from_trace
+#print axioms NoEpsilon.identityCorner_bounded_from_whole_norm
+#print axioms NoEpsilon.exists_scalar_add_lipschitz_solution
+#print axioms NoEpsilon.exists_sylvester_solution_scalar_centers
+#print axioms NoEpsilon.exists_assembly_centers
+#print axioms NoEpsilon.submatrix_operator_norm_le
+#print axioms NoEpsilon.BlockAssembly.norm_blockDiagonal_le
+#print axioms NoEpsilon.BlockAssembly.norm_le_card_mul_block_bound
+#print axioms NoEpsilon.BlockAssembly.normalize_factors
+#print axioms NoEpsilon.BlockAssembly.assemble_normalized
+#print axioms NoEpsilon.BlockAssembly.assemble_fixed_constants
+#print axioms NoEpsilon.BlockAssembly.assemble_reindexed
+#print axioms NoEpsilon.MSSSelection.paired_covariance
+#print axioms NoEpsilon.MSSSelection.paired_covariance_deficit
+#print axioms NoEpsilon.MSSSelection.paired_children_bound_of_outcome
+#print axioms NoEpsilon.MSSSelection.paired_index_partition
+#print axioms NoEpsilon.MSSSelection.paired_vectors_independent
+#print axioms NoEpsilon.MSSSelection.paired_covariance_expectation
+#print axioms NoEpsilon.MSSSelection.paired_energy_expectation_le
+#print axioms NoEpsilon.exists_neutral_large_image_of_opposite_rayleigh
+#print axioms NoEpsilon.exists_unit_neutral_large_image_of_numericalRange
+#print axioms NoEpsilon.convex_unitNumericalRange
+#print axioms NoEpsilon.closedBall_subset_unitNumericalRange_of_support
+#print axioms NoEpsilon.highMass_compression_contains_disk_of_card
+#print axioms NoEpsilon.highMass_range_has_large_neutral
+#print axioms NoEpsilon.Steinitz.exists_complex_permutation
+#print axioms NoEpsilon.MixedCharacteristic.det_add_vecMulVec
+#print axioms NoEpsilon.MixedCharacteristic.weighted_rank_one_mixed_characteristic_step
+#print axioms NoEpsilon.MSSStability.UpperStable.sub_pderiv
+#print axioms NoEpsilon.MSSStability.psdPencil_fold_sub_pderiv_upperStable
+#print axioms NoEpsilon.MSSStability.psdPencil_initial_logDerivative
+#print axioms NoEpsilon.Absorption.eliminate_one
+#print axioms NoEpsilon.Absorption.eliminate_finset
+#print axioms NoEpsilon.Absorption.identity_corner_absorption
+#print axioms NoEpsilon.BlockAssembly.assemble_any
+#print axioms NoEpsilon.exists_bounded_fibers
+#print axioms NoEpsilon.Absorption.diagonal_corner_absorption
+#print axioms NoEpsilon.highMass_exists_neutral_frame
+#print axioms NoEpsilon.highMass_bounded_commutator
+#print axioms NoEpsilon.SteinitzGrouping.exists_trace_controlled_groups
+#print axioms NoEpsilon.MSSBarrier.mixedBarrierDerivative_nonpos
+#print axioms NoEpsilon.MSSBarrier.barrier_antitone_aboveRoots
+#print axioms NoEpsilon.MSSBarrier.aboveRoots_sub_pderiv
+#print axioms NoEpsilon.ThreeHermitian.exists_unit_common_neutral
+#print axioms NoEpsilon.ThreeHermitian.exists_almost_hollow
+#print axioms NoEpsilon.ThreeHermitian.exists_diagonal_control
+#print axioms NoEpsilon.MSSPartialFractions.partial_fractions_of_natDegree_le
+#print axioms CommutatorTheorem.NoEpsilon.uniform_bound_of_shrinking_split
+#print axioms CommutatorTheorem.NoEpsilon.candidate_budget_closes
+#print axioms CommutatorTheorem.NoEpsilon.candidate_global_constant
+#print axioms NoEpsilon.MSSBarrierStep.quantitative_barrier_step
+#print axioms NoEpsilon.MSSPencilBarrier.psdPencil_fold_eval_ne_zero
+#print axioms NoEpsilon.MSSFinite.finite_mss
+#print axioms NoEpsilon.MSSPadding.finite_mss_le
+#print axioms NoEpsilon.MSSScaled.finite_mss_scaled
+#print axioms NoEpsilon.LowMassPaving.pairedHalfSelection
+#print axioms NoEpsilon.normalized_low_mass_paving
+#print axioms NoEpsilon.low_mass_input
+#print axioms NoEpsilon.GlobalAssembly.assemble_with_leftovers
+#print axioms NoEpsilon.uniformCommutatorBound_of_lowMassPaving
+#print axioms NoEpsilon.lowMassPavingInput_proved
+#print axioms NoEpsilon.uniformCommutatorBound_iff_euclideanOperatorNorm
+#print axioms NoEpsilon.uniformCommutatorBound
+#print axioms NoEpsilon.uniformCommutatorBound_euclideanOperatorNorm

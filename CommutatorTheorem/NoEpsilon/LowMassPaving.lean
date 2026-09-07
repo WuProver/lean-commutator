@@ -2,6 +2,7 @@ import CommutatorTheorem.NoEpsilon.ThreeHermitianBasis
 import CommutatorTheorem.NoEpsilon.SteinitzGrouping
 import CommutatorTheorem.NoEpsilon.MSSSelection
 import Mathlib.Analysis.Matrix.Order
+import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order
 
 /-!
 # Matrix interfaces for low-mass paving
@@ -93,6 +94,7 @@ theorem mss_energy_eq_vectorEnergy (v : ι → ℂ) : MSSSelection.energy v = ve
 /-- A positive semidefinite matrix admits an exact Hermitian square-root factor. -/
 theorem exists_hermitian_square_root (E : Matrix ι ι ℂ) (hE : E.PosSemidef) :
     ∃ S : Matrix ι ι ℂ, Sᴴ = S ∧ S * S = E := by
+  letI : CStarAlgebra (Matrix ι ι ℂ) := {}
   have hpos : (CFC.sqrt E).PosSemidef :=
     Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg E)
   refine ⟨CFC.sqrt E, hpos.1.eq, ?_⟩

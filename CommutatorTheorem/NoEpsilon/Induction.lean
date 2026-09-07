@@ -1,4 +1,4 @@
-import Mathlib.Data.Real.Basic
+import CommutatorTheorem.NoEpsilon.Budget
 import Mathlib.Tactic
 
 /-!
@@ -48,13 +48,6 @@ theorem uniform_bound_of_shrinking_split
       calc
         c * (K * q * size x) + b * size x = (c * q * K + b) * size x := by ring
         _ ≤ K * size x := mul_le_mul_of_nonneg_right hclose (size_nonneg x)
-
-/-- The exact numerical constants used in the candidate proof satisfy the contraction
-budget whenever the global constant dominates twice the additive assembly cost. -/
-theorem candidate_budget_closes (K : ℝ) (hK : (2 : ℝ) ^ 43 ≤ K) :
-    (8 * 8192 : ℝ) * (319 / (2 : ℝ) ^ 26) * K + (2 : ℝ) ^ 42 ≤ K := by
-  norm_num at hK ⊢
-  linarith
 
 /-- The proposed global constant dominates both the high-mass branch and the additive
 cost needed by the shrinking branch. This is scalar arithmetic, not either branch theorem. -/
