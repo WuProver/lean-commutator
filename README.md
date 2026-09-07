@@ -8,7 +8,7 @@ All norms below are Euclidean operator norms, and both factors have the same siz
 | Paper | Main result | Lean theorem |
 |---|---|---|
 | *A dimension-independent commutator bound via trace-mass splitting*, Theorem 1.1 | There is a universal $K > 0$ such that $A = BC - CB$ and $\|B\|\,\|C\| \le K\|A\|$. No normality assumption is imposed on the factors. | [NoEpsilon.uniformCommutatorBound](CommutatorTheorem/NoEpsilon/Main.lean) |
-| Johnson–Ozawa–Schechtman, *A quantitative version of the commutator theorem for zero trace matrices*, Theorem 1 (PNAS, 2013; local reference: `epsilon.pdf`; DOI: `10.1073/pnas.1201411109`) | For every $\varepsilon > 0$, there is $K_\varepsilon > 0$ such that $A = BC - CB$, $B$ is normal, and $\|B\|\,\|C\| \le K_\varepsilon n^\varepsilon\|A\|$. | [CommutatorTheorem.main_commutator_theorem_normal](CommutatorTheorem/Epsilon/Main.lean) |
+| Johnson–Ozawa–Schechtman, *A quantitative version of the commutator theorem for zero trace matrices*, Theorem 1 (PNAS, 2013; local reference: `epsilon.pdf`; DOI: `10.1073/pnas.1202411109`) | For every $\varepsilon > 0$, there is $K_\varepsilon > 0$ such that $A = BC - CB$, $B$ is normal, and $\|B\|\,\|C\| \le K_\varepsilon n^\varepsilon\|A\|$. | [CommutatorTheorem.main_commutator_theorem_normal](CommutatorTheorem/Epsilon/Main.lean) |
 
 In the first row, $K$ is chosen before the dimension $n$ and matrix $A$; in the second,
 $K_\varepsilon$ depends only on $\varepsilon$. Both statements apply to every traceless
@@ -51,7 +51,7 @@ not yet fully aligned because of some technical gaps, but they are broadly align
 
 The separate Epsilon branch formalizes the theorem from Johnson, Ozawa, and Schechtman,
 “A quantitative version of the commutator theorem for zero trace matrices,” *Proceedings
-of the National Academy of Sciences* (2013), [doi:10.1073/pnas.1201411109](https://doi.org/10.1073/pnas.1201411109).
+of the National Academy of Sciences* (2013), [doi:10.1073/pnas.1202411109](https://doi.org/10.1073/pnas.1202411109).
 For every `ε > 0`, a traceless complex `n × n` matrix admits a commutator decomposition
 with a normal first factor and a bound of the form `K_ε n^ε ‖A‖`. Its main Lean entry point is
 [CommutatorTheorem.main_commutator_theorem_normal](CommutatorTheorem/Epsilon/Main.lean).
@@ -64,8 +64,6 @@ Install Lean's `elan` toolchain manager, then run the following commands from th
 lake exe cache get
 lake build
 ```
-
-The toolchain is pinned to **Lean 4.30.0-rc1** in [lean-toolchain](lean-toolchain), and the mathlib revision is pinned in [lake-manifest.json](lake-manifest.json). The default build compiles both `CommutatorTheorem` and `PavingSeparation`.
 
 After building, check the paper correspondence and the main theorem:
 
