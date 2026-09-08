@@ -10,7 +10,7 @@ It does not equate differently normalized statements or assert coverage of the p
 -/
 
 #check NoEpsilon.uniformCommutatorBound
-#check PavingSeparation.theorem1
+#check PavingSeparation.paving_commutator_separation
 #check PavingSeparation.finFamily_lambdaA_lower_bound
 #check NoEpsilon.hermitianUnitaryCommutatorBound
 #check NoEpsilon.HermitianUnitaryCommutatorBound
@@ -65,13 +65,13 @@ It does not equate differently normalized statements or assert coverage of the p
 #check PavingSeparation.lambdaM_not_bddAbove
 #check PavingSeparation.section5_finite_but_unbounded
 #check PavingSeparation.diagonalCost
-#check PavingSeparation.skew
+#check PavingSeparation.skewMatrix
 #check PavingSeparation.skew_zero
 #check PavingSeparation.skew_succ
 #check PavingSeparation.skew_conj_apply
 #check PavingSeparation.skew_transpose
 #check PavingSeparation.skew_diag
-#check PavingSeparation.family
+#check PavingSeparation.pavingMatrix
 #check PavingSeparation.family_offdiag_norm_sq
 #check PavingSeparation.family_trace
 #check PavingSeparation.Foundation.hsNorm_le_sqrt_n_mul_opNorm
@@ -113,7 +113,7 @@ It does not equate differently normalized statements or assert coverage of the p
 #print axioms NoEpsilon.uniformCommutatorBound_euclideanOperatorNorm
 #print axioms NoEpsilon.MSSFinite.finite_mss
 #print axioms NoEpsilon.normalized_low_mass_paving
-#print axioms PavingSeparation.theorem1
+#print axioms PavingSeparation.paving_commutator_separation
 #print axioms PavingSeparation.finFamily_lambdaA_lower_bound
 #print axioms PavingSeparation.lambdaM_unbounded
 #print axioms PavingSeparation.PlanarEnergy.energy_lower_bound

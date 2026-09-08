@@ -201,22 +201,22 @@ theorem card_cube_even (k : ℕ) : Fintype.card (Cube (2 * k)) = 4 ^ k := by
 /-- The precise diagonal cost lower bound in Theorem 1 of the supplied PDF. -/
 theorem family_diagonalCost_lower_bound (k : ℕ) (hk : 1 ≤ k) :
     Real.sqrt ((((3 : ℝ) * k - 1) * (4 : ℝ) ^ k + 1) /
-      (32 * ((4 : ℝ) ^ k - 1))) ≤ diagonalCost (family (2 * k)) := by
-  apply le_diagonalCost (family (2 * k)) (family_diag (2 * k))
+      (32 * ((4 : ℝ) ^ k - 1))) ≤ diagonalCost (pavingMatrix (2 * k)) := by
+  apply le_diagonalCost (pavingMatrix (2 * k)) (family_diag (2 * k))
   intro D C hD hc
   have hf : ∀ i j : Cube (2 * k), i ≠ j →
-      ‖family (2 * k) i j‖ ^ 2 = ((Fintype.card (Cube (2 * k)) : ℝ) - 1)⁻¹ := by
+      ‖pavingMatrix (2 * k) i j‖ ^ 2 = ((Fintype.card (Cube (2 * k)) : ℝ) - 1)⁻¹ := by
     intro i j hij
     simpa only [card_cube, Nat.cast_pow, Nat.cast_ofNat, one_div] using
       family_offdiag_norm_sq (2 * k) hij
   have h := DiagonalCost.isDiag_commutator_product_cost k hk (card_cube_even k)
-    (family (2 * k)) D C hD hf hc
+    (pavingMatrix (2 * k)) D C hD hf hc
   rw [card_cube_even] at h
   simpa only [Nat.cast_pow, Nat.cast_ofNat] using h
 
 /-- The simpler divergent lower bound for `κ_diag` along the same family. -/
 theorem family_diagonalCost_sqrt_lower_bound (k : ℕ) (hk : 1 ≤ k) :
-    Real.sqrt (k : ℝ) / 4 ≤ diagonalCost (family (2 * k)) := by
+    Real.sqrt (k : ℝ) / 4 ≤ diagonalCost (pavingMatrix (2 * k)) := by
   have hn : 1 < 4 ^ k := by
     have h : 4 ^ 1 ≤ 4 ^ k := Nat.pow_le_pow_right (by omega) hk
     norm_num at h

@@ -18,7 +18,10 @@ theorem lowMassPavingInput_proved : lowMassPavingInput := by
   exact normalized_low_mass_paving (k := k) (h := 26) hk A hNorm hTrace hLow
 
 /-- The complete epsilon-free theorem, with no additional mathematical hypotheses. -/
-theorem uniformCommutatorBound : UniformCommutatorBound :=
+theorem uniformCommutatorBound :
+    ∃ K : ℝ, 0 < K ∧ ∀ (n : ℕ) (A : Matrix (Fin n) (Fin n) ℂ),
+      Matrix.trace A = 0 →
+        ∃ B C : Matrix (Fin n) (Fin n) ℂ, A = B * C - C * B ∧ ‖B‖ * ‖C‖ ≤ K * ‖A‖ :=
   uniformCommutatorBound_of_lowMassPaving lowMassPavingInput_proved
 
 /-- The same theorem stated using the continuous-linear-map Euclidean operator norm. -/

@@ -9,7 +9,7 @@ The following gives a one-to-one correspondence between the paper's theorems and
 | Paper result | Content | Lean entry point |
 |---|---|---|
 | Theorem 1.1 | Dimension-independent commutator bound. | [NoEpsilon.uniformCommutatorBound](CommutatorTheorem/NoEpsilon/Main.lean) |
-| Theorem 1.4 | Exact paving and normal-factor cost, including the square-normalized λ lower bound. | [PavingSeparation.theorem1](PavingSeparation/Theorem1.lean); [PavingSeparation.finFamily_lambdaA_lower_bound](PavingSeparation/Lambda.lean) |
+| Theorem 1.4 | Exact paving and normal-factor cost, including the square-normalized λ lower bound. | [PavingSeparation.paving_commutator_separation](PavingSeparation/Theorem1.lean); [PavingSeparation.finFamily_lambdaA_lower_bound](PavingSeparation/Lambda.lean) |
 | Lemma 2.1 | Hermitian commutator decomposition with a unitary first factor. | [NoEpsilon.hermitianUnitaryCommutatorBound](CommutatorTheorem/NoEpsilon/CyclicCommutator.lean) |
 | Corollary 2.2 | Sum of two commutators with unitary first factors. | [NoEpsilon.adaptiveTwoCommutatorBound](CommutatorTheorem/NoEpsilon/CyclicCommutator.lean) |
 | Lemma 3.1 | Identity-corner commutator representation. | [NoEpsilon.identityCorner_bounded_from_whole_norm](CommutatorTheorem/NoEpsilon/CoreTheorem.lean) |

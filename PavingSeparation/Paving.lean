@@ -21,7 +21,7 @@ def dyadicColor : (m l : ℕ) → l ≤ m → Cube m → Cube l
         (dyadicColor m l (Nat.le_of_succ_le_succ h))
 
 theorem dyadic_skew_compression_norm (m l : ℕ) (h : l ≤ m) (a : Cube l) :
-    ‖compression (colorClass (dyadicColor m l h) a) (skew m)‖ =
+    ‖compression (colorClass (dyadicColor m l h) a) (skewMatrix m)‖ =
       Real.sqrt ((2 : ℝ) ^ (m - l) - 1) := by
   induction l generalizing m with
   | zero =>
@@ -36,9 +36,9 @@ theorem dyadic_skew_compression_norm (m l : ℕ) (h : l ≤ m) (a : Cube l) :
           | inl a =>
               have heq :
                   compression (colorClass (dyadicColor (m + 1) (l + 1) h)
-                    (Sum.inl a)) (skew (m + 1)) =
+                    (Sum.inl a)) (skewMatrix (m + 1)) =
                     Matrix.fromBlocks
-                      (compression (colorClass (dyadicColor m l hl) a) (skew m)) 0 0 0 := by
+                      (compression (colorClass (dyadicColor m l hl) a) (skewMatrix m)) 0 0 0 := by
                 ext i j
                 cases i <;> cases j <;>
                   simp [compression_apply, colorClass, dyadicColor, Cube]
@@ -47,9 +47,9 @@ theorem dyadic_skew_compression_norm (m l : ℕ) (h : l ≤ m) (a : Cube l) :
           | inr a =>
               have heq :
                   compression (colorClass (dyadicColor (m + 1) (l + 1) h)
-                    (Sum.inr a)) (skew (m + 1)) =
+                    (Sum.inr a)) (skewMatrix (m + 1)) =
                     Matrix.fromBlocks 0 0 0
-                      (-compression (colorClass (dyadicColor m l hl) a) (skew m)) := by
+                      (-compression (colorClass (dyadicColor m l hl) a) (skewMatrix m)) := by
                 ext i j
                 cases i <;> cases j <;>
                   simp [compression_apply, colorClass, dyadicColor, Cube]
@@ -58,16 +58,16 @@ theorem dyadic_skew_compression_norm (m l : ℕ) (h : l ≤ m) (a : Cube l) :
               simpa using ih m hl a
 
 theorem dyadic_family_compression_norm (m l : ℕ) (h : l ≤ m) (a : Cube l) :
-    ‖compression (colorClass (dyadicColor m l h) a) (family m)‖ =
+    ‖compression (colorClass (dyadicColor m l h) a) (pavingMatrix m)‖ =
       Real.sqrt (((2 : ℝ) ^ (m - l) - 1) / ((2 : ℝ) ^ m - 1)) := by
-  rw [family, compression_smul, norm_smul, dyadic_skew_compression_norm]
+  rw [pavingMatrix, compression_smul, norm_smul, dyadic_skew_compression_norm]
   rw [norm_div, Complex.norm_I, Complex.norm_real,
     Real.norm_of_nonneg (Real.sqrt_nonneg _)]
   rw [Real.sqrt_div (order_sub_one_nonneg (m - l))]
   ring
 
 theorem dyadic_pavingNorm (m l : ℕ) (h : l ≤ m) :
-    pavingNorm (family m) (dyadicColor m l h) =
+    pavingNorm (pavingMatrix m) (dyadicColor m l h) =
       Real.sqrt (((2 : ℝ) ^ (m - l) - 1) / ((2 : ℝ) ^ m - 1)) := by
   apply le_antisymm
   · exact pavingNorm_le _ _ _ (fun a ↦ (dyadic_family_compression_norm m l h a).le)
@@ -76,8 +76,8 @@ theorem dyadic_pavingNorm (m l : ℕ) (h : l ≤ m) :
 
 theorem family_compression_lower (m : ℕ) (s : Finset (Cube m)) (hs : s.Nonempty) :
     Real.sqrt (((s.card : ℝ) - 1) / ((2 : ℝ) ^ m - 1)) ≤
-      ‖compression s (family m)‖ := by
-  have h := flat_compression_sq_lower (family m) (1 / ((2 : ℝ) ^ m - 1))
+      ‖compression s (pavingMatrix m)‖ := by
+  have h := flat_compression_sq_lower (pavingMatrix m) (1 / ((2 : ℝ) ^ m - 1))
     (family_diag m) (fun i j hij ↦ family_offdiag_norm_sq m hij) s hs
   have hcard : 1 ≤ s.card := hs.card_pos
   rw [Nat.cast_sub hcard, Nat.cast_one] at h
@@ -87,7 +87,7 @@ theorem family_compression_lower (m : ℕ) (s : Finset (Cube m)) (hs : s.Nonempt
 /-- Every coloring, including those unrelated to the recursive tree, obeys the lower bound. -/
 theorem dyadic_paving_lower (m l : ℕ) (h : l ≤ m) (c : Cube m → Fin (2 ^ l)) :
     Real.sqrt (((2 : ℝ) ^ (m - l) - 1) / ((2 : ℝ) ^ m - 1)) ≤
-      pavingNorm (family m) c := by
+      pavingNorm (pavingMatrix m) c := by
   have hcard : Fintype.card (Fin (2 ^ l)) * 2 ^ (m - l) ≤ Fintype.card (Cube m) := by
     simp only [Fintype.card_fin, card_cube]
     rw [← pow_add, Nat.add_sub_of_le h]
@@ -102,26 +102,26 @@ theorem dyadic_paving_lower (m l : ℕ) (h : l ≤ m) (c : Cube m → Fin (2 ^ l
         ≤ Real.sqrt ((((colorClass c a).card : ℝ) - 1) / ((2 : ℝ) ^ m - 1)) := by
           apply Real.sqrt_le_sqrt
           exact div_le_div_of_nonneg_right (by linarith) (order_sub_one_nonneg m)
-    _ ≤ ‖compression (colorClass c a) (family m)‖ := family_compression_lower m _ hs
-    _ ≤ pavingNorm (family m) c := compression_norm_le_pavingNorm _ _ _
+    _ ≤ ‖compression (colorClass c a) (pavingMatrix m)‖ := family_compression_lower m _ hs
+    _ ≤ pavingNorm (pavingMatrix m) c := compression_norm_le_pavingNorm _ _ _
 
 /-- The optimal value is the true minimum over all original-coordinate partitions. -/
 theorem pavingMinimum_dyadic (m l : ℕ) (h : l ≤ m) :
-    pavingMinimum (family m) (2 ^ l) =
+    pavingMinimum (pavingMatrix m) (2 ^ l) =
       Real.sqrt (((2 : ℝ) ^ (m - l) - 1) / ((2 : ℝ) ^ m - 1)) := by
   apply le_antisymm
   · let e : Cube l ≃ Fin (2 ^ l) := Fintype.equivOfCardEq (by simp)
     calc
-      pavingMinimum (family m) (2 ^ l)
-          ≤ pavingNorm (family m) (e ∘ dyadicColor m l h) := pavingMinimum_le _ _ _
-      _ = pavingNorm (family m) (dyadicColor m l h) := pavingNorm_relabel _ _ e
+      pavingMinimum (pavingMatrix m) (2 ^ l)
+          ≤ pavingNorm (pavingMatrix m) (e ∘ dyadicColor m l h) := pavingMinimum_le _ _ _
+      _ = pavingNorm (pavingMatrix m) (dyadicColor m l h) := pavingNorm_relabel _ _ e
       _ = _ := dyadic_pavingNorm m l h
   · exact le_pavingMinimum _ _ _ (fun c ↦ dyadic_paving_lower m l h c)
 
 /-- A prescribed dyadic number of colors works also when it exceeds the matrix dimension. -/
 theorem family_paving_at_dyadic_count (m L : ℕ) (hm : 0 < m)
     (ε : ℝ) (hε : 0 < ε) (hpow : 1 / ε ^ 2 ≤ (2 : ℝ) ^ L) :
-    ∃ c : Cube m → Fin (2 ^ L), pavingNorm (family m) c ≤ ε := by
+    ∃ c : Cube m → Fin (2 ^ L), pavingNorm (pavingMatrix m) c ≤ ε := by
   by_cases hLm : L ≤ m
   · let e : Cube L ≃ Fin (2 ^ L) := Fintype.equivOfCardEq (by simp)
     refine ⟨e ∘ dyadicColor m L hLm, ?_⟩
@@ -140,7 +140,7 @@ theorem family_paving_at_dyadic_count (m L : ℕ) (hm : 0 < m)
 theorem exists_uniform_family_paving (ε : ℝ) (hε : 0 < ε) (hε1 : ε < 1) :
     ∃ r : ℕ, 0 < r ∧ (r : ℝ) < 2 / ε ^ 2 ∧
       ∀ m : ℕ, 0 < m → ∃ c : Cube m → Fin r,
-        ∀ a : Fin r, ‖compression (colorClass c a) (family m)‖ ≤ ε := by
+        ∀ a : Fin r, ‖compression (colorClass c a) (pavingMatrix m)‖ ≤ ε := by
   obtain ⟨L, hL, hcount⟩ := exists_dyadic_inverse_sq ε hε hε1
   refine ⟨2 ^ L, by positivity, ?_, ?_⟩
   · exact_mod_cast hcount

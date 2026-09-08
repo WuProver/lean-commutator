@@ -38,7 +38,7 @@ theorem rawFlip_anticommutes (S : Matrix ι ι ℂ) :
   apply fromBlocks_inj.mpr
   refine ⟨?_, ?_, ?_, ?_⟩ <;> noncomm_ring
 
-/-- A self-adjoint unitary of the same size as `family (m+1)`. -/
+/-- A self-adjoint unitary of the same size as `pavingMatrix (m+1)`. -/
 noncomputable def flip (m : ℕ) : Matrix (Cube (m + 1)) (Cube (m + 1)) ℂ :=
   ((Real.sqrt 2 : ℂ) / 2) • rawFlip
 
@@ -58,8 +58,8 @@ theorem flip_mul_self (m : ℕ) : flip m * flip m = 1 := by
   rw [hc, one_smul]
 
 theorem flip_anticommutes (m : ℕ) :
-    flip m * family (m + 1) = -(family (m + 1) * flip m) := by
-  rw [flip, family, smul_mul_smul, smul_mul_smul, skew_succ,
+    flip m * pavingMatrix (m + 1) = -(pavingMatrix (m + 1) * flip m) := by
+  rw [flip, pavingMatrix, smul_mul_smul, smul_mul_smul, skew_succ,
     rawFlip_anticommutes, smul_neg]
   congr 2
   ring
@@ -72,7 +72,7 @@ theorem flip_norm (m : ℕ) : ‖flip m‖ = 1 := by
 /-- The second factor is skew-adjoint, hence normal. -/
 noncomputable def normalSecond (m : ℕ) :
     Matrix (Cube (m + 1)) (Cube (m + 1)) ℂ :=
-  (1 / 2 : ℂ) • (flip m * family (m + 1))
+  (1 / 2 : ℂ) • (flip m * pavingMatrix (m + 1))
 
 theorem normalSecond_conjTranspose (m : ℕ) :
     (normalSecond m)ᴴ = -normalSecond m := by
@@ -89,17 +89,17 @@ theorem normalSecond_isStarNormal (m : ℕ) : IsStarNormal (normalSecond m) := b
   simp
 
 theorem normal_factors_commutator (m : ℕ) :
-    flip m * normalSecond m - normalSecond m * flip m = family (m + 1) := by
+    flip m * normalSecond m - normalSecond m * flip m = pavingMatrix (m + 1) := by
   rw [normalSecond, mul_smul_comm, smul_mul_assoc]
-  have h₁ : flip m * (flip m * family (m + 1)) = family (m + 1) := by
+  have h₁ : flip m * (flip m * pavingMatrix (m + 1)) = pavingMatrix (m + 1) := by
     rw [← mul_assoc, flip_mul_self, one_mul]
-  have h₂ : flip m * family (m + 1) * flip m = -family (m + 1) := by
+  have h₂ : flip m * pavingMatrix (m + 1) * flip m = -pavingMatrix (m + 1) := by
     rw [flip_anticommutes, neg_mul, mul_assoc, flip_mul_self, mul_one]
   rw [h₁, h₂]
   module
 
 theorem normalSecond_norm (m : ℕ) : ‖normalSecond m‖ = 1 / 2 := by
-  have hu : flip m * family (m + 1) ∈
+  have hu : flip m * pavingMatrix (m + 1) ∈
       unitary (Matrix (Cube (m + 1)) (Cube (m + 1)) ℂ) := by
     apply mul_mem
     · rw [Unitary.mem_iff, Matrix.star_eq_conjTranspose, (flip_isHermitian m).eq]
@@ -126,9 +126,9 @@ noncomputable def normalCost (A : Matrix ι ι ℂ) : ℝ :=
   sInf {t : ℝ | ∃ B C : Matrix ι ι ℂ,
     IsStarNormal B ∧ IsStarNormal C ∧ A = B * C - C * B ∧ t = ‖B‖ * ‖C‖}
 
-theorem family_normalCost (m : ℕ) : normalCost (family (m + 1)) = 1 / 2 := by
+theorem family_normalCost (m : ℕ) : normalCost (pavingMatrix (m + 1)) = 1 / 2 := by
   have hw : (1 / 2 : ℝ) ∈ {t : ℝ | ∃ B C : Matrix (Cube (m + 1)) (Cube (m + 1)) ℂ,
-      IsStarNormal B ∧ IsStarNormal C ∧ family (m + 1) = B * C - C * B ∧
+      IsStarNormal B ∧ IsStarNormal C ∧ pavingMatrix (m + 1) = B * C - C * B ∧
         t = ‖B‖ * ‖C‖} := by
     refine ⟨flip m, normalSecond m, (flip_isHermitian m).isSelfAdjoint.isStarNormal,
       normalSecond_isStarNormal m, (normal_factors_commutator m).symm, ?_⟩
@@ -139,9 +139,9 @@ theorem family_normalCost (m : ℕ) : normalCost (family (m + 1)) = 1 / 2 := by
     rintro t ⟨B, C, _, _, hc, rfl⟩
     exact commutator_cost_lower (family_norm (by omega)) hc
 
-theorem family_unrestrictedCost (m : ℕ) : unrestrictedCost (family (m + 1)) = 1 / 2 := by
+theorem family_unrestrictedCost (m : ℕ) : unrestrictedCost (pavingMatrix (m + 1)) = 1 / 2 := by
   have hw : (1 / 2 : ℝ) ∈ {t : ℝ | ∃ B C : Matrix (Cube (m + 1)) (Cube (m + 1)) ℂ,
-      family (m + 1) = B * C - C * B ∧ t = ‖B‖ * ‖C‖} := by
+      pavingMatrix (m + 1) = B * C - C * B ∧ t = ‖B‖ * ‖C‖} := by
     refine ⟨flip m, normalSecond m, (normal_factors_commutator m).symm, ?_⟩
     rw [flip_norm, normalSecond_norm, one_mul]
   apply le_antisymm

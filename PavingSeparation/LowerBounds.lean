@@ -27,7 +27,7 @@ theorem exists_colorClass_card_ge_average (r : ℕ) [NeZero r] (c : ι → Fin r
 theorem family_paving_ceiling_lower (m r : ℕ) [NeZero r] (c : Cube m → Fin r) :
     Real.sqrt
         (((Nat.ceil ((2 : ℝ) ^ m / r) : ℝ) - 1) / ((2 : ℝ) ^ m - 1)) ≤
-      pavingNorm (family m) c := by
+      pavingNorm (pavingMatrix m) c := by
   obtain ⟨a, ha⟩ := exists_colorClass_card_ge_average r c
   simp only [card_cube, Nat.cast_pow, Nat.cast_ofNat] at ha
   have hr : (0 : ℝ) < r := by exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne r)
@@ -44,19 +44,19 @@ theorem family_paving_ceiling_lower (m r : ℕ) [NeZero r] (c : Cube m → Fin r
         ≤ Real.sqrt ((((colorClass c a).card : ℝ) - 1) / ((2 : ℝ) ^ m - 1)) := by
           apply Real.sqrt_le_sqrt
           exact div_le_div_of_nonneg_right (by linarith) (order_sub_one_nonneg m)
-    _ ≤ ‖compression (colorClass c a) (family m)‖ := family_compression_lower m _ hs
-    _ ≤ pavingNorm (family m) c := compression_norm_le_pavingNorm _ _ _
+    _ ≤ ‖compression (colorClass c a) (pavingMatrix m)‖ := family_compression_lower m _ hs
+    _ ≤ pavingNorm (pavingMatrix m) c := compression_norm_le_pavingNorm _ _ _
 
 theorem pavingMinimum_ceiling_lower (m r : ℕ) [NeZero r] :
     Real.sqrt
         (((Nat.ceil ((2 : ℝ) ^ m / r) : ℝ) - 1) / ((2 : ℝ) ^ m - 1)) ≤
-      pavingMinimum (family m) r :=
+      pavingMinimum (pavingMatrix m) r :=
   le_pavingMinimum _ _ _ (fun c ↦ family_paving_ceiling_lower m r c)
 
 /-- Any epsilon paving needs at least n / (1 + epsilon squared times (n - 1)) colors. -/
 theorem family_paving_card_lower (m r : ℕ) (hm : 0 < m) [NeZero r]
     (ε : ℝ) (c : Cube m → Fin r)
-    (hc : ∀ a, ‖compression (colorClass c a) (family m)‖ ≤ ε) :
+    (hc : ∀ a, ‖compression (colorClass c a) (pavingMatrix m)‖ ≤ ε) :
     (2 : ℝ) ^ m / (1 + ε ^ 2 * ((2 : ℝ) ^ m - 1)) ≤ r := by
   obtain ⟨a, ha⟩ := exists_colorClass_card_ge_average r c
   simp only [card_cube, Nat.cast_pow, Nat.cast_ofNat] at ha
@@ -65,9 +65,9 @@ theorem family_paving_card_lower (m r : ℕ) (hm : 0 < m) [NeZero r]
   have hs : (colorClass c a).Nonempty := by
     apply Finset.card_pos.mp
     exact_mod_cast havg.trans_le ha
-  have hflat := flat_compression_sq_lower (family m) (1 / ((2 : ℝ) ^ m - 1))
+  have hflat := flat_compression_sq_lower (pavingMatrix m) (1 / ((2 : ℝ) ^ m - 1))
     (family_diag m) (fun i j hij ↦ family_offdiag_norm_sq m hij) (colorClass c a) hs
-  have hsq : ‖compression (colorClass c a) (family m)‖ ^ 2 ≤ ε ^ 2 :=
+  have hsq : ‖compression (colorClass c a) (pavingMatrix m)‖ ^ 2 ≤ ε ^ 2 :=
     pow_le_pow_left₀ (norm_nonneg _) (hc a) 2
   have hcard : 1 ≤ (colorClass c a).card := hs.card_pos
   rw [Nat.cast_sub hcard, Nat.cast_one] at hflat
@@ -84,9 +84,9 @@ theorem family_paving_card_lower (m r : ℕ) (hm : 0 < m) [NeZero r]
   simpa only [mul_comm] using hmul
 
 theorem family_pavingMinimum_card_lower (m r : ℕ) (hm : 0 < m) [NeZero r]
-    (ε : ℝ) (h : pavingMinimum (family m) r ≤ ε) :
+    (ε : ℝ) (h : pavingMinimum (pavingMatrix m) r ≤ ε) :
     (2 : ℝ) ^ m / (1 + ε ^ 2 * ((2 : ℝ) ^ m - 1)) ≤ r := by
-  obtain ⟨c, hc⟩ := exists_pavingMinimum (family m) r
+  obtain ⟨c, hc⟩ := exists_pavingMinimum (pavingMatrix m) r
   apply family_paving_card_lower m r hm ε c
   intro a
   exact (compression_norm_le_pavingNorm _ _ a).trans (hc ▸ h)

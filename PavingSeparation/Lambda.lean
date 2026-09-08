@@ -94,7 +94,7 @@ def cubeEvenEquivFin (k : ℕ) : Cube (2 * k) ≃ Fin (4 ^ k) :=
 
 /-- The explicit matrices on the conventional `Fin n` index set. -/
 def finFamily (k : ℕ) : Matrix (Fin (4 ^ k)) (Fin (4 ^ k)) ℂ :=
-  (family (2 * k)).submatrix (cubeEvenEquivFin k).symm (cubeEvenEquivFin k).symm
+  (pavingMatrix (2 * k)).submatrix (cubeEvenEquivFin k).symm (cubeEvenEquivFin k).symm
 
 @[simp] theorem finFamily_diag (k : ℕ) (i : Fin (4 ^ k)) : finFamily k i i = 0 :=
   family_diag (2 * k) _
