@@ -1,4 +1,5 @@
 import PavingSeparation.Family
+import PavingSeparation.Lambda
 
 /-!
 # Normal commutator factors
@@ -121,12 +122,23 @@ theorem commutator_cost_lower {A B C : Matrix ι ι ℂ} (hA : ‖A‖ = 1)
 noncomputable def unrestrictedCost (A : Matrix ι ι ℂ) : ℝ :=
   sInf {t : ℝ | ∃ B C : Matrix ι ι ℂ, A = B * C - C * B ∧ t = ‖B‖ * ‖C‖}
 
-/-- Both factors must be normal, as in the PDF's definition of `κ_normal`. -/
+/-- The paper's `λ(A)`: the infimum of `‖C‖` for a diagonal first factor whose
+entries lie in `[-1, 1] + i[-1, 1]`, in the prescribed coordinate basis. -/
 noncomputable def normalCost (A : Matrix ι ι ℂ) : ℝ :=
+  sInf {t : ℝ | ∃ z : ι → ℂ, ∃ C : Matrix ι ι ℂ,
+    (∀ i, |(z i).re| ≤ 1 ∧ |(z i).im| ≤ 1) ∧
+    A = Matrix.diagonal z * C - C * Matrix.diagonal z ∧ t = ‖C‖}
+
+/-- On `Fin n`, `normalCost` is exactly the existing paper invariant `lambdaA`. -/
+theorem normalCost_eq_lambdaA {n : ℕ} (A : Matrix (Fin n) (Fin n) ℂ) :
+    normalCost A = lambdaA A := rfl
+
+/-- Both factors must be normal, as in the PDF's definition of `κ_normal`. -/
+noncomputable def twoNormalCost (A : Matrix ι ι ℂ) : ℝ :=
   sInf {t : ℝ | ∃ B C : Matrix ι ι ℂ,
     IsStarNormal B ∧ IsStarNormal C ∧ A = B * C - C * B ∧ t = ‖B‖ * ‖C‖}
 
-theorem family_normalCost (m : ℕ) : normalCost (pavingMatrix (m + 1)) = 1 / 2 := by
+theorem family_twoNormalCost (m : ℕ) : twoNormalCost (pavingMatrix (m + 1)) = 1 / 2 := by
   have hw : (1 / 2 : ℝ) ∈ {t : ℝ | ∃ B C : Matrix (Cube (m + 1)) (Cube (m + 1)) ℂ,
       IsStarNormal B ∧ IsStarNormal C ∧ pavingMatrix (m + 1) = B * C - C * B ∧
         t = ‖B‖ * ‖C‖} := by

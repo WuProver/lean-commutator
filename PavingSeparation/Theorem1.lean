@@ -66,10 +66,10 @@ theorem paving_commutator_separation :
         ∀ m : ℕ, 0 < m → ∃ c : Cube m → Fin r,
           ∀ a : Fin r, ‖compression (colorClass c a) (pavingMatrix m)‖ ≤ ε) ∧
     -- The optimal cost with both commutator factors normal is 1/2.
-    (∀ m : ℕ, 0 < m → normalCost (pavingMatrix m) = 1 / 2) ∧
-    -- Formula (3): the diagonal cost has the precise lower bound, at least √k / 4.
+    (∀ m : ℕ, 0 < m → twoNormalCost (pavingMatrix m) = 1 / 2) ∧
+    -- The paper's λ(A), on the coordinate-reindexed family, is at least √k / 4.
     (∀ k : ℕ, 1 ≤ k →
-      separationLowerBound k ≤ diagonalCost (pavingMatrix (2 * k)) ∧
+      separationLowerBound k ≤ lambdaA (finFamily k) ∧
       Real.sqrt (k : ℝ) / 4 ≤ separationLowerBound k) ∧
     -- The same precise lower bound holds for diagonal entries in the prescribed square.
     (∀ k : ℕ, 1 ≤ k →
@@ -86,16 +86,16 @@ theorem paving_commutator_separation :
   · intro m hm
     cases m with
     | zero => omega
-    | succ m => exact family_normalCost m
+    | succ m => exact family_twoNormalCost m
   · intro k hk
-    exact ⟨family_diagonalCost_lower_bound k hk, separationLowerBound_sqrt k hk⟩
+    exact ⟨finFamily_lambdaA_lower_bound k hk, separationLowerBound_sqrt k hk⟩
 
 /-- Section 5: the unrestricted infimum equals the both-normal infimum on this family. -/
 theorem section5_unrestricted (m : ℕ) (hm : 0 < m) :
-    unrestrictedCost (pavingMatrix m) = 1 / 2 ∧ normalCost (pavingMatrix m) = 1 / 2 := by
+    unrestrictedCost (pavingMatrix m) = 1 / 2 ∧ twoNormalCost (pavingMatrix m) = 1 / 2 := by
   cases m with
   | zero => omega
-  | succ m => exact ⟨family_unrestrictedCost m, family_normalCost m⟩
+  | succ m => exact ⟨family_unrestrictedCost m, family_twoNormalCost m⟩
 
 /-- Formula (12), using `Fin n` and the PDF's norm-one convention for `λ(n)`. -/
 theorem section5_lambda (k : ℕ) (hk : 1 ≤ k) :

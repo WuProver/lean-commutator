@@ -54,7 +54,9 @@ It does not equate differently normalized statements or assert coverage of the p
 #check PavingSeparation.pavingMinimum_dyadic_ratio
 #check PavingSeparation.exists_uniform_family_paving
 #check PavingSeparation.normalCost
-#check PavingSeparation.family_normalCost
+#check PavingSeparation.normalCost_eq_lambdaA
+#check PavingSeparation.twoNormalCost
+#check PavingSeparation.family_twoNormalCost
 #check PavingSeparation.normal_factors_commutator
 #check PavingSeparation.flip_norm
 #check PavingSeparation.normalSecond_norm
