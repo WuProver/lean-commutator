@@ -1,0 +1,15 @@
+NoEpsilon.commutator_bound_two_pow_3200 : ∀ (n : ℕ) (A : Matrix (Fin n) (Fin n) ℂ),
+  A.trace = 0 → ∃ B C, A = B * C - C * B ∧ ‖B‖ * ‖C‖ ≤ 2 ^ 3200 * ‖A‖
+NoEpsilon.commutator_bound_two_pow_3200_euclideanOperatorNorm : ∀ (n : ℕ) (A : Matrix (Fin n) (Fin n) ℂ),
+  A.trace = 0 →
+    ∃ B C,
+      A = B * C - C * B ∧ ‖Matrix.toEuclideanCLM B‖ * ‖Matrix.toEuclideanCLM C‖ ≤ 2 ^ 3200 * ‖Matrix.toEuclideanCLM A‖
+'NoEpsilon.Absorption.eliminate_simultaneously' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NoEpsilon.identityCornerNormBudget_le_monomial' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NoEpsilon.simultaneousBudget_fixed_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NoEpsilon.highMassNormBudget_fixed_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NoEpsilon.globalNormBudget_le_explicit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NoEpsilon.commutator_bound_two_pow_3200' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NoEpsilon.commutator_bound_two_pow_3200_euclideanOperatorNorm' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,66 @@
+{
+  "date": "2026-09-17",
+  "base_commit": "8560e3605900427b4b8f615e58cd2d488262ad07",
+  "revision_kind": "local working tree; no new commit or remote publication",
+  "lean_toolchain": "leanprover/lean4:v4.30.0-rc1",
+  "mathlib_commit": "0c154d67103f74be3a0f2c509f72ccbf5be9f2a7",
+  "theorem": "NoEpsilon.commutator_bound_two_pow_3200",
+  "constant": "(2 : ℝ) ^ 3200",
+  "norm": "Matrix.Norms.L2Operator; definitionally Matrix.toEuclideanCLM operator norm",
+  "sha256": {
+    ".gitignore": "9614867e2703f912935ed79100959470085eb4e776dc304530bb01d4406dd32f",
+    "README.md": "28b61167c4de671ea1e5130e62e9017d75abb8c0bb291b47d73e265ce96551f0",
+    "AxiomAudit.lean": "4ad371febea965b7bc70c1c6c9ca509fcf9ac9e8e014ba4118b1cbf5aa496bcf",
+    "CommutatorTheorem/NoEpsilon.lean": "e2c5a2bf21ed4d41994c148b11fa32e8f5e93b4e3cc1db63ddc1eb1f2a4e56f4",
+    "CommutatorTheorem/NoEpsilon/SimultaneousAbsorption.lean": "70591b96a621cec865ff905aeb26c94f82cf471863d41e74d16065f421e1f412",
+    "CommutatorTheorem/NoEpsilon/AbsorptionCore.lean": "9197eaadf3088d267accc219519d01dace5254353dc9edc5a3bb3b797a7920b5",
+    "CommutatorTheorem/NoEpsilon/GlobalInduction.lean": "d008123aaa872a9e15484d25f835e732202c30dca8bda71b863c6b73a03d805d",
+    "CommutatorTheorem/NoEpsilon/ExplicitBound.lean": "2dfbbb028b770a2c93e741c74c5a7e548569e1849a60ea1e577ccdf844c511a9",
+    "paper/commutator_bound_2pow3200.tex": "03928662f4e57e9df12732904ea544f85e4803760f7d196c70183a6cc608a1fb",
+    "output/pdf/commutator_bound_2pow3200.pdf": "1859d99efd26779c40ec2c57ffecb1b137cfdc37c962ed7f24ef95b6e9a2c99b",
+    "verification/explicit_3200/Audit.lean": "39ae51059d9eed98ac6500a9ac5f029d3acfacf1af38ca1e47cdd412a445c6a6",
+    "verification/explicit_3200/build.log": "79e8f8fbcca09681b353bed18aa8f08446a917065f5dc30da121336265181096",
+    "verification/explicit_3200/axioms_and_types.log": "42adf8f7978ea10dbe3a1104823373effdb3cee685c3d472d705a311af6485ba",
+    "verification/explicit_3200/full_axioms.log": "9f3623b53442808b12555529b7b344e3877589410a536e199c96c2c61425e524",
+    "verification/explicit_3200/latex.log": "47f87367b72bd40c78b0faa3b5c6803a5f6a70fa4637d22e3d0c7e5b2b581ac2"
+  },
+  "checks": {
+    "lake build": {
+      "exit_code": 0,
+      "jobs": 8434,
+      "log": "verification/explicit_3200/build.log"
+    },
+    "new_sources_placeholder_scan": {
+      "sorry": 0,
+      "admit": 0,
+      "custom_axiom": 0,
+      "native_decide": 0
+    },
+    "pdf": {
+      "pages": 14,
+      "all_pages_visually_reviewed": true,
+      "overfull_boxes": 0,
+      "undefined_references": 0
+    },
+    "lake env lean verification/explicit_3200/Audit.lean": {
+      "exit_code": 0,
+      "audited_declarations": 7,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "log": "verification/explicit_3200/axioms_and_types.log"
+    },
+    "lake env lean AxiomAudit.lean": {
+      "exit_code": 0,
+      "audited_declarations": 106,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "log": "verification/explicit_3200/full_axioms.log"
+    }
+  }
+}

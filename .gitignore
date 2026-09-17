@@ -11,3 +11,13 @@ verification/
 scripts/
 *.pdf
 
+
+# Keep the explicit-bound proof revision and its reproducibility artifacts.
+!/paper/
+/paper/*
+!/paper/commutator_bound_2pow3200.tex
+!/verification/
+/verification/*
+!/verification/explicit_3200/
+!/output/pdf/commutator_bound_2pow3200.pdf
+/tmp/pdfs/

@@ -115,3 +115,9 @@ and the paving separation entry points.
 #print axioms NoEpsilon.uniformCommutatorBound_iff_euclideanOperatorNorm
 #print axioms NoEpsilon.uniformCommutatorBound
 #print axioms NoEpsilon.uniformCommutatorBound_euclideanOperatorNorm
+
+-- Explicit refinement from simultaneous outside-block elimination.
+#print axioms NoEpsilon.Absorption.eliminate_simultaneously
+#print axioms NoEpsilon.highMassNormBudget_fixed_le
+#print axioms NoEpsilon.commutator_bound_two_pow_3200
+#print axioms NoEpsilon.commutator_bound_two_pow_3200_euclideanOperatorNorm
