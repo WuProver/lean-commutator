@@ -3,9 +3,9 @@ import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.LinearAlgebra.Matrix.IsDiag
 
 /-!
-# Explicit lower bounds for the diagonal-commutator cost of flat matrices
+# Explicit bounds for the diagonal-commutator cost of flat matrices
 
-The explicit planar energy lower bound controls every original-coordinate diagonal
+The explicit planar energy bound controls every original-coordinate diagonal
 commutator representation, both with square-normalized entries and after scaling
 an arbitrary diagonal factor. All norms are Euclidean operator norms.
 No optimality is claimed for the coefficients in these lower bounds.
@@ -53,7 +53,7 @@ private theorem card_one_lt {ι : Type*} [Fintype ι] (k : ℕ) (hk : 1 ≤ k)
   norm_num at hpow
   omega
 
-/-- An explicit lower bound for the squared cost with a square-normalized diagonal factor
+/-- An explicit bound for the squared cost with a square-normalized diagonal factor
 and a flat matrix. -/
 theorem diagonal_commutator_cost_sq {ι : Type*} [Fintype ι] [DecidableEq ι]
     (k : ℕ) (hk : 1 ≤ k) (hn : Fintype.card ι = 4 ^ k)
@@ -115,7 +115,7 @@ theorem diagonal_commutator_cost_sq {ι : Type*} [Fintype ι] [DecidableEq ι]
     nlinarith
   exact (mul_le_mul_iff_right₀ hnpos).mp hcancel
 
-/-- An explicit lower bound in square-root form for the finite-dimensional separation theorem. -/
+/-- An explicit bound in square-root form for the finite-dimensional separation theorem. -/
 theorem diagonal_commutator_cost {ι : Type*} [Fintype ι] [DecidableEq ι]
     (k : ℕ) (hk : 1 ≤ k) (hn : Fintype.card ι = 4 ^ k)
     (A C : Matrix ι ι ℂ) (z : ι → ℂ)
@@ -127,7 +127,7 @@ theorem diagonal_commutator_cost {ι : Type*} [Fintype ι] [DecidableEq ι]
   apply Real.sqrt_le_iff.mpr
   exact ⟨norm_nonneg _, diagonal_commutator_cost_sq k hk hn A C z hz hflat hcomm⟩
 
-/-- The explicit lower bound is at least the simpler lower bound √k / 4. -/
+/-- The explicit bound is at least the simpler lower bound √k / 4. -/
 theorem sqrt_k_lower_bound (k : ℕ) (hk : 1 ≤ k) (n : ℕ) (hn : 1 < n) :
     Real.sqrt (k : ℝ) / 4 ≤
       Real.sqrt ((((3 : ℝ) * k - 1) * n + 1) / (32 * ((n : ℝ) - 1))) := by
