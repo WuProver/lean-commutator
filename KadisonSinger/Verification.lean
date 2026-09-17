@@ -10,12 +10,16 @@ Every reported axiom closure should be contained in
 
 #check KadisonSinger.kadison_singer
 #check KadisonSinger.kadison_singer_state_extension
+#check NoEpsilon.MSSFinite.finite_mss_supported
+#check NoEpsilon.MSSFinite.finite_mss_positive_probability
 #check KadisonSinger.hermitian_paving
 #check KadisonSinger.selfAdjoint_operator_paving
 #check KadisonSinger.mem_range_diagonalRepresentation_iff
 #check KadisonSinger.State.isPure_iff_extreme
 
 #print axioms NoEpsilon.MSSFinite.finite_mss
+#print axioms NoEpsilon.MSSFinite.finite_mss_supported
+#print axioms NoEpsilon.MSSFinite.finite_mss_positive_probability
 #print axioms KadisonSinger.vector_partition
 #print axioms KadisonSinger.vector_partition_le
 #print axioms KadisonSinger.weaver_ks2

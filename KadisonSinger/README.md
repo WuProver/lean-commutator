@@ -3,11 +3,19 @@
 This development proves the original Kadison–Singer pure-state extension theorem,
 starting from `NoEpsilon.MSSFinite.finite_mss` in the existing project.
 
-The main entry point is `KadisonSinger.kadison_singer` in `Main.lean`:
-every pure state on the algebra of bounded diagonal operators on ℓ²(ℕ) has a
-unique pure-state extension to all bounded operators on ℓ²(ℕ).
-`kadison_singer_state_extension` additionally gives uniqueness among **all** states.
+The entry point matching uniqueness among **all** state extensions is
+`KadisonSinger.kadison_singer_state_extension` in `Main.lean`: every pure state
+on the algebra of bounded diagonal operators on ℓ²(ℕ) has a unique state extension
+to all bounded operators on ℓ²(ℕ). There is no purity assumption on the extension
+in this uniqueness statement. Display this theorem when stating all-state uniqueness.
+`KadisonSinger.kadison_singer` is its pure-extension corollary: the unique state
+extension is itself pure, as proved in `PureExtension.lean`.
 Neither endpoint assumes paving or the existence of an extension.
+
+For the positive-probability MSS formulation, the public corollaries
+`NoEpsilon.MSSFinite.finite_mss_supported` and `finite_mss_positive_probability`
+provide positive marginal support and positive joint weight, respectively.
+The internal use of `finite_mss` remains compatible with these stronger statements.
 
 The concrete spaces are `Hilbert = lp (fun _ : ℕ ↦ ℂ) 2`,
 `Operator = Hilbert →L[ℂ] Hilbert`, and `Diagonal = lp (fun _ : ℕ ↦ ℂ) ∞`.
@@ -41,12 +49,13 @@ lake env lean KadisonSinger/Verification.lean
 Use `lake build KadisonSinger` to build only this library and its dependencies.
 The project pins Lean 4.30.0-rc1 and mathlib commit
 `0c154d67103f74be3a0f2c509f72ccbf5be9f2a7`.
-The axiom audit is recorded in `verification/axioms.txt`; the complete build log
-is in `verification/build.log`.
-The full project build passed. All 18 audited declarations, including both final
-theorems, depend only on `propext`, `Classical.choice`, and `Quot.sound`;
-no `sorryAx` or additional axiom occurs. `verification/summary.json` records the
-checks and source fingerprints.
+`Verification.lean` audits 20 declarations, including both final theorems and
+the two supported-selection MSS corollaries. Re-run the commands above for the
+current checkout; every axiom closure should contain only `propext`,
+`Classical.choice`, and `Quot.sound`, with no `sorryAx` or additional axioms.
+The files `verification/axioms.txt`, `verification/build.log`, and
+`verification/summary.json` record an earlier audit and its source fingerprints;
+they are not refreshed by the commands above.
 
 ## Reference
 
