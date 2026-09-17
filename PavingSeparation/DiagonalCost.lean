@@ -115,7 +115,7 @@ theorem diagonal_commutator_cost_sq {ι : Type*} [Fintype ι] [DecidableEq ι]
     nlinarith
   exact (mul_le_mul_iff_right₀ hnpos).mp hcancel
 
-/-- An explicit lower bound in square-root form for the finite-dimensional separation theorem. -/
+/-- An explicit bound in square-root form for the finite-dimensional separation theorem. -/
 theorem diagonal_commutator_cost {ι : Type*} [Fintype ι] [DecidableEq ι]
     (k : ℕ) (hk : 1 ≤ k) (hn : Fintype.card ι = 4 ^ k)
     (A C : Matrix ι ι ℂ) (z : ι → ℂ)
@@ -127,7 +127,7 @@ theorem diagonal_commutator_cost {ι : Type*} [Fintype ι] [DecidableEq ι]
   apply Real.sqrt_le_iff.mpr
   exact ⟨norm_nonneg _, diagonal_commutator_cost_sq k hk hn A C z hz hflat hcomm⟩
 
-/-- The explicit lower bound is at least the simpler lower bound √k / 4. -/
+/-- The explicit bound is at least the simpler lower bound √k / 4. -/
 theorem sqrt_k_lower_bound (k : ℕ) (hk : 1 ≤ k) (n : ℕ) (hn : 1 < n) :
     Real.sqrt (k : ℝ) / 4 ≤
       Real.sqrt ((((3 : ℝ) * k - 1) * n + 1) / (32 * ((n : ℝ) - 1))) := by
