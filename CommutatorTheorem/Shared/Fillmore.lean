@@ -58,7 +58,7 @@ private lemma exists_neg_proj (n : ℕ)
   have hTotalSum : ∑ i : Fin (n + 2), (A i i * starRingEnd ℂ (A 0 0)).re = 0 := by
     rw [← re_fintype_sum, ← Finset.sum_mul]
     have : ∑ i : Fin (n + 2), A i i = 0 := by
-      have := hTrace; simp [Matrix.trace, Matrix.diag] at this; exact this
+      have := hTrace; simp only [Matrix.trace, Matrix.diag] at this; exact this
     rw [this, zero_mul]; rfl
   have h00 : 0 < (A 0 0 * starRingEnd ℂ (A 0 0)).re := by
     rw [starRingEnd_apply]; simp [Complex.mul_conj, Complex.normSq_pos, hA00]
@@ -164,6 +164,9 @@ private lemma rayleigh_zero_normalize {m : ℕ}
 -- the kernel has dim ≥ 1. A nonzero kernel element, scaled to the ellipsoid
 -- p²+4|w|²=1, gives the desired unit vector.
 set_option maxHeartbeats 1600000 in
+-- Matrix and finite-sum calculations require additional elaboration steps.
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedVariables false in
 private lemma zero_mem_nr_2x2
     (A : Matrix (Fin 2) (Fin 2) ℂ)
     (hTrace : A.trace = 0)
@@ -245,7 +248,11 @@ private lemma zero_mem_nr_2x2
     have hw0' : w = 0 := by rwa [Complex.normSq_eq_zero] at hnw0
     have hp_eq : p = -1 := by nlinarith [Complex.normSq_nonneg w, hell]
     apply ha
-    have := hw_eq; rw [hp_eq, hw0'] at this; simp at this; exact this
+    have := hw_eq
+    rw [hp_eq, hw0'] at this
+    simp only [Complex.ofReal_neg, Complex.ofReal_one, mul_neg, mul_one, mul_zero, add_zero,
+      map_zero, neg_eq_zero] at this
+    exact this
   set α := ((1 + p) / 2 : ℝ)
   have hα_pos : 0 < α := by change 0 < (1 + p) / 2; linarith
   set u : Fin 2 → ℂ := ![↑α, w]
@@ -264,7 +271,7 @@ private lemma zero_mem_nr_2x2
   rw [show ↑α * a * ↑α + ↑α * b * w + (starRingEnd ℂ w * c * ↑α + starRingEnd ℂ w * -a * w) =
       ↑α * (a * ↑α + (b * w + c * starRingEnd ℂ w)) - a * (starRingEnd ℂ w * w) from by ring]
   rw [hbwcw, hcww, hnw]
-  have : ↑α = (↑p + 1) / 2 := by push_cast; ring
+  have : ↑α = (↑p + 1) / 2 := by ring
   rw [this]
   push_cast
   ring
@@ -374,13 +381,13 @@ private lemma segment_diag_in_nr {n : ℕ}
     simp_rw [this, Finset.sum_add_distrib, Finset.sum_ite_eq', Finset.mem_univ, if_true]
     simp only [Fin.sum_univ_two] at hN; linarith
 
-open Complex Finset in
 -- Orthogonal compression: given a unit vector v₁ with v₁(k₀) = 0,
 -- for any t ∈ [0,1], produce a unit vector v with
 -- R_A(v) = t * R_A(v₁) + (1-t) * A(k₀,k₀)
 -- and v(i) = 0 whenever v₁(i) = 0 and i ≠ k₀.
 set_option maxHeartbeats 1600000 in
 -- orthogonal compression via 2x2 embedding
+open Complex Finset in
 private lemma ortho_compress {m : ℕ}
     (A : Matrix (Fin m) (Fin m) ℂ)
     (v₁ : Fin m → ℂ) (k₀ : Fin m)
@@ -534,9 +541,9 @@ private lemma ortho_compress {m : ℕ}
     simp only [v, hvi, mul_zero, hik, ite_false, add_zero]
 
 -- Iterative averaging of diagonal entries via orthogonal compression.
-open Complex Finset in
 set_option maxHeartbeats 6400000 in
 -- iterative diagonal averaging via orthogonal compression
+open Complex Finset in
 private lemma iter_diag_avg {m : ℕ}
     (A : Matrix (Fin m) (Fin m) ℂ) :
     ∀ p : ℕ, p < m →
@@ -807,7 +814,8 @@ private lemma zero_in_nr_of_trace_zero (m : ℕ) (hm : 2 ≤ m)
             have hu_ne : u ≠ 0 := by
               intro h
               have h1 := congr_fun h k
-              change (if k = (0 : Fin (n+1+2)) then -A 0 k else if k = k then A 0 0 else 0) = 0 at h1
+              change (if k = (0 : Fin (n+1+2)) then -A 0 k else if k = k then A 0 0 else 0) = 0
+                at h1
               rw [if_neg hk0, if_pos rfl] at h1
               exact hdiag_zero 0 h1
             apply rayleigh_zero_normalize A u hu_ne
@@ -1036,6 +1044,9 @@ private lemma zero_in_nr_of_trace_zero (m : ℕ) (hm : 2 ≤ m)
 -- then handle the 2x2 submatrix at (0,j). If its det is 0, construct a
 -- kernel vector. If not, use zero_in_nr_of_trace_zero for the Im ≠ 0 case.
 set_option maxHeartbeats 1600000 in
+-- Matrix and finite-sum calculations require additional elaboration steps.
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedVariables false in
 private lemma zero_mem_nr_toeplitz_hausdorff (n : ℕ)
     (A : Matrix (Fin (n + 1 + 2)) (Fin (n + 1 + 2)) ℂ)
     (hTrace : A.trace = 0)
@@ -1215,7 +1226,7 @@ private lemma zero_mem_nr_toeplitz_hausdorff (n : ℕ)
               rw [Complex.normSq_apply]
               by_cases hPv : Pv = 0
               · have hQv : Qv ≠ 0 := h hPv
-                simp [hPv]; positivity
+                simp only [hPv, neg_zero, mul_zero, add_zero, mul_self_pos, ne_eq]; positivity
               · have : Pv ^ 2 > 0 := by positivity
                 nlinarith [sq_nonneg Qv]
           -- Im of cross-term · conj(A₀₀) = 0 by choice of z₀
@@ -1388,6 +1399,7 @@ private lemma zero_mem_numerical_range (n : ℕ)
       exact zero_mem_nr_toeplitz_hausdorff n A hTrace hDiag hdet
 
 set_option maxHeartbeats 800000 in
+-- Matrix and finite-sum calculations require additional elaboration steps.
 /-- ONB extension: given a unit vector v in ℂⁿ, there exists a unitary matrix
     whose first column is v. Standard result via Gram-Schmidt or Householder. -/
 private lemma onb_extension (n : ℕ)
@@ -1420,7 +1432,7 @@ private lemma onb_extension (n : ℕ)
   obtain ⟨b, hb⟩ := Orthonormal.exists_orthonormalBasis_extension_of_card_eq hcard horth
   have hb0 : b 0 = ve := by
     have := hb 0 (Set.mem_singleton 0)
-    simp [w] at this; exact this
+    simp only [↓reduceIte, w] at this; exact this
   -- Form the change-of-basis matrix (unitary) and verify first column
   let e := EuclideanSpace.basisFun (Fin (n + 2)) ℂ
   let M := e.toBasis.toMatrix (fun i => b i)
@@ -1513,7 +1525,7 @@ private lemma exists_unitary_zero_corner (n : ℕ)
       rw [Fin.sum_univ_succ]
     have h1 : C 0 0 + ∑ i : Fin (n + 1), C i.succ i.succ = 0 := by
       rw [← hExpand, hTraceC]
-    simp [show C 0 0 = 0 from hC00] at h1
+    simp only [show C 0 0 = 0 from hC00, zero_add] at h1
     exact h1
 
 private lemma fromBlocks_unitary {n : ℕ}
@@ -1569,10 +1581,15 @@ private lemma block_conjugation_zero_diag (n : ℕ)
                    Matrix.fromBlocks_apply₁₁, Matrix.fromBlocks_apply₂₁,
                    Fintype.sum_sum_type, Matrix.one_apply, Matrix.zero_apply,
                    Matrix.submatrix_apply]
-        simp [e, finSumFinEquiv, finCongr]
+        simp only [Finset.univ_unique, Fin.default_eq_zero, Fin.isValue, RCLike.star_def,
+          MonoidWithZeroHom.map_ite_one_zero, finSumFinEquiv, finCongr, Equiv.trans_apply,
+          Equiv.coe_fn_mk, Sum.elim_inl, ite_mul, one_mul, zero_mul, Finset.sum_ite_eq',
+          Finset.mem_singleton, Fin.mk_eq_zero, Fin.castAdd_mk, Fin.cast_mk, star_zero,
+          Sum.elim_inr, Fin.cast_natAdd, Fin.addNat_one, Finset.sum_const_zero, add_zero,
+          mul_ite, mul_one, mul_zero, ite_eq_right_iff, forall_self_imp, e]
         intro hj0
         subst hj0
-        convert hC00 using 2 <;> simp [Fin.ext_iff]
+        convert hC00 using 2
       · simp only [D_sum, W_sum, C_sum, Matrix.mul_apply, Matrix.conjTranspose_apply,
                    Matrix.fromBlocks_apply₁₂, Matrix.fromBlocks_apply₂₂,
                    Fintype.sum_sum_type, Matrix.zero_apply, Matrix.submatrix_apply]

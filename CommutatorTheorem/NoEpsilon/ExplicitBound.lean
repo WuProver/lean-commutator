@@ -11,10 +11,12 @@ open scoped Matrix.Norms.L2Operator
 namespace NoEpsilon
 
 set_option maxRecDepth 10000
-set_option maxHeartbeats 2000000
+
 -- Exact powers of two up to 3200 are small integers for kernel arithmetic.
 set_option exponentiation.threshold 10000
 
+set_option maxHeartbeats 2000000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- A convenient monomial majorant for the identity-corner cost. -/
 theorem identityCornerNormBudget_le_monomial (x : ℝ) (hx : 1 ≤ x) :
     identityCornerNormBudget x ≤ 2 ^ 29 * x ^ 9 := by
@@ -41,6 +43,8 @@ theorem identityCornerNormBudget_le_monomial (x : ℝ) (hx : 1 ≤ x) :
       ring_nf
       nlinarith [pow_nonneg hx0 9]
 
+set_option maxHeartbeats 2000000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- The two-shear transformed norm is at most 2^281 at the fixed high-mass parameters. -/
 theorem simultaneousBudget_fixed_le :
     Absorption.simultaneousBudget ((2 : ℝ) ^ 27) (2 ^ 29) ≤ (2 : ℝ) ^ 281 := by
@@ -65,6 +69,8 @@ theorem simultaneousBudget_fixed_le :
     _ ≤ (2 : ℝ) ^ 83 * ((2 : ℝ) ^ 99) ^ 2 := by gcongr
     _ = _ := by norm_num
 
+set_option maxHeartbeats 2000000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- The transformed norm is at least one, so the monomial majorant applies. -/
 theorem simultaneousBudget_fixed_ge_one :
     1 ≤ Absorption.simultaneousBudget ((2 : ℝ) ^ 27) (2 ^ 29) := by
@@ -79,6 +85,8 @@ theorem simultaneousBudget_fixed_ge_one :
         (1 + (2 : ℝ) ^ 27 + Real.sqrt ((2 ^ 29 : ℕ) : ℝ)) ^ 2) := by positivity
     linarith))
 
+set_option maxHeartbeats 2000000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- The high-trace-mass branch has the bound stated in the referee's estimate. -/
 theorem highMassNormBudget_fixed_le :
     highMassNormBudget (2 / (2 : ℝ) ^ 26) ≤ (2 : ℝ) ^ 3153 := by
@@ -113,6 +121,8 @@ theorem highMassNormBudget_fixed_le :
       gcongr
     _ ≤ (2 : ℝ) ^ 3153 := by norm_num
 
+set_option maxHeartbeats 2000000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- The complete induction budget is below 2^3200. -/
 theorem globalNormBudget_le_explicit : globalNormBudget ≤ (2 : ℝ) ^ 3200 := by
   unfold globalNormBudget
@@ -125,6 +135,8 @@ theorem globalNormBudget_le_explicit : globalNormBudget ≤ (2 : ℝ) ^ 3200 := 
       _ ≤ (2 : ℝ) ^ 3200 := by norm_num
   · norm_num
 
+set_option maxHeartbeats 2000000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- Every trace-zero complex matrix is a same-dimension commutator with constant 2^3200. -/
 theorem commutator_bound_two_pow_3200 (n : ℕ) (A : Matrix (Fin n) (Fin n) ℂ)
     (hA : Matrix.trace A = 0) :
@@ -135,6 +147,8 @@ theorem commutator_bound_two_pow_3200 (n : ℕ) (A : Matrix (Fin n) (Fin n) ℂ)
   exact ⟨B, C, hBC, hbound.trans
     (mul_le_mul_of_nonneg_right globalNormBudget_le_explicit (norm_nonneg A))⟩
 
+set_option maxHeartbeats 2000000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- The same explicit estimate stated with the actual continuous-linear-map operator norm. -/
 theorem commutator_bound_two_pow_3200_euclideanOperatorNorm
     (n : ℕ) (A : Matrix (Fin n) (Fin n) ℂ) (hA : Matrix.trace A = 0) :

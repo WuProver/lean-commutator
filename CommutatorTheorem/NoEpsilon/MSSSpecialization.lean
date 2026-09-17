@@ -72,6 +72,8 @@ theorem derivative_coordinatePolynomial {R : Type*} [CommRing R]
 
 variable [Fintype σ]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedFintypeInType false in
 /-- The derivative of a coordinate polynomial is evaluation of the multivariate
 partial at the same (possibly complex) coordinate point. -/
 theorem derivative_eval_coordinatePolynomial (p : MvPolynomial σ ℂ)
@@ -89,6 +91,8 @@ theorem derivative_eval_coordinatePolynomial (p : MvPolynomial σ ℂ)
   simp only [eval_coordinatePolynomial] at hd
   exact hd.unique hh'
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedFintypeInType false in
 /-- Fixing every coordinate except one at real values preserves nonvanishing
 in that variable, as long as the specialization is nonzero. -/
 theorem coordinatePolynomial_upperStable {p : MvPolynomial σ ℂ} (hp : UpperStable p)
@@ -133,6 +137,8 @@ theorem splits_of_complexification_upperStable {p : ℝ[X]}
   · simp
   · simpa using hzim.symm
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedFintypeInType false in
 /-- A nonzero real coordinate specialization of a real stable multivariate
 polynomial has only real roots. -/
 theorem coordinatePolynomial_splits {p : MvPolynomial σ ℝ} (hp : RealStable p)
@@ -162,6 +168,9 @@ theorem coordinatePolynomial_roots_neg {p : MvPolynomial σ ℝ} {z : σ → ℝ
   rw [← eval_coordinatePolynomial] at hpos
   exact hpos.ne' heval
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
 /-- Above all roots, every coordinate barrier is nonnegative. -/
 theorem barrier_nonneg {p : MvPolynomial σ ℝ} (hp : RealStable p)
     {z : σ → ℝ} (hz : AboveRoots p z) (i : σ) : 0 ≤ barrier p i z := by
@@ -190,6 +199,8 @@ theorem natDegree_le_of_bounded_quotient (g h : ℝ[X]) (hzero : h ≠ 0) (C : �
   obtain ⟨x, hx, hx0⟩ := (he.and (Filter.eventually_ge_atTop (0 : ℝ))).exists
   exact (not_lt_of_ge (hbound x hx0)) hx
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedFintypeInType false in
 /-- The cross-direction barrier has a bounded rational numerator degree. -/
 theorem barrier_quotient_natDegree_le {p : MvPolynomial σ ℝ} (hp : RealStable p)
     {z : σ → ℝ} (hz : AboveRoots p z) (i j : σ) :
@@ -208,6 +219,8 @@ theorem barrier_quotient_natDegree_le {p : MvPolynomial σ ℝ} (hp : RealStable
   rw [abs_of_nonneg (barrier_nonneg hp hz' i)]
   exact barrier_antitone_aboveRoots hp hz (le_coordinateShift z j ht) i
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedFintypeInType false in
 /-- The cross-coordinate rational barrier retains the Pick sign on the closed
 upper half-plane wherever its denominator is nonzero. -/
 theorem coordinate_quotient_pick {p : MvPolynomial σ ℝ} (hp : RealStable p)

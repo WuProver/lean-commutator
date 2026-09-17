@@ -13,6 +13,8 @@ namespace NoEpsilon.LowMassPaving
 noncomputable def transversalConstant (D : ℝ) : ℝ :=
   (1 + 2 * (Real.sqrt 2 + 1) * Real.sqrt D) ^ 2
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedVariables false in
 /-- A closed upper bound for every level of the paired-selection recurrence. -/
 theorem binary_recurrence_sqrt_bound (δ : ℝ) (hδ : 0 ≤ δ) (L : ℕ → ℝ)
     (hL : ∀ j, 0 ≤ L j) (h₀ : L 0 ≤ 1)
@@ -68,7 +70,7 @@ theorem binary_recurrence_leaf_bound (D : ℝ) (hD : 0 ≤ D) (h : ℕ) (L : ℕ
   rw [hgeom, Real.sqrt_div hD] at hbound
   have hbound' : Real.sqrt (L h) ≤
       (1 + 2 * (Real.sqrt 2 + 1) * Real.sqrt D) / Real.sqrt ((2 : ℝ) ^ h) := by
-    convert hbound using 1 <;> ring
+    convert hbound using 1; ring
   have hsq := (sq_le_sq₀ (Real.sqrt_nonneg (L h)) (by positivity)).mpr hbound'
   simpa only [Real.sq_sqrt (hL h), div_pow, Real.sq_sqrt hR.le,
     transversalConstant] using hsq

@@ -18,6 +18,9 @@ open scoped Matrix Matrix.Norms.L2Operator
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedSectionVars false in
 /-- For a zero-sum real family, half of its absolute mass is its positive mass. -/
 theorem twice_sum_positive_eq_sum_abs (f : ι → ℝ) (hf : ∑ i, f i = 0) :
     2 * (∑ i, max (f i) 0) = ∑ i, |f i| := by
@@ -31,6 +34,8 @@ theorem twice_sum_positive_eq_sum_abs (f : ι → ℝ) (hf : ∑ i, f i = 0) :
   simp_rw [hpoint]
   rw [Finset.sum_add_distrib, hf, add_zero]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 /-- Positive trace mass forces a proportionate number of eigenvalues above `t / 4`.
 The conclusion is strict, so it can be paired directly with a codimension upper bound. -/
 theorem high_mass_many_large_coordinates [Nonempty ι] (f : ι → ℝ) (t : ℝ)
@@ -54,6 +59,9 @@ theorem high_mass_many_large_coordinates [Nonempty ι] (f : ι → ℝ) (t : ℝ
     Finset.card_univ, nsmul_eq_mul] at hSum
   nlinarith
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedSectionVars false in
 /-- More coordinate directions than the codimension of a subspace leave a nonzero
 vector supported in those directions inside the subspace. -/
 theorem exists_supported_nonzero_in_submodule (W : Submodule ℂ (ι → ℂ)) (s : Finset ι)
@@ -73,6 +81,8 @@ theorem exists_supported_nonzero_in_submodule (W : Submodule ℂ (ι → ℂ)) (
   rw [hE, Module.finrank_pi] at hLe
   simpa using (not_lt_of_ge hLe) hDim
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 /-- The dimension intersection can be normalized without changing support or subspace. -/
 theorem exists_supported_unit_in_submodule (W : Submodule ℂ (ι → ℂ)) (s : Finset ι)
     (hDim : Fintype.card ι < Module.finrank ℂ W + s.card) :
@@ -91,6 +101,8 @@ theorem exists_supported_unit_in_submodule (W : Submodule ℂ (ι → ℂ)) (s :
   · intro i hi
     simp only [Pi.smul_apply, hSupport i hi, smul_zero]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 /-- A low-codimension subspace retains a large direction for any diagonal zero-trace
 Hermitian form with high absolute spectral mass. -/
 theorem exists_large_diagonal_rayleigh_in_submodule [Nonempty ι]

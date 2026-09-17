@@ -16,6 +16,9 @@ open scoped Matrix Matrix.Norms.L2Operator ComplexConjugate
 
 variable {ι κ : Type*} [Fintype ι] [Fintype κ] [DecidableEq ι] [DecidableEq κ]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedSectionVars false in
 /-- Numerical-range values commute with rectangular compression. -/
 theorem rayleighValue_compression (A : Matrix ι ι ℂ) (V : Matrix ι κ ℂ) (v : κ → ℂ) :
     rayleighValue (Vᴴ * A * V) v = rayleighValue A (V *ᵥ v) := by
@@ -25,6 +28,8 @@ theorem rayleighValue_compression (A : Matrix ι ι ℂ) (V : Matrix ι κ ℂ) 
   have h := congrArg (fun M : Matrix Unit Unit ℂ ↦ M () ()) hGram
   simpa only [gram_diagonal] using h
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 /-- A rectangular isometry preserves Euclidean energy. -/
 theorem vectorEnergy_isometry_mulVec (V : Matrix ι κ ℂ) (hV : Vᴴ * V = 1) (v : κ → ℂ) :
     vectorEnergy (V *ᵥ v) = vectorEnergy v := by
@@ -33,6 +38,9 @@ theorem vectorEnergy_isometry_mulVec (V : Matrix ι κ ℂ) (hV : Vᴴ * V = 1) 
   exact_mod_cast h.symm
 
 omit [Fintype κ] [DecidableEq κ] in
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedSectionVars false in
 theorem rayleighValue_adjoint (A : Matrix ι ι ℂ) (v : ι → ℂ) :
     rayleighValue Aᴴ v = star (rayleighValue A v) := by
   let X : Matrix ι Unit ℂ := fun i _ ↦ v i
@@ -42,11 +50,16 @@ theorem rayleighValue_adjoint (A : Matrix ι ι ℂ) (v : ι → ℂ) :
   simpa only [gram_diagonal, Matrix.conjTranspose_apply] using h
 
 omit [Fintype κ] [DecidableEq κ] in
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedSectionVars false in
 theorem rayleighValue_smul_matrix (A : Matrix ι ι ℂ) (c : ℂ) (v : ι → ℂ) :
     rayleighValue (c • A) v = c * rayleighValue A v := by
   simp only [rayleighValue, Matrix.smul_mulVec, dotProduct_smul, smul_eq_mul]
 
 omit [Fintype κ] [DecidableEq κ] in
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 set_option backward.isDefEq.respectTransparency false in
 theorem rayleighValue_hermitianRealPart_re (A : Matrix ι ι ℂ) (v : ι → ℂ) :
     (rayleighValue (hermitianRealPart A) v).re = (rayleighValue A v).re := by
@@ -170,6 +183,9 @@ theorem highMass_compression_has_large_neutral [Nonempty ι]
     simp only [Metric.mem_closedBall, dist_zero_right, norm_neg, Complex.norm_real,
       Real.norm_eq_abs, abs_of_pos (by linarith : 0 < t / 4), le_refl]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedSectionVars false in
 /-- An isometry has range dimension equal to its number of columns. -/
 theorem finrank_range_isometry (V : Matrix ι κ ℂ) (hV : Vᴴ * V = 1) :
     Module.finrank ℂ V.mulVecLin.range = Fintype.card κ := by
@@ -190,6 +206,9 @@ theorem highMass_compression_contains_disk_of_card [Nonempty ι]
   apply highMass_compression_contains_disk A V hV t ht hNorm hTrace hMass
   rwa [finrank_range_isometry V hV]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedSectionVars false in
 /-- Rectangular matrix multiplication obeys the Euclidean operator norm bound. -/
 theorem euclideanNorm_mulVec_le (V : Matrix ι κ ℂ) (v : κ → ℂ) :
     ‖(WithLp.toLp 2 (V *ᵥ v) : EuclideanSpace ℂ ι)‖ ≤

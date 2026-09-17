@@ -15,16 +15,22 @@ open NoEpsilon.MSSSelection NoEpsilon.MSSPadding
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 set_option backward.isDefEq.respectTransparency false
-set_option maxHeartbeats 100000
 
 variable {ι κ Ω : Type*} [Fintype ι] [DecidableEq ι] [Fintype κ] [Fintype Ω]
 
+set_option maxHeartbeats 100000 in
+-- Retain the original elaboration budget locally for this declaration.
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
 /-- The whole weighted covariance scales by the square of the real vector scale. -/
 theorem mean_outer_real_mul (v : κ → Ω → ι → ℂ) (p : κ → Ω → ℝ) (c : ℝ) :
     (∑ i, ∑ ω, (p i ω : ℂ) • outer (fun j ↦ (c : ℂ) * v i ω j)) =
       c ^ 2 • ∑ i, ∑ ω, (p i ω : ℂ) • outer (v i ω) := by
   simp only [outer_real_mul, smul_comm (p _ _ : ℂ) (c ^ 2), Finset.smul_sum]
 
+set_option maxHeartbeats 100000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- Positive-parameter scaling of the unit-covariance-inequality MSS theorem. -/
 theorem finite_mss_scaled_pos (v : κ → Ω → ι → ℂ) (p : κ → Ω → ℝ)
     (hp : ∀ i ω, 0 ≤ p i ω) (hsum : ∀ i, ∑ ω, p i ω = 1)
@@ -87,6 +93,8 @@ theorem finite_mss_scaled_pos (v : κ → Ω → ι → ℂ) (p : κ → Ω → 
       congr 1
       field_simp
 
+set_option maxHeartbeats 100000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- The scaled finite MSS estimate, including both zero-parameter cases. -/
 theorem finite_mss_scaled (v : κ → Ω → ι → ℂ) (p : κ → Ω → ℝ)
     (hp : ∀ i ω, 0 ≤ p i ω) (hsum : ∀ i, ∑ ω, p i ω = 1)

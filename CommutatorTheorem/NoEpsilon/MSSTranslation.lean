@@ -36,8 +36,8 @@ theorem pderiv_translateAll (x : R) (i : σ) (p : MvPolynomial σ R) :
   | add p q hp hq => simp [hp, hq]
   | mul_X p j hp =>
     by_cases h : j = i
-    · subst j; simp [MvPolynomial.pderiv_mul, hp, mul_add, add_mul]; ring
-    · simp [MvPolynomial.pderiv_mul, hp, h, mul_add, add_mul]
+    · subst j; simp [hp, mul_add, add_mul]; ring
+    · simp [hp, h, mul_add, add_mul]
 
 theorem mixedDifference_translateAll (x : R) (xs : List σ) (p : MvPolynomial σ R) :
     mixedDifference xs (translateAll x p) = translateAll x (mixedDifference xs p) := by

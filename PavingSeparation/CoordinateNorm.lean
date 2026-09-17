@@ -41,6 +41,8 @@ theorem submatrix_eq_coordinate_compression (A : Matrix β β ℂ)
   simp [Matrix.mul_apply, coordinateInclusion, Matrix.conjTranspose_apply,
     mul_ite, ite_mul, Finset.sum_ite_eq']
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 /-- Rectangular coordinate compression is contractive in the Euclidean operator norm. -/
 theorem submatrix_operator_norm_le (A : Matrix β β ℂ)
     (f : α → β) (g : γ → β) (hf : Function.Injective f) (hg : Function.Injective g) :

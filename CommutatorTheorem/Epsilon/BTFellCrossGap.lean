@@ -80,8 +80,7 @@ theorem filter_length_le_length_sub_succ_of_get_lt
     (l.filter fun r ↦ x < r).length ≤ l.length - (k + 1) := by
   have hprefix : (l.take (k + 1)).filter (fun r ↦ x < r) = [] := by
     apply List.filter_eq_nil_iff.mpr
-    intro y hy
-    intro hydec
+    intro y hy hydec
     rw [List.mem_iff_getElem] at hy
     obtain ⟨j, hj, rfl⟩ := hy
     simp only [List.length_take] at hj

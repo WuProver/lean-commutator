@@ -14,8 +14,8 @@ open Polynomial CommutatorTheorem CommutatorTheorem.BTMDPSelection
 open NoEpsilon.MSSCharpoly NoEpsilon.MSSInterlacing
 open scoped BigOperators Polynomial ComplexOrder
 
-set_option maxHeartbeats 800000
-
+set_option maxHeartbeats 800000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- Splitting the first independent coordinate is valid for every module-valued average. -/
 theorem sum_smul_independent_succ {R M Ω : Type*} [CommSemiring R]
     [AddCommMonoid M] [Module R M] [Fintype Ω]
@@ -31,6 +31,8 @@ theorem sum_smul_independent_succ {R M Ω : Type*} [CommSemiring R]
 
 variable {ι Ω : Type*} [Fintype ι] [DecidableEq ι] [Fintype Ω]
 
+set_option maxHeartbeats 800000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- Exact first-coordinate recursion of the real expected characteristic polynomial. -/
 theorem realExpectedCharpoly_succ (n : ℕ) (B : Matrix ι ι ℂ) (hB : B.IsHermitian)
     (v : Fin (n + 1) → Ω → ι → ℂ) (p : Fin (n + 1) → Ω → ℝ) :
@@ -55,27 +57,40 @@ theorem realExpectedCharpoly_succ (n : ℕ) (B : Matrix ι ι ℂ) (hB : B.IsHer
     simp only [Fin.cons_zero, Fin.cons_succ, add_assoc]
   congr 1
 
+set_option maxHeartbeats 800000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- A two-point probability law, allowing its two points to coincide. -/
 noncomputable def twoPointLaw (a b : Ω) (t : ℝ) (ω : Ω) : ℝ := by
   classical
   exact (if ω = a then t else 0) + (if ω = b then 1 - t else 0)
 
+set_option maxHeartbeats 800000 in
+-- Retain the original elaboration budget locally for this declaration.
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedFintypeInType false in
+set_option linter.unusedSectionVars false in
 theorem twoPointLaw_nonneg (a b : Ω) (t : ℝ) (ht : 0 ≤ t) (ht1 : t ≤ 1) (ω : Ω) :
     0 ≤ twoPointLaw a b t ω := by
   classical
   unfold twoPointLaw
   split_ifs <;> linarith
 
+set_option maxHeartbeats 800000 in
+-- Retain the original elaboration budget locally for this declaration.
 theorem sum_twoPointLaw (a b : Ω) (t : ℝ) : ∑ ω, twoPointLaw a b t ω = 1 := by
   classical
   simp [twoPointLaw, Finset.sum_add_distrib]
 
+set_option maxHeartbeats 800000 in
+-- Retain the original elaboration budget locally for this declaration.
 theorem sum_twoPointLaw_smul {M : Type*} [AddCommGroup M] [Module ℝ M]
     (a b : Ω) (t : ℝ) (f : Ω → M) :
     (∑ ω, twoPointLaw a b t ω • f ω) = t • f a + (1 - t) • f b := by
   classical
   simp [twoPointLaw, add_smul, Finset.sum_add_distrib, ite_smul]
 
+set_option maxHeartbeats 800000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- Convex combinations of any two conditional children are real-rooted, because they
 are themselves expectations for a different independent law in the next coordinate. -/
 theorem children_pairwise_convex_realRooted (n : ℕ) (B : Matrix ι ι ℂ)
@@ -105,6 +120,8 @@ theorem children_pairwise_convex_realRooted (n : ℕ) (B : Matrix ι ι ℂ)
   simp only [p', Fin.cons_zero, Fin.cons_succ, sum_twoPointLaw_smul] at h
   exact h
 
+set_option maxHeartbeats 800000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- A complete outcome inherits every upper root bound of the expected polynomial.
 All real-rootedness and interlacing assertions are proved internally. -/
 theorem exists_outcome_inheriting_rootBounds [Nonempty ι]
@@ -142,6 +159,8 @@ theorem exists_outcome_inheriting_rootBounds [Nonempty ι]
     simpa only [Fin.sum_univ_succ, Fin.cons_zero, Fin.cons_succ, add_assoc]
       using hselected
 
+set_option maxHeartbeats 800000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- In particular, some actual outcome is bounded by the largest root of its
 expected characteristic polynomial. -/
 theorem exists_outcome_below_expected_largestRoot [Nonempty ι]

@@ -14,7 +14,6 @@ padding existence step needed to pass from covariance equality to inequality in 
 open scoped BigOperators Matrix ComplexOrder MatrixOrder
 
 set_option backward.isDefEq.respectTransparency false
-set_option maxHeartbeats 600000
 
 namespace NoEpsilon.MSSPadding
 
@@ -22,23 +21,48 @@ open NoEpsilon.MSSSelection
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 
+set_option maxHeartbeats 600000 in
+-- Retain the original elaboration budget locally for this declaration.
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedSectionVars false in
 lemma energy_nonneg (v : ι → ℂ) : 0 ≤ energy v :=
   Finset.sum_nonneg fun _ _ ↦ sq_nonneg _
 
+set_option maxHeartbeats 600000 in
+-- Retain the original elaboration budget locally for this declaration.
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
+set_option linter.unusedSectionVars false in
 lemma outer_real_mul (c : ℝ) (v : ι → ℂ) :
     outer (fun i ↦ (c : ℂ) * v i) = (c ^ 2 : ℝ) • outer v := by
   ext i j
   simp [outer, star_mul, pow_two, mul_assoc, mul_left_comm, mul_comm]
 
+set_option maxHeartbeats 600000 in
+-- Retain the original elaboration budget locally for this declaration.
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedSectionVars false in
 lemma energy_real_mul (c : ℝ) (v : ι → ℂ) :
     energy (fun i ↦ (c : ℂ) * v i) = c ^ 2 * energy v := by
   simp only [energy, norm_mul, mul_pow, Complex.norm_real, Real.norm_eq_abs, sq_abs, Finset.mul_sum]
 
+set_option maxHeartbeats 600000 in
+-- Retain the original elaboration budget locally for this declaration.
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedSectionVars false in
 lemma sum_outer_columns (S : Matrix ι ι ℂ) :
     (∑ j, outer (fun i ↦ S i j)) = S * Sᴴ := by
   ext i j
   simp [Matrix.sum_apply, outer, Matrix.mul_apply, Matrix.conjTranspose_apply]
 
+set_option maxHeartbeats 600000 in
+-- Retain the original elaboration budget locally for this declaration.
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 lemma exists_outer_decomposition (D : Matrix ι ι ℂ) (hD : D.PosSemidef) :
     ∃ v : ι → ι → ℂ, ∑ j, outer (v j) = D := by
   obtain ⟨S, hS, -, hSq⟩ :=
@@ -49,10 +73,18 @@ lemma exists_outer_decomposition (D : Matrix ι ι ℂ) (hD : D.PosSemidef) :
   change S * star S = D
   rw [hS.star_eq, hSq]
 
+set_option maxHeartbeats 600000 in
+-- Retain the original elaboration budget locally for this declaration.
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 lemma energy_le_total (v : ι → ι → ℂ) (j : ι) :
     energy (v j) ≤ ∑ k, energy (v k) :=
   Finset.single_le_sum (fun k _ ↦ energy_nonneg (v k)) (Finset.mem_univ j)
 
+set_option maxHeartbeats 600000 in
+-- Retain the original elaboration budget locally for this declaration.
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 /-- Repeat and rescale each vector to make every energy at most `ε`, retaining
 exactly the same covariance sum. The index type is explicitly finite. -/
 theorem exists_small_energy_decomposition (D : Matrix ι ι ℂ)
@@ -91,6 +123,8 @@ theorem exists_small_energy_decomposition (D : Matrix ι ι ℂ)
 
 open scoped Matrix.Norms.L2Operator
 
+set_option maxHeartbeats 600000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- Discarding a positive summand can only decrease the Euclidean operator norm. -/
 theorem norm_le_norm_add_of_posSemidef (A B : Matrix ι ι ℂ)
     (hA : A.PosSemidef) (hB : B.PosSemidef) : ‖A‖ ≤ ‖A + B‖ := by
@@ -98,6 +132,8 @@ theorem norm_le_norm_add_of_posSemidef (A B : Matrix ι ι ℂ)
   exact CStarAlgebra.norm_le_norm_of_nonneg_of_le hA.nonneg
     (le_add_of_nonneg_right hB.nonneg)
 
+set_option maxHeartbeats 600000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- The finite MSS theorem for total covariance at most the identity. Deterministic
 padding is constructed here and then removed by positive operator monotonicity. -/
 theorem finite_mss_le {κ Ω : Type*} [Fintype κ] [Fintype Ω]

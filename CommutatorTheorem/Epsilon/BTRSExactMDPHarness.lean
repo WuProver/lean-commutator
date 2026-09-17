@@ -339,6 +339,8 @@ def RSExactConditionalMDPExpansion : Prop :=
                 (1 - t) • deletionChildPolynomial
                   (normalizedConditionalMDP (d := d) A hA) s j))
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedVariables false in
 /-- The base exact-MDP identity already implies every conditional-node
 identity by all-ones differentiation and descending-factorial
 normalization. -/

@@ -216,6 +216,8 @@ private lemma deletionWeight_nonneg {α : Type*} [DecidableEq α]
     (s : Finset α) (i : {i // i ∈ s}) : 0 ≤ deletionWeight s i := by
   exact inv_nonneg.mpr (Nat.cast_nonneg _)
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedFintypeInType false in
 /-- Coordinate-by-coordinate selection in any normalized deletion tree.
 
 The selected `t` has exactly the target cardinality and every root of its

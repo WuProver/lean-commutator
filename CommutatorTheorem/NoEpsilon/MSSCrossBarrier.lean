@@ -20,6 +20,8 @@ open scoped BigOperators Topology
 
 variable {σ : Type*} [Fintype σ] [DecidableEq σ]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedFintypeInType false in
 /-- Every cross-coordinate barrier above the roots is a constant plus a finite
 sum of positive residues at strictly negative poles. -/
 theorem exists_barrier_residue_expansion {p : MvPolynomial σ ℝ} (hp : RealStable p)
@@ -67,6 +69,8 @@ theorem exists_barrier_residue_expansion {p : MvPolynomial σ ℝ} (hp : RealSta
       simp [g, h, barrier]
     rw [hbarrier, ← hcancel, hc t hHt]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedFintypeInType false in
 /-- The supporting-tangent estimate in MSS Lemma 5.7. This is the required
 cross-coordinate convexity consequence, derived entirely from real stability. -/
 theorem barrier_coordinate_tangent {p : MvPolynomial σ ℝ} (hp : RealStable p)

@@ -138,12 +138,11 @@ theorem coeffList_mul_X_eq_append_zero
         omega
       rw [hindex, coeff_mul_X]
     · have hieq : i = p.coeffList.length := by
-        simp only [List.length_append, List.length_cons, List.length_nil,
-          Nat.add_zero] at hi'
+        simp only [List.length_append, List.length_cons, List.length_nil] at hi'
         omega
       subst i
       simp [coeffList_getElem_eq_coeff_natDegree_sub hmul, hdeg,
-        Polynomial.length_coeffList_eq_ite, hp, coeff_mul_X]
+        Polynomial.length_coeffList_eq_ite, hp]
 
 /-- Appending the zero introduced by multiplication with `X` does not alter
 the nonzero coefficient sign word. -/
@@ -233,7 +232,7 @@ theorem signVariations_derivative_le
           ⟨p.coeffList.getLast hclne, List.getLast_mem hclne,
             congrArg SignType.sign hlast⟩
       · simpa [sign_ne_zero] using hconst
-    simpa [h] using hsign0
+    simp [h] at hsign0
   have hsub := List.sublist_append_left (nonzeroCoeffSigns p).dropLast
     [(nonzeroCoeffSigns p).getLast hne]
   rw [List.dropLast_append_getLast hne] at hsub
@@ -261,7 +260,7 @@ theorem signVariations_le_derivative_add_one
           ⟨p.coeffList.getLast hclne, List.getLast_mem hclne,
             congrArg SignType.sign hlast⟩
       · simpa [sign_ne_zero] using hconst
-    simpa [h] using hsign0
+    simp [h] at hsign0
   have hdecomp : nonzeroCoeffSigns p =
       nonzeroCoeffSigns p.derivative ++
         [(nonzeroCoeffSigns p).getLast hne] := by
@@ -336,7 +335,7 @@ theorem negOne_pow_signVariations_mul_leadingSign_eq_constantSign
           [SignType.sign (p.coeff 0)] := by
       unfold nonzeroCoeffSigns
       rw [hdecomp, List.map_append, List.filter_append]
-      simp [hconst, sign_ne_zero]
+      simp [hconst]
     simp [hfilteredDecomp]
   have hnz : ∀ s ∈ nonzeroCoeffSigns p, s ≠ 0 := by
     intro s hs

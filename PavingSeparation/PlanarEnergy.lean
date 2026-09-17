@@ -151,6 +151,8 @@ private theorem color_card (s : ℕ) :
   rw [← mul_pow]
   norm_num
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedFintypeInType false in
 private theorem collision_offdiag {ι α : Type*} [Fintype ι] [Fintype α]
     [DecidableEq ι] [DecidableEq α] (f : ι → α) :
     (∑ i : ι, ∑ j : ι, if f i = f j then (1 : ℝ) else 0) =

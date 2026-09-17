@@ -28,6 +28,8 @@ theorem isOpen_upperHalfPlaneProduct (sigma : Type*) [Finite sigma] :
   exact isOpen_set_pi Set.finite_univ fun _ _ ↦
     isOpen_lt continuous_const Complex.continuous_im
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedFintypeInType false in
 theorem convex_upperHalfPlaneProduct (sigma : Type*) [Fintype sigma] :
     Convex ℝ (upperHalfPlaneProduct sigma) := by
   have hset : upperHalfPlaneProduct sigma =
@@ -39,6 +41,8 @@ theorem convex_upperHalfPlaneProduct (sigma : Type*) [Fintype sigma] :
   intro i _
   exact convex_halfSpace_gt Complex.imCLM.isLinear 0
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedFintypeInType false in
 theorem isPreconnected_upperHalfPlaneProduct (sigma : Type*) [Fintype sigma] :
     IsPreconnected (upperHalfPlaneProduct sigma) :=
   (convex_upperHalfPlaneProduct sigma).isPreconnected

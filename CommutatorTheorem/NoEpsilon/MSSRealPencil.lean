@@ -32,6 +32,9 @@ theorem map_realPartPolynomial {σ : Type*} (p : MvPolynomial σ ℂ)
 
 variable {ι κ : Type*} [Fintype ι] [DecidableEq ι] [Fintype κ] [DecidableEq κ]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedSectionVars false in
 theorem psdPencil_conjugate (A : κ → Matrix ι ι ℂ) (hA : ∀ i, (A i).IsHermitian) :
     (MSSStability.psdPencil A).map (starRingEnd ℂ) = MSSStability.psdPencil A := by
   let P : Matrix ι ι (MvPolynomial κ ℂ) :=
@@ -41,7 +44,8 @@ theorem psdPencil_conjugate (A : κ → Matrix ι ι ℂ) (hA : ∀ i, (A i).IsH
   congr 1
   apply Matrix.ext
   intro i j
-  simp only [RingHom.mapMatrix_apply, P, Matrix.map_apply, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul,
+  simp only [RingHom.mapMatrix_apply, P, Matrix.map_apply, Matrix.sum_apply, Matrix.smul_apply,
+    smul_eq_mul,
     map_sum, map_mul, MvPolynomial.map_X, MvPolynomial.map_C, starRingEnd_apply,
     Matrix.transpose_apply]
   apply Finset.sum_congr rfl
@@ -51,10 +55,14 @@ theorem psdPencil_conjugate (A : κ → Matrix ι ι ℂ) (hA : ∀ i, (A i).IsH
 noncomputable def realPencil (A : κ → Matrix ι ι ℂ) : MvPolynomial κ ℝ :=
   realPartPolynomial (MSSStability.psdPencil A)
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 theorem map_realPencil (A : κ → Matrix ι ι ℂ) (hA : ∀ i, (A i).IsHermitian) :
     (realPencil A).map Complex.ofRealHom = MSSStability.psdPencil A :=
   map_realPartPolynomial _ (psdPencil_conjugate A hA)
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 theorem realPencil_realStable (A : κ → Matrix ι ι ℂ) (hA : ∀ i, (A i).PosSemidef)
     (hTotal : (∑ i, A i).PosDef) : MSSBarrier.RealStable (realPencil A) := by
   unfold MSSBarrier.RealStable
@@ -70,6 +78,8 @@ theorem map_fold_sub_pderiv (p : MvPolynomial κ ℝ) (xs : List κ) :
   | cons i xs ih =>
     simp only [List.foldl_cons, ih, map_sub, MvPolynomial.pderiv_map]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 theorem realPencil_fold_realStable (A : κ → Matrix ι ι ℂ)
     (hA : ∀ i, (A i).PosSemidef) (hTotal : (∑ i, A i).PosDef) (xs : List κ) :
     MSSBarrier.RealStable
@@ -85,6 +95,9 @@ noncomputable def affinePencil (B : Matrix ι ι ℂ) (A : κ → Matrix ι ι �
   (B.map MvPolynomial.C +
     ∑ i, (MvPolynomial.X i : MvPolynomial κ ℂ) • (A i).map MvPolynomial.C).det
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedSectionVars false in
 theorem affinePencil_conjugate (B : Matrix ι ι ℂ) (hB : B.IsHermitian)
     (A : κ → Matrix ι ι ℂ) (hA : ∀ i, (A i).IsHermitian) :
     (affinePencil B A).map (starRingEnd ℂ) = affinePencil B A := by
@@ -108,6 +121,8 @@ theorem affinePencil_conjugate (B : Matrix ι ι ℂ) (hB : B.IsHermitian)
 noncomputable def realAffinePencil (B : Matrix ι ι ℂ) (A : κ → Matrix ι ι ℂ) :
     MvPolynomial κ ℝ := realPartPolynomial (affinePencil B A)
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 theorem map_realAffinePencil (B : Matrix ι ι ℂ) (hB : B.IsHermitian)
     (A : κ → Matrix ι ι ℂ) (hA : ∀ i, (A i).IsHermitian) :
     (realAffinePencil B A).map Complex.ofRealHom = affinePencil B A :=

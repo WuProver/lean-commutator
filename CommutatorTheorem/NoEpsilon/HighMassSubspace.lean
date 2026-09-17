@@ -20,6 +20,9 @@ def subspaceBasisMatrix (W : Submodule ℂ (EuclideanSpace ℂ ι)) :
     Matrix ι (Fin (Module.finrank ℂ W)) ℂ :=
   fun i j ↦ ((stdOrthonormalBasis ℂ W) j : EuclideanSpace ℂ ι) i
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedSectionVars false in
 theorem subspaceBasisMatrix_isometry (W : Submodule ℂ (EuclideanSpace ℂ ι)) :
     (subspaceBasisMatrix W)ᴴ * subspaceBasisMatrix W = 1 := by
   let b := stdOrthonormalBasis ℂ W
@@ -34,6 +37,9 @@ theorem subspaceBasisMatrix_isometry (W : Submodule ℂ (EuclideanSpace ℂ ι))
   ext j k
   rw [hGram, b.inner_eq_ite, Matrix.one_apply]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedSectionVars false in
 theorem subspaceBasisMatrix_mulVec (W : Submodule ℂ (EuclideanSpace ℂ ι))
     (x : Fin (Module.finrank ℂ W) → ℂ) :
     (WithLp.toLp 2 (subspaceBasisMatrix W *ᵥ x) : EuclideanSpace ℂ ι) =
@@ -41,6 +47,8 @@ theorem subspaceBasisMatrix_mulVec (W : Submodule ℂ (EuclideanSpace ℂ ι))
   ext i
   simp [Matrix.mulVec, dotProduct, subspaceBasisMatrix, mul_comm]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 /-- Its isometric range is exactly the given Euclidean subspace. -/
 theorem mem_range_subspaceBasisMatrix_iff (W : Submodule ℂ (EuclideanSpace ℂ ι))
     (v : ι → ℂ) :

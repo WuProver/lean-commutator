@@ -11,27 +11,36 @@ The blocks have arbitrary finite index types, and may have different dimensions.
 
 open scoped BigOperators Matrix.Norms.L2Operator
 
-set_option maxHeartbeats 2000000
-
 namespace NoEpsilon
 namespace BlockAssembly
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 variable {d : ι → Type*} [∀ i, Fintype (d i)] [∀ i, DecidableEq (d i)]
 
+set_option maxHeartbeats 2000000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- A rectangular block of a matrix indexed by a dependent disjoint union. -/
 def block (A : Matrix (Sigma d) (Sigma d) ℂ) (i j : ι) : Matrix (d i) (d j) ℂ :=
   A.submatrix (Sigma.mk i) (Sigma.mk j)
 
+set_option maxHeartbeats 2000000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- Restrict a Euclidean vector to one block. -/
 def vectorBlock (x : EuclideanSpace ℂ (Sigma d)) (i : ι) : EuclideanSpace ℂ (d i) :=
   WithLp.toLp 2 (fun a ↦ x ⟨i, a⟩)
 
+set_option maxHeartbeats 2000000 in
+-- Retain the original elaboration budget locally for this declaration.
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedSectionVars false in
 theorem norm_sq_eq_sum_vectorBlock (x : EuclideanSpace ℂ (Sigma d)) :
     ‖x‖ ^ 2 = ∑ i, ‖vectorBlock x i‖ ^ 2 := by
-  simp only [EuclideanSpace.norm_sq_eq, vectorBlock, PiLp.toLp_apply]
+  simp only [EuclideanSpace.norm_sq_eq, vectorBlock]
   exact Fintype.sum_sigma _
 
+set_option maxHeartbeats 2000000 in
+-- Retain the original elaboration budget locally for this declaration.
 theorem block_mulVec (A : Matrix (Sigma d) (Sigma d) ℂ)
     (x : EuclideanSpace ℂ (Sigma d)) (i : ι) :
     vectorBlock (Matrix.toEuclideanLin A x) i =
@@ -41,6 +50,8 @@ theorem block_mulVec (A : Matrix (Sigma d) (Sigma d) ℂ)
     Matrix.toLpLin_apply, block, Matrix.mulVec, dotProduct, Matrix.submatrix_apply]
   exact Fintype.sum_sigma _
 
+set_option maxHeartbeats 2000000 in
+-- Retain the original elaboration budget locally for this declaration.
 theorem diagonal_mulVec (D : ∀ i, Matrix (d i) (d i) ℂ)
     (x : EuclideanSpace ℂ (Sigma d)) (i : ι) :
     vectorBlock (Matrix.toEuclideanLin (Matrix.blockDiagonal' D) x) i =
@@ -56,6 +67,8 @@ theorem diagonal_mulVec (D : ∀ i, Matrix (d i) (d i) ℂ)
     intro b _
     rw [Matrix.blockDiagonal'_apply_ne _ _ _ hji.symm, zero_mul]
 
+set_option maxHeartbeats 2000000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- A block diagonal matrix is bounded by a common bound for its diagonal blocks. -/
 theorem norm_blockDiagonal_le (D : ∀ i, Matrix (d i) (d i) ℂ)
     (q : ℝ) (hq : 0 ≤ q) (hD : ∀ i, ‖D i‖ ≤ q) :
@@ -79,6 +92,8 @@ theorem norm_blockDiagonal_le (D : ∀ i, Matrix (d i) (d i) ℂ)
       simpa only [mul_pow] using pow_le_pow_left₀ (norm_nonneg _) h' 2
     _ = q ^ 2 * ∑ i, ‖vectorBlock x i‖ ^ 2 := by rw [Finset.mul_sum]
 
+set_option maxHeartbeats 2000000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- A common bound for all rectangular blocks gives a bound linear in the block count. -/
 theorem norm_le_card_mul_block_bound (A : Matrix (Sigma d) (Sigma d) ℂ)
     (q : ℝ) (hq : 0 ≤ q) (hA : ∀ i j, ‖block A i j‖ ≤ q) :
@@ -119,6 +134,11 @@ theorem norm_le_card_mul_block_bound (A : Matrix (Sigma d) (Sigma d) ℂ)
       rw [← norm_sq_eq_sum_vectorBlock]
       ring
 
+set_option maxHeartbeats 2000000 in
+-- Retain the original elaboration budget locally for this declaration.
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedSectionVars false in
 theorem block_diagonal_mul (D : ∀ i, Matrix (d i) (d i) ℂ)
     (A : Matrix (Sigma d) (Sigma d) ℂ) (i j : ι) :
     block (Matrix.blockDiagonal' D * A) i j = D i * block A i j := by
@@ -131,6 +151,12 @@ theorem block_diagonal_mul (D : ∀ i, Matrix (d i) (d i) ℂ)
     intro c _
     rw [Matrix.blockDiagonal'_apply_ne _ _ _ hki.symm, zero_mul]
 
+set_option maxHeartbeats 2000000 in
+-- Retain the original elaboration budget locally for this declaration.
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
+set_option linter.unusedSectionVars false in
 theorem block_mul_diagonal (D : ∀ i, Matrix (d i) (d i) ℂ)
     (A : Matrix (Sigma d) (Sigma d) ℂ) (i j : ι) :
     block (A * Matrix.blockDiagonal' D) i j = block A i j * D j := by
@@ -143,25 +169,51 @@ theorem block_mul_diagonal (D : ∀ i, Matrix (d i) (d i) ℂ)
     intro c _
     rw [Matrix.blockDiagonal'_apply_ne _ _ _ hkj, mul_zero]
 
+set_option maxHeartbeats 2000000 in
+-- Retain the original elaboration budget locally for this declaration.
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
+set_option linter.unusedSectionVars false in
 @[simp]
 theorem block_add (A B : Matrix (Sigma d) (Sigma d) ℂ) (i j : ι) :
     block (A + B) i j = block A i j + block B i j := rfl
 
+set_option maxHeartbeats 2000000 in
+-- Retain the original elaboration budget locally for this declaration.
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
+set_option linter.unusedSectionVars false in
 @[simp]
 theorem block_sub (A B : Matrix (Sigma d) (Sigma d) ℂ) (i j : ι) :
     block (A - B) i j = block A i j - block B i j := rfl
 
+set_option maxHeartbeats 2000000 in
+-- Retain the original elaboration budget locally for this declaration.
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedSectionVars false in
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
 @[simp]
 theorem block_diagonal_same (D : ∀ i, Matrix (d i) (d i) ℂ) (i : ι) :
     block (Matrix.blockDiagonal' D) i i = D i := by
   ext a b
   exact Matrix.blockDiagonal'_apply_eq D i a b
 
+set_option maxHeartbeats 2000000 in
+-- Retain the original elaboration budget locally for this declaration.
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
+set_option linter.unusedSectionVars false in
 theorem block_diagonal_ne (D : ∀ i, Matrix (d i) (d i) ℂ) (i j : ι) (h : i ≠ j) :
     block (Matrix.blockDiagonal' D) i j = 0 := by
   ext a b
   exact Matrix.blockDiagonal'_apply_ne D a b h
 
+set_option maxHeartbeats 2000000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- Inverse rescaling makes the first commutator factor small at no product cost. -/
 theorem normalize_factors {n : Type*} [Fintype n] [DecidableEq n]
     (U V : Matrix n n ℂ) (p : ℝ) (hp : 0 ≤ p) (hcost : ‖U‖ * ‖V‖ ≤ p) :
@@ -188,6 +240,8 @@ theorem normalize_factors {n : Type*} [Fintype n] [DecidableEq n]
   · rw [norm_smul, hcnorm]
     nlinarith
 
+set_option maxHeartbeats 2000000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- Assemble normalized diagonal commutators using separated scalar centers. -/
 theorem assemble_normalized
     (A : Matrix (Sigma d) (Sigma d) ℂ) (U V : ∀ i, Matrix (d i) (d i) ℂ)
@@ -265,6 +319,8 @@ theorem assemble_normalized
         add_le_add (norm_blockDiagonal_le V q hq hV) hEnorm
       _ = q + 2 * Fintype.card ι * ‖A‖ := by ring
 
+set_option maxHeartbeats 2000000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- Product-cost assembly for arbitrary diagonal commutator representations and scalar centers. -/
 theorem assemble_with_centers
     (A : Matrix (Sigma d) (Sigma d) ℂ) (p b : ℝ) (hp : 0 ≤ p) (hb : 0 ≤ b)
@@ -288,6 +344,8 @@ theorem assemble_with_centers
       mul_le_mul hB hC (norm_nonneg _) hb
     _ = 4 * b * p + 2 * b * Fintype.card ι * ‖A‖ := by ring
 
+set_option maxHeartbeats 2000000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- The constants of the no-epsilon induction, with the scalar centers still explicit. -/
 theorem assemble_fixed_constants_with_centers
     (A : Matrix (Sigma d) (Sigma d) ℂ) (p : ℝ) (hp : 0 ≤ p)
@@ -305,6 +363,8 @@ theorem assemble_fixed_constants_with_centers
     exact_mod_cast (show Fintype.card ι ≤ 134217728 by norm_num at hcard; omega)
   nlinarith [mul_le_mul_of_nonneg_right hcard' (norm_nonneg A)]
 
+set_option maxHeartbeats 2000000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- Finite-block assembly with the fixed constants of the no-epsilon proof.
 The scalar grid and all off-diagonal Sylvester solutions are constructed internally. -/
 theorem assemble_fixed_constants
@@ -317,6 +377,10 @@ theorem assemble_fixed_constants
   obtain ⟨z, hz, hsep⟩ := exists_assembly_centers hcard
   exact assemble_fixed_constants_with_centers A p hp hcard hdiag z hz hsep
 
+set_option maxHeartbeats 2000000 in
+-- Retain the original elaboration budget locally for this declaration.
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 /-- The assembled commutator stays in the original dimension under a partition equivalence. -/
 theorem assemble_reindexed {n : Type*} [Fintype n] [DecidableEq n]
     (A : Matrix n n ℂ) (e : n ≃ Sigma d) (p : ℝ) (hp : 0 ≤ p)
@@ -333,6 +397,8 @@ theorem assemble_reindexed {n : Type*} [Fintype n] [DecidableEq n]
       Matrix.submatrix_mul_equiv] using h
   · simpa only [submatrix_operator_norm_equiv] using hbound
 
+set_option maxHeartbeats 2000000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- Assembly for an arbitrary finite number of blocks. This bound is used after the
 high-mass absorption, where the number of blocks is fixed by the mass threshold. -/
 theorem assemble_any
@@ -346,7 +412,7 @@ theorem assemble_any
   obtain ⟨B, C, hcomm, hbound⟩ := assemble_with_centers A p (Fintype.card ι) hp
     (Nat.cast_nonneg _) hdiag z hz hsep
   refine ⟨B, C, hcomm, ?_⟩
-  convert hbound using 1 <;> ring
+  convert hbound using 1; ring
 
 end BlockAssembly
 end NoEpsilon

@@ -17,6 +17,8 @@ open scoped BigOperators ComplexOrder
 
 variable {ι κ : Type*} [Fintype ι] [DecidableEq ι] [Fintype κ] [DecidableEq κ]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 /-- The real determinant pencil is positive on the entire orthant above every
 positive scalar vector when the total covariance is the identity. -/
 theorem realPencil_aboveRoots (A : κ → Matrix ι ι ℂ) (hA : ∀ i, (A i).PosSemidef)
@@ -50,6 +52,8 @@ theorem realPencil_aboveRoots (A : κ → Matrix ι ι ℂ) (hA : ∀ i, (A i).P
   rw [← heval] at hdet
   exact_mod_cast hdet
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 /-- The real initial barrier equals the real trace divided by the starting
 scalar, by the exact determinant first-variation formula. -/
 theorem realPencil_initial_barrier [Nonempty ι]
@@ -63,6 +67,8 @@ theorem realPencil_initial_barrier [Nonempty ι]
   have hr := congrArg Complex.re he
   simpa [barrier] using hr
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 /-- The complete deterministic MSS barrier bound, with no supplied barrier
 monotonicity, convexity, or root-selection hypothesis. -/
 theorem realPencil_fold_aboveRoots [Nonempty ι]
@@ -80,6 +86,8 @@ theorem realPencil_fold_aboveRoots [Nonempty ι]
   rw [realPencil_initial_barrier A (fun i ↦ (hA i).isHermitian) hTotal _ ht.ne']
   exact div_le_div_of_nonneg_right (htrace i) ht.le
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 /-- The complex diagonal evaluation of the mixed difference polynomial has no
 root at or beyond the MSS bound. This is the interface to expected characteristic
 polynomials and interlacing selection. -/

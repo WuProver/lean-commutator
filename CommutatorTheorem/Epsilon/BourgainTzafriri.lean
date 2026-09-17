@@ -214,7 +214,7 @@ theorem bourgain_tzafriri_iterated :
       A.submatrix (g : Fin R.card → Fin (2 * 4 ^ n)) g with hAg_def
     have hAg_zd : ZeroDiag Ag := by
       intro i
-      show A (g i) (g i) = 0
+      change A (g i) (g i) = 0
       exact hzd _
     have hAg_norm_le : ‖Ag‖ ≤ 1 := by
       have h := submatrix_norm_le (g : Fin R.card → Fin (2 * 4 ^ n)) hg_inj A
@@ -270,7 +270,8 @@ theorem bourgain_tzafriri_iterated :
       exact hx_not_in_U hx_in_U
     -- Norm bound for σ_s.
     have hσ_s_norm : ‖A.submatrix σ_s σ_s‖ ≤ K_final * (1 / 2 : ℝ) ^ l := by
-      -- A.submatrix σ_s σ_s = (Ag.submatrix f f).submatrix (Fin.castLE h_floor) (Fin.castLE h_floor)
+      -- A.submatrix σ_s σ_s = (Ag.submatrix f f).submatrix (Fin.castLE h_floor) (Fin.castLE
+      -- h_floor)
       have h_eq : A.submatrix σ_s σ_s =
           (Ag.submatrix f f).submatrix (Fin.castLE h_floor) (Fin.castLE h_floor) := by
         ext i j; rfl

@@ -118,12 +118,17 @@ theorem exists_outcome_norm_le_fintype {κ : Type*} [Fintype κ] [Nonempty ι]
   rw [heq]
   exact hq
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedSectionVars false in
 /-- The trace of an outer product is its squared Euclidean vector norm. -/
 theorem trace_outer_re (v : ι → ℂ) :
     (Matrix.vecMulVec v (star v)).trace.re = MSSSelection.energy v := by
   simp [Matrix.trace, Matrix.diag, Matrix.vecMulVec, Complex.re_sum, MSSSelection.energy,
-    Complex.mul_conj, Complex.normSq_eq_norm_sq, ← Complex.ofReal_pow]
+    Complex.mul_conj, Complex.normSq_eq_norm_sq, -Complex.ofReal_pow]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 /-- Covariance trace is the expected squared Euclidean norm. -/
 theorem trace_mean_outer_re (v : Ω → ι → ℂ) (p : Ω → ℝ) :
     (∑ ω, (p ω : ℂ) • Matrix.vecMulVec (v ω) (star (v ω))).trace.re =

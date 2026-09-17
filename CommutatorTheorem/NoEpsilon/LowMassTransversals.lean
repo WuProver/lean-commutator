@@ -85,6 +85,8 @@ theorem treeBound_nonneg (δ : ℝ) (h : ℕ) {L : ℝ} (hL : 0 ≤ L) :
     simpa only [treeBound, Function.iterate_succ_apply'] using
       splitBound_nonneg δ (treeBound δ h L)
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedFintypeInType false in
 theorem binary_sum_split {ι : Type*} [Fintype ι] {k h : ℕ}
     (f : Fin k → BinaryIndex (h + 1) → ι → ℂ) :
     (∑ j, ∑ x, outer (f j x)) =
@@ -191,6 +193,8 @@ theorem exists_transversals {ι : Type*} [Fintype ι] [DecidableEq ι]
   intro x
   exact (hτ (e.symm x)).trans hfinal
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedFintypeInType false in
 theorem sum_permuted_vectors {ι κ : Type*} [Fintype ι] [Fintype κ]
     {k : ℕ} (f : Fin k → κ → ι → ℂ) (σ : Fin k → Equiv.Perm κ) :
     (∑ x, ∑ j, outer (f j (σ j x))) = ∑ j, ∑ x, outer (f j x) := by

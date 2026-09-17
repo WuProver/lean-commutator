@@ -72,6 +72,10 @@ theorem extendUnitary_unitary {N q : ℕ} (U : Matrix (Fin N) (Sigma d) ℂ)
   simp [extendUnitary, Matrix.fromBlocks_conjTranspose, Matrix.fromBlocks_multiply,
     hU, hU', Matrix.fromBlocks_one]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
+set_option linter.unusedSectionVars false in
 theorem extendUnitary_compression {N q : ℕ} (U : Matrix (Fin N) (Sigma d) ℂ)
     (A : Matrix (Fin N ⊕ Fin q) (Fin N ⊕ Fin q) ℂ) :
     (extendUnitary (q := q) U)ᴴ * A * extendUnitary (q := q) U =

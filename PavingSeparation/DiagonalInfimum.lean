@@ -131,6 +131,8 @@ theorem zeroDiag_square_representation_bounded {n : ℕ}
     · simp [Matrix.diagonal_apply_ne _ hij, hB i j hij]
   exact ⟨(fun i ↦ B i i), C, hs, by simpa only [hd, matComm] using hc, hnorm⟩
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 /-- Every finite zero-diagonal matrix admits an original-coordinate diagonal commutator. -/
 theorem zeroDiag_diagonal_representation {ι : Type*} [Fintype ι] [DecidableEq ι]
     (A : Matrix ι ι ℂ) (hzd : ∀ i, A i i = 0) :

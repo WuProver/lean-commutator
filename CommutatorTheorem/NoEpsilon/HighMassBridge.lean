@@ -19,6 +19,10 @@ variable {ι κ : Type*} [Fintype ι] [Fintype κ] [DecidableEq ι] [DecidableEq
 /-- A vector family, represented as the columns of a rectangular matrix. -/
 def familyMatrix (p : κ → EuclideanSpace ℂ ι) : Matrix ι κ ℂ := fun i j ↦ p j i
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
+set_option linter.unusedSectionVars false in
 /-- Matrix Gram entries are the actual Euclidean inner products. -/
 theorem familyMatrix_gram_entry (p q : κ → EuclideanSpace ℂ ι) (j k : κ) :
     ((familyMatrix p)ᴴ * familyMatrix q) j k = inner ℂ (p j) (q k) := by
@@ -28,16 +32,26 @@ theorem familyMatrix_gram_entry (p q : κ → EuclideanSpace ℂ ι) (j k : κ) 
   intro i _
   exact mul_comm _ _
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
 theorem familyMatrix_isometry (p : κ → EuclideanSpace ℂ ι) (hp : Orthonormal ℂ p) :
     (familyMatrix p)ᴴ * familyMatrix p = 1 := by
   ext i j
   rw [familyMatrix_gram_entry, orthonormal_iff_ite.mp hp, Matrix.one_apply]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
+set_option linter.unusedSectionVars false in
 /-- Applying a matrix to every column agrees with its Euclidean operator. -/
 theorem mul_familyMatrix (A : Matrix ι ι ℂ) (p : κ → EuclideanSpace ℂ ι) :
     A * familyMatrix p =
       familyMatrix (fun j ↦ Matrix.toEuclideanCLM (n := ι) (𝕜 := ℂ) A (p j)) := rfl
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
 theorem familyMatrix_compression_entry (A : Matrix ι ι ℂ)
     (p q : κ → EuclideanSpace ℂ ι) (i j : κ) :
     ((familyMatrix p)ᴴ * A * familyMatrix q) i j =

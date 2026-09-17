@@ -391,6 +391,8 @@ theorem exists_common_neutral_of_hollow {ι : Type*} [Fintype ι]
       (by simpa [f] using neg_pos.mpr hj) (by simpa [f] using neg_pos.mpr hk)
     exact ⟨v, hv, hHv, hGv, neg_eq_zero.mp ((rayleighValue_neg E v).symm.trans hEv)⟩
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedFintypeInType false in
 theorem isHermitian_compression {ι κ : Type*} [Fintype ι] [Fintype κ]
     (H : Matrix ι ι ℂ) (hH : H.IsHermitian) (U : Matrix ι κ ℂ) :
     (Uᴴ * H * U).IsHermitian := by

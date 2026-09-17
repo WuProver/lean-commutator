@@ -17,7 +17,7 @@ theorem norm_duplicate_diagonal_le (A : Matrix ι ι ℂ) (L : ℝ)
   let x₀ : EuclideanSpace ℂ ι := WithLp.toLp 2 (fun i ↦ x (Sum.inl i))
   let x₁ : EuclideanSpace ℂ ι := WithLp.toLp 2 (fun i ↦ x (Sum.inr i))
   have hx : ‖x‖ ^ 2 = ‖x₀‖ ^ 2 + ‖x₁‖ ^ 2 := by
-    simp only [EuclideanSpace.norm_sq_eq, Fintype.sum_sum_type, x₀, x₁, PiLp.toLp_apply]
+    simp only [EuclideanSpace.norm_sq_eq, Fintype.sum_sum_type, x₀, x₁]
   have hAx : ‖Matrix.toEuclideanLin (Matrix.fromBlocks A 0 0 A) x‖ ^ 2 =
       ‖Matrix.toEuclideanLin A x₀‖ ^ 2 + ‖Matrix.toEuclideanLin A x₁‖ ^ 2 := by
     simp only [EuclideanSpace.norm_sq_eq, Fintype.sum_sum_type, Matrix.toLpLin_apply,

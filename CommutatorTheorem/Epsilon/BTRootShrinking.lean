@@ -90,6 +90,8 @@ lemma rootBarrier_curvature_identity {p : ℝ[X]} (hp : RealRooted p) {b : ℝ}
 
 /-! ## The finite-dimensional algebra in one barrier step -/
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 /-- A weighted rearrangement inequality in exactly the form needed by the barrier step. -/
 lemma weighted_rearrangement_barrier
     {ι : Type*} [Fintype ι] [DecidableEq ι] (a t : ι → ℝ)
@@ -176,6 +178,8 @@ lemma reciprocal_gap_pair_nonneg {A ai aj : ℝ}
     positivity
   · positivity
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 /-- The scalar heart of one barrier step.  If `a i` are the reciprocal gaps at the old
 barrier and `A` is their sum, then `t i` are the reciprocal gaps one step to the left. -/
 lemma reciprocal_gap_barrier_sum
@@ -234,12 +238,12 @@ any mapped sum. -/
 lemma multiset_map_sum_eq_fin_sum_sort (s : Multiset ℝ) (f : ℝ → ℝ) :
     (s.map f).sum = ∑ i : Fin (s.sort (· ≤ ·)).length, f ((s.sort (· ≤ ·)).get i) := by
   let l := s.sort (· ≤ ·)
-  have hcoe : (↑l : Multiset ℝ) = s := by simpa [l] using Multiset.sort_eq s (· ≤ ·)
+  have hcoe : (↑l : Multiset ℝ) = s := by simp [l]
   calc
     (s.map f).sum = ((↑l : Multiset ℝ).map f).sum := by rw [hcoe]
     _ = (l.map f).sum := by rfl
     _ = ∑ i : Fin l.length, f (l.get i) := by
-      simpa using (list_sum_eq_fin_sum (l := l.map f))
+      simp [list_sum_eq_fin_sum]
 
 /-! ## A reusable conditional iteration harness -/
 

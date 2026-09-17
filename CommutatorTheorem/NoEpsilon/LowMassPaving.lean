@@ -22,6 +22,10 @@ namespace LowMassPaving
 
 variable {ι κ : Type*} [Fintype ι] [Fintype κ] [DecidableEq ι] [DecidableEq κ]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
+set_option linter.unusedSectionVars false in
 theorem right_unitary_preserves_range (Q : Matrix ι κ ℂ) (U : Matrix κ κ ℂ)
     (hU : U * Uᴴ = 1) : (Q * U) * (Q * U)ᴴ = Q * Qᴴ := by
   simp only [Matrix.conjTranspose_mul]
@@ -29,6 +33,9 @@ theorem right_unitary_preserves_range (Q : Matrix ι κ ℂ) (U : Matrix κ κ �
     Q * U * (Uᴴ * Qᴴ) = Q * (U * Uᴴ) * Qᴴ := by simp only [Matrix.mul_assoc]
     _ = Q * Qᴴ := by rw [hU, Matrix.mul_one]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedSectionVars false in
 theorem right_unitary_preserves_isometry (Q : Matrix ι κ ℂ) (U : Matrix κ κ ℂ)
     (hQ : Qᴴ * Q = 1) (hU : Uᴴ * U = 1) : (Q * U)ᴴ * (Q * U) = 1 := by
   simp only [Matrix.conjTranspose_mul]
@@ -36,11 +43,17 @@ theorem right_unitary_preserves_isometry (Q : Matrix ι κ ℂ) (U : Matrix κ �
     Uᴴ * Qᴴ * (Q * U) = Uᴴ * (Qᴴ * Q) * U := by simp only [Matrix.mul_assoc]
     _ = 1 := by rw [hQ, Matrix.mul_one, hU]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedSectionVars false in
 theorem compression_right_mul (A : Matrix ι ι ℂ) (Q : Matrix ι κ ℂ)
     (U : Matrix κ κ ℂ) :
     (Q * U)ᴴ * A * (Q * U) = Uᴴ * (Qᴴ * A * Q) * U := by
   simp only [Matrix.conjTranspose_mul, Matrix.mul_assoc]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedVariables false in
 /-- The exact local basis construction, including the `12/R` energy bound.
 Each supplied group is an isometric copy of `ℂ^R`; no selection theorem is assumed. -/
 theorem exists_flat_group_bases {k R : ℕ} (hR : 0 < R)
@@ -76,21 +89,32 @@ theorem exists_flat_group_bases {k R : ℕ} (hR : 0 < R)
       apply div_le_div_of_nonneg_right _ (Nat.cast_nonneg R)
       linarith [hMass j])
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
+set_option linter.unusedSectionVars false in
 /-- The column outer products sum to the matrix frame operator. -/
 theorem sum_outer_columns (X : Matrix ι κ ℂ) :
     (∑ a, MSSSelection.outer (fun i ↦ X i a)) = X * Xᴴ := by
   ext i j
   simp [Matrix.sum_apply, MSSSelection.outer, Matrix.mul_apply, Matrix.conjTranspose_apply]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 /-- Euclidean energy after a factor map is its Gram quadratic form. -/
 theorem image_energy_eq_gram (S : Matrix ι κ ℂ) (v : κ → ℂ) :
     vectorEnergy (S *ᵥ v) = (rayleighValue (Sᴴ * S) v).re := by
   have h := congrArg Complex.re (rayleighValue_compression (1 : Matrix ι ι ℂ) S v)
   simpa only [Matrix.mul_one, rayleighValue_one, Complex.ofReal_re] using h.symm
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedSectionVars false in
 theorem mss_energy_eq_vectorEnergy (v : ι → ℂ) : MSSSelection.energy v = vectorEnergy v := by
   simp only [MSSSelection.energy, vectorEnergy, Complex.normSq_eq_norm_sq]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 /-- A positive semidefinite matrix admits an exact Hermitian square-root factor. -/
 theorem exists_hermitian_square_root (E : Matrix ι ι ℂ) (hE : E.PosSemidef) :
     ∃ S : Matrix ι ι ℂ, Sᴴ = S ∧ S * S = E := by
@@ -100,6 +124,8 @@ theorem exists_hermitian_square_root (E : Matrix ι ι ℂ) (hE : E.PosSemidef) 
   refine ⟨CFC.sqrt E, hpos.1.eq, ?_⟩
   exact CFC.sqrt_mul_sqrt_self E hE.nonneg
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 /-- Mapping a complete orthonormal basis through a Hermitian square root gives
 exactly the prescribed covariance, and each vector has the correct scalar energy. -/
 theorem square_root_frame (E S : Matrix ι ι ℂ) (V : Matrix ι κ ℂ)
@@ -140,15 +166,17 @@ theorem groupInclusion_gram {k R : ℕ} (e : (Fin k × Fin R) ≃ ι) (j l : Fin
     (groupInclusion e j)ᴴ * groupInclusion e l = if j = l then 1 else 0 := by
   by_cases hj : j = l
   · subst l
-    simp only [if_pos rfl, groupInclusion]
+    simp only [groupInclusion]
     apply coordinateInclusion_isometry
     intro a b hab
     exact congrArg Prod.snd (e.injective hab)
   · rw [if_neg hj]
     ext a b
     simp [groupInclusion, coordinateInclusion, Matrix.mul_apply,
-      Matrix.conjTranspose_apply, mul_ite, ite_mul, e.injective.eq_iff, hj, Ne.symm hj]
+      Matrix.conjTranspose_apply, mul_ite, e.injective.eq_iff, Ne.symm hj]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedFintypeInType false in
 /-- The group ranges are disjoint and cover the original coordinate space exactly. -/
 theorem sum_groupInclusion_ranges {k R : ℕ} (e : (Fin k × Fin R) ≃ ι) :
     (∑ j, groupInclusion e j * (groupInclusion e j)ᴴ) = 1 := by
@@ -159,8 +187,12 @@ theorem sum_groupInclusion_ranges {k R : ℕ} (e : (Fin k × Fin R) ≃ ι) :
     (if i = e p then (1 : ℂ) else 0) * star (if l = e p then (1 : ℂ) else 0))]
   rw [e.sum_comp (fun x ↦
     (if i = x then (1 : ℂ) else 0) * star (if l = x then (1 : ℂ) else 0))]
-  simp [Matrix.one_apply, mul_ite, ite_mul, eq_comm]
+  simp [Matrix.one_apply, mul_ite]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
+set_option linter.unusedSectionVars false in
 theorem left_isometry_preserves_gram (U : Matrix ι ι ℂ) (hU : Uᴴ * U = 1)
     (C D : Matrix ι κ ℂ) : (U * C)ᴴ * (U * D) = Cᴴ * D := by
   simp only [Matrix.conjTranspose_mul]
@@ -176,6 +208,10 @@ theorem sum_unitary_group_ranges {k R : ℕ} (e : (Fin k × Fin R) ≃ ι)
       simp only [Finset.mul_sum, Finset.sum_mul, Matrix.conjTranspose_mul, Matrix.mul_assoc]
     _ = 1 := by rw [sum_groupInclusion_ranges, Matrix.mul_one, hU]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
+set_option linter.unusedSectionVars false in
 theorem compression_left_mul (A U : Matrix ι ι ℂ) (C D : Matrix ι κ ℂ) :
     (U * C)ᴴ * A * (U * D) = Cᴴ * (Uᴴ * A * U) * D := by
   simp only [Matrix.conjTranspose_mul, Matrix.mul_assoc]
@@ -267,6 +303,9 @@ theorem exists_spectral_groups {k R : ℕ} (hk : 0 < k) (hR : 0 < R)
       rw [compression_left_mul, group_compression_trace, Complex.re_sum]
       exact (he j).2
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedSectionVars false in
 /-- Cross-compression vanishing depends only on the two ranges, so it survives
 the independent unitary changes made inside every spectral group. -/
 theorem cross_compression_zero_of_same_ranges (A : Matrix ι ι ℂ)
@@ -290,6 +329,9 @@ theorem sum_group_traces {k R : ℕ} (Q : Fin k → Matrix ι (Fin R) ℂ)
     _ = Matrix.trace A := by
       rw [← Matrix.trace_sum, ← Finset.sum_mul, hQ, Matrix.one_mul]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedSectionVars false in
 theorem norm_trace_hermitian (A : Matrix ι ι ℂ) (hA : A.IsHermitian) :
     ‖Matrix.trace A‖ = |(Matrix.trace A).re| := by
   have h := congrArg Complex.im (Matrix.trace_conjTranspose A)
@@ -348,17 +390,26 @@ theorem exists_prepared_groups {k R : ℕ} (hk : 0 < k) (hR : 0 < R)
 def concatenateGroups {k R : ℕ} (V : Fin k → Matrix ι (Fin R) ℂ) :
     Matrix ι (Fin k × Fin R) ℂ := fun i p ↦ V p.1 i p.2
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
+set_option linter.unusedSectionVars false in
 theorem concatenateGroups_range {k R : ℕ} (V : Fin k → Matrix ι (Fin R) ℂ) :
     concatenateGroups V * (concatenateGroups V)ᴴ = ∑ j, V j * (V j)ᴴ := by
   ext i l
   simp [concatenateGroups, Matrix.mul_apply, Matrix.conjTranspose_apply,
     Matrix.sum_apply, Fintype.sum_prod_type]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedSectionVars false in
 theorem concatenateGroups_gram_entry {k R : ℕ} (V : Fin k → Matrix ι (Fin R) ℂ)
     (j l : Fin k) (a b : Fin R) :
     ((concatenateGroups V)ᴴ * concatenateGroups V) (j, a) (l, b) =
       ((V j)ᴴ * V l) a b := rfl
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 theorem concatenateGroups_isometry {k R : ℕ} (V : Fin k → Matrix ι (Fin R) ℂ)
     (hV : ∀ j l, (V j)ᴴ * V l = if j = l then 1 else 0) :
     (concatenateGroups V)ᴴ * concatenateGroups V = 1 := by
@@ -369,11 +420,16 @@ theorem concatenateGroups_isometry {k R : ℕ} (V : Fin k → Matrix ι (Fin R) 
 def selectedColumns {k R : ℕ} (V : Fin k → Matrix ι (Fin R) ℂ) (a : Fin k → Fin R) :
     Matrix ι (Fin k) ℂ := fun i j ↦ V j i (a j)
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedSectionVars false in
 theorem selectedColumns_compression_entry {k R : ℕ} (V : Fin k → Matrix ι (Fin R) ℂ)
     (a : Fin k → Fin R) (A : Matrix ι ι ℂ) (j l : Fin k) :
     ((selectedColumns V a)ᴴ * A * selectedColumns V a) j l =
       ((V j)ᴴ * A * V l) (a j) (a l) := rfl
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 theorem selectedColumns_isometry {k R : ℕ} (V : Fin k → Matrix ι (Fin R) ℂ)
     (a : Fin k → Fin R) (hV : ∀ j l, (V j)ᴴ * V l = if j = l then 1 else 0) :
     (selectedColumns V a)ᴴ * selectedColumns V a = 1 := by
@@ -383,6 +439,9 @@ theorem selectedColumns_isometry {k R : ℕ} (V : Fin k → Matrix ι (Fin R) �
   rw [h, hV]
   by_cases hjl : j = l <;> simp [hjl, Matrix.one_apply]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedSectionVars false in
 /-- The trace of every one-per-group selection is fixed before MSS chooses it. -/
 theorem selectedColumns_trace {k R : ℕ} (V : Fin k → Matrix ι (Fin R) ℂ)
     (a : Fin k → Fin R) (A : Matrix ι ι ℂ) (d : Fin k → ℂ)
@@ -394,6 +453,8 @@ theorem selectedColumns_trace {k R : ℕ} (V : Fin k → Matrix ι (Fin R) ℂ)
   rw [gram_diagonal]
   exact hd j (a j)
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 /-- Since different original groups reduce `G`, every selected compression is
 diagonal, with the already fixed group means as its diagonal entries. -/
 theorem selectedColumns_diagonal {k R : ℕ} (V : Fin k → Matrix ι (Fin R) ℂ)
@@ -407,8 +468,10 @@ theorem selectedColumns_diagonal {k R : ℕ} (V : Fin k → Matrix ι (Fin R) �
     rw [gram_diagonal, Matrix.diagonal_apply_eq]
     exact hdiag j (a j)
   · rw [selectedColumns_compression_entry, hcross j l hjl]
-    simp [Matrix.diagonal_apply, hjl]
+    simp [hjl]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 theorem selectedColumns_norm_le {k R : ℕ} (V : Fin k → Matrix ι (Fin R) ℂ)
     (a : Fin k → Fin R) (G : Matrix ι ι ℂ) (g : Fin k → ℂ) (c : ℝ) (hc : 0 ≤ c)
     (hcross : ∀ j l, j ≠ l → (V j)ᴴ * G * V l = 0)
@@ -444,12 +507,18 @@ theorem norm_le_of_hermitian_order_interval (H E : Matrix ι ι ℂ)
     (Matrix.isHermitian_iff_isSelfAdjoint.mp hH)
     (Matrix.isHermitian_iff_isSelfAdjoint.mp hE.1) hlower hupper
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
+set_option linter.unusedSectionVars false in
 theorem compression_mono (A B : Matrix ι ι ℂ) (hAB : A ≤ B) (V : Matrix ι κ ℂ) :
     Vᴴ * A * V ≤ Vᴴ * B * V := by
   apply Matrix.le_iff.mpr
   have h := (Matrix.le_iff.mp hAB).conjTranspose_mul_mul_same V
   simpa only [Matrix.mul_sub, Matrix.sub_mul] using h
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 /-- The same sharp order comparison survives every rectangular compression. -/
 theorem norm_compression_le_of_order_interval (H E : Matrix ι ι ℂ)
     (hH : H.IsHermitian) (hE : E.PosSemidef) (hlower : -E ≤ H) (hupper : H ≤ E)

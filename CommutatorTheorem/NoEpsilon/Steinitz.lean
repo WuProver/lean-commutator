@@ -27,6 +27,10 @@ def boxFiber {E : Type*} [AddCommGroup E] [Module ℝ E]
     (L : (ι → ℝ) →ₗ[ℝ] E) (b : E) : Set (ι → ℝ) :=
   Icc 0 1 ∩ L ⁻¹' {b}
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
+set_option linter.unusedSectionVars false in
 /-- Directions supported on fractional coordinates admit a two-sided perturbation in the box. -/
 theorem exists_box_perturbation (a u : ι → ℝ) (ha : a ∈ Icc (0 : ι → ℝ) 1)
     (hu : ∀ i, ¬ (0 < a i ∧ a i < 1) → u i = 0) :
@@ -55,6 +59,9 @@ theorem exists_box_perturbation (a u : ι → ℝ) (ha : a ∈ Icc (0 : ι → �
       simp only [Real.dist_eq, sub_zero, abs_of_pos (half_pos hδ)]
       linarith)
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
 /-- An extreme point has no nonzero feasible direction supported in its fractional coordinates. -/
 theorem extreme_box_fiber_no_direction {E : Type*} [AddCommGroup E] [Module ℝ E]
     (L : (ι → ℝ) →ₗ[ℝ] E) (b : E) (a : ι → ℝ)
@@ -75,6 +82,8 @@ theorem extreme_box_fiber_no_direction {E : Type*} [AddCommGroup E] [Module ℝ 
   have hzero : ε • u = 0 := sub_eq_self.mp heq
   exact (smul_eq_zero.mp hzero).resolve_left (ne_of_gt hε)
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedFintypeInType false in
 /-- The constraint images of the fractional coordinates of an extreme point are independent. -/
 theorem extreme_fractional_linearIndependent {E : Type*} [AddCommGroup E] [Module ℝ E]
     (L : (ι → ℝ) →ₗ[ℝ] E) (b : E) (a : ι → ℝ)
@@ -94,7 +103,7 @@ theorem extreme_fractional_linearIndependent {E : Type*} [AddCommGroup E] [Modul
     have hk : k.val ≠ i := by
       intro h
       exact hi (h ▸ k.property)
-    simp [Pi.single_apply, hk, hk.symm]
+    simp [hk.symm]
   have hLu : L u = 0 := by
     dsimp [u]
     simpa only [map_sum, map_smul] using hc
@@ -105,10 +114,12 @@ theorem extreme_fractional_linearIndependent {E : Type*} [AddCommGroup E] [Modul
     · simp
     · intro k hkj
       have hk : k.val ≠ j.val := fun h ↦ hkj (Subtype.ext h)
-      simp [Pi.single_apply, hk, hk.symm]
+      simp [hk.symm]
   have h := congrFun hzero j.val
   simpa only [hui, Pi.zero_apply] using h
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 /-- Extreme box fibers have at most `finrank` many fractional coordinates. -/
 theorem extreme_fractional_card_le {E : Type*} [AddCommGroup E] [Module ℝ E]
     [FiniteDimensional ℝ E] (L : (ι → ℝ) →ₗ[ℝ] E) (b : E) (a : ι → ℝ)
@@ -117,6 +128,8 @@ theorem extreme_fractional_card_le {E : Type*} [AddCommGroup E] [Module ℝ E]
   classical
   exact (extreme_fractional_linearIndependent L b a ha).fintype_card_le_finrank
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 /-- Every nonempty box fiber admits a feasible point with at most `finrank` fractional entries. -/
 theorem exists_few_fractional {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [FiniteDimensional ℝ E] (L : (ι → ℝ) →ₗ[ℝ] E) (b : E)
@@ -133,10 +146,12 @@ def constraintMap (x : ι → Fin 2 → ℝ) :
     (ι → ℝ) →ₗ[ℝ] (ℝ × (Fin 2 → ℝ)) where
   toFun a := (∑ i, a i, ∑ i, a i • x i)
   map_add' a b := by
-    ext j <;> simp [Finset.sum_add_distrib, add_smul, add_mul]
+    ext j <;> simp [Finset.sum_add_distrib, add_smul]
   map_smul' c a := by
-    ext j <;> simp [Finset.mul_sum, mul_assoc, smul_smul]
+    ext j <;> simp [Finset.mul_sum, mul_assoc]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 /-- Three affine constraints admit a box solution with at most three fractional entries. -/
 theorem exists_weights_three_fractional (x : ι → Fin 2 → ℝ) (mass : ℝ)
     (hfeasible : (boxFiber (constraintMap x) (mass, 0)).Nonempty) :
@@ -146,6 +161,9 @@ theorem exists_weights_three_fractional (x : ι → Fin 2 → ℝ) (mass : ℝ)
   refine ⟨a, ha, ?_⟩
   simpa [Module.finrank_prod] using hfrac
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedSectionVars false in
 /-- A box solution of mass `card - 3` with at most three fractional entries has a zero entry. -/
 theorem exists_zero_of_three_fractional (a : ι → ℝ) (ha : a ∈ Icc (0 : ι → ℝ) 1)
     (hmass : ∑ i, a i = (Fintype.card ι : ℝ) - 3)
@@ -179,6 +197,8 @@ theorem exists_zero_of_three_fractional (a : ι → ℝ) (ha : a ∈ Icc (0 : ι
   simp only [Finset.sum_const, nsmul_eq_mul, mul_one] at hstrict
   linarith
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 /-- Reduce the weight mass by one while creating a zero coordinate, preserving the vector sum. -/
 theorem exists_deletable_weights (x : ι → Fin 2 → ℝ) (hn : 2 < Fintype.card ι)
     (a : ι → ℝ) (ha : a ∈ boxFiber (constraintMap x) ((Fintype.card ι : ℝ) - 2, 0)) :
@@ -211,6 +231,9 @@ def FeasibleOn (x : ι → Fin 2 → ℝ) (s : Finset ι) : Prop :=
   ∃ a : ι → ℝ, (∀ i ∈ s, 0 ≤ a i ∧ a i ≤ 1) ∧
     (∑ i ∈ s, a i) = (s.card : ℝ) - 2 ∧ ∑ i ∈ s, a i • x i = 0
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedFintypeInType false in
+set_option linter.unusedSectionVars false in
 /-- A feasible set of more than two elements admits a deletion that leaves a feasible set. -/
 theorem feasible_erase (x : ι → Fin 2 → ℝ) (s : Finset ι) (hn : 2 < s.card)
     (hs : FeasibleOn x s) : ∃ i ∈ s, FeasibleOn x (s.erase i) := by
@@ -255,6 +278,10 @@ theorem feasible_erase (x : ι → Fin 2 → ℝ) (s : Finset ι) (hn : 2 < s.ca
     rw [hci, zero_smul, add_zero, hcvec] at hsum
     exact hsum
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
+set_option linter.unusedSectionVars false in
 /-- Feasible weights bound the sum of the unweighted vectors by two. -/
 theorem norm_sum_le_two_of_feasible (x : ι → Fin 2 → ℝ) (s : Finset ι)
     (hx : ∀ i ∈ s, ‖x i‖ ≤ 1) (hs : FeasibleOn x s) : ‖∑ i ∈ s, x i‖ ≤ 2 := by
@@ -274,11 +301,18 @@ theorem norm_sum_le_two_of_feasible (x : ι → Fin 2 → ℝ) (s : Finset ι)
       simp only [Finset.sum_sub_distrib, Finset.sum_const, nsmul_eq_mul, mul_one, hamass]
       ring
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedFintypeInType false in
+set_option linter.unusedSectionVars false in
 /-- List prefixes viewed as sets inherit subset membership. -/
 theorem prefix_subset (l : List ι) (k : ℕ) : (l.take k).toFinset ⊆ l.toFinset := by
   intro i hi
   exact List.mem_toFinset.mpr (List.take_subset k l (List.mem_toFinset.mp hi))
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
+set_option linter.unusedSectionVars false in
 /-- Unit vectors in a finite set have sum norm at most its cardinality. -/
 theorem norm_sum_le_card (x : ι → Fin 2 → ℝ) (s : Finset ι)
     (hx : ∀ i ∈ s, ‖x i‖ ≤ 1) : ‖∑ i ∈ s, x i‖ ≤ s.card := by
@@ -287,6 +321,8 @@ theorem norm_sum_le_card (x : ι → Fin 2 → ℝ) (s : Finset ι)
     _ ≤ ∑ _i ∈ s, (1 : ℝ) := Finset.sum_le_sum hx
     _ = s.card := by simp
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedFintypeInType false in
 /-- Feasible weights yield an ordering whose every prefix has norm at most two. -/
 theorem exists_order_of_feasible (x : ι → Fin 2 → ℝ) (s : Finset ι)
     (hx : ∀ i ∈ s, ‖x i‖ ≤ 1) (hs : 2 < s.card → FeasibleOn x s) :
@@ -328,6 +364,10 @@ theorem exists_order_of_feasible (x : ι → Fin 2 → ℝ) (s : Finset ι)
       · rw [List.take_of_length_le (by simp; omega), hfull]
         exact norm_sum_le_two_of_feasible x s hx (hs hlarge)
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
+set_option linter.unusedSectionVars false in
 /-- Constant weights initialize the deletion argument for a zero-sum family. -/
 theorem feasibleOn_of_sum_zero (x : ι → Fin 2 → ℝ) (s : Finset ι)
     (hn : 2 < s.card) (hsum : ∑ i ∈ s, x i = 0) : FeasibleOn x s := by

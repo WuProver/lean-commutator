@@ -19,7 +19,7 @@ theorem pderiv_commute {R σ : Type*} [CommRing R] (p : MvPolynomial σ R) (i j 
   | add p q hp hq => simp [hp, hq]
   | mul_X p k hp =>
     by_cases hki : k = i <;> by_cases hkj : k = j <;>
-      simp_all [pderiv_mul, Pi.single_apply] <;> ring
+      simp_all [] <;> ring
 
 theorem rational_update (a b c d : ℝ) (ha : a ≠ 0) (hac : a - c ≠ 0) :
     (b - d) / (a - c) = b / a - ((d * a - b * c) / a ^ 2) / (1 - c / a) := by
@@ -31,6 +31,9 @@ theorem rational_update (a b c d : ℝ) (ha : a ≠ 0) (hac : a - c ≠ 0) :
   field_simp
   ring
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
 theorem barrier_sub_pderiv {σ : Type*} [Fintype σ] [DecidableEq σ]
     (p : MvPolynomial σ ℝ) (i j : σ) (z : σ → ℝ)
     (hp : MvPolynomial.eval z p ≠ 0) (hb : barrier p j z ≠ 1) :

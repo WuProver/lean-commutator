@@ -500,7 +500,8 @@ lemma ListsInterlace.erase_of_count_ge_two {lower upper : List ℝ}
     by_cases hax : a ≤ x
     · simp [halower, haupper, hax] at hold ⊢
       omega
-    · simp [halower, haupper, hax] at hold ⊢
+    · simp only [halower, haupper, hax, decide_false, Bool.false_eq_true, and_false,
+        ↓reduceIte, tsub_zero, ge_iff_le] at hold ⊢
       exact hold
   · intro x
     have hold := h.card_get_lt_le_add_one x
@@ -512,7 +513,8 @@ lemma ListsInterlace.erase_of_count_ge_two {lower upper : List ℝ}
     by_cases hax : a < x
     · simp [halower, haupper, hax] at hold ⊢
       omega
-    · simp [halower, haupper, hax] at hold ⊢
+    · simp only [halower, haupper, hax, decide_false, Bool.false_eq_true, and_false,
+        ↓reduceIte, tsub_zero, ge_iff_le] at hold ⊢
       exact hold
 
 /-- A weakly interlacing longer list contains every repeated value of the shorter list with
@@ -654,7 +656,8 @@ lemma splits_of_monic_of_pairwise_lt_of_alternating_sign
             simp
           have hpdeg : 0 < p.degree := natDegree_pos_iff_degree_pos.mp hpdegNat
           have heventually : ∀ᶠ b in Filter.atTop, 0 < p.eval b :=
-            (p.tendsto_atTop_of_leadingCoeff_nonneg hpdeg (by simp [hp.leadingCoeff])).eventually_gt_atTop 0
+            (p.tendsto_atTop_of_leadingCoeff_nonneg hpdeg (by simp
+              [hp.leadingCoeff])).eventually_gt_atTop 0
           obtain ⟨z, hz⟩ := Filter.Eventually.exists_forall_of_atTop heventually
           let b := max (a + 1) z
           have hab : a ≤ b := le_trans (by linarith) (le_max_left _ _)

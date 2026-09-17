@@ -422,7 +422,7 @@ theorem charpoly_rowScale_affine {ι : Type*} [Fintype ι] [DecidableEq ι]
       by_cases hci : c = i
       · subst c
         simp [N₀, N₁, rowScale, hdiag]
-      · simp [N₀, N₁, Matrix.charmatrix_apply, rowScale, hci]
+      · simp [N₀, N₁, Matrix.charmatrix_apply, rowScale]
         ring
     · simp [N₀, N₁, Matrix.charmatrix_apply, rowScale, hri]
   have hN₁ : N₁ = N₀.updateRow i (N₁ i) := by
@@ -513,7 +513,7 @@ theorem charpoly_coordinateScale_eq_rowScale
     ext r c
     by_cases hr : r = i
     · subst r
-      simp [D, coordinateScaleDiagonal, rowScale]
+      simp only [coordinateScaleDiagonal, Matrix.diagonal_mul, ↓reduceIte, rowScale, D]
       rw [← mul_assoc, hsq]
     · simp [D, coordinateScaleDiagonal, rowScale, hr]
   calc
@@ -700,7 +700,7 @@ private theorem coloringPolynomial_coordinateScaleFamily_factor {n k : ℕ}
   apply Finset.prod_congr rfl
   intro b hb
   have hba : b ≠ a := Finset.ne_of_mem_erase hb
-  simp [coordinateScaleFamily, hba]
+  simp [hba]
 
 /-- Every exact-MDP leaf is affine under one-coordinate scaling. -/
 theorem coloringPolynomial_coordinateScaleFamily_affine {n k : ℕ}

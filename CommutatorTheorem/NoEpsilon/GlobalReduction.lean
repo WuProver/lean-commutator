@@ -34,7 +34,8 @@ theorem commutator_smul (A : Matrix ι ι ℂ) (c : ℝ) (p : ℝ)
 omit [Fintype κ] [DecidableEq κ] in
 theorem normalized_matrix_norm (A : Matrix ι ι ℂ) (hA : A ≠ 0) :
     ‖((‖A‖⁻¹ : ℝ) : ℂ) • A‖ = 1 := by
-  rw [norm_smul, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg (inv_nonneg.mpr (norm_nonneg A))]
+  rw [norm_smul, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg (inv_nonneg.mpr (norm_nonneg
+    A))]
   exact inv_mul_cancel₀ (norm_ne_zero_iff.mpr hA)
 
 omit [Fintype κ] [DecidableEq κ] in
