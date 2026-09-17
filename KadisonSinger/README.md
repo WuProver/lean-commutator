@@ -53,9 +53,6 @@ The project pins Lean 4.30.0-rc1 and mathlib commit
 the two supported-selection MSS corollaries. Re-run the commands above for the
 current checkout; every axiom closure should contain only `propext`,
 `Classical.choice`, and `Quot.sound`, with no `sorryAx` or additional axioms.
-The files `verification/axioms.txt`, `verification/build.log`, and
-`verification/summary.json` record an earlier audit and its source fingerprints;
-they are not refreshed by the commands above.
 
 ## Reference
 

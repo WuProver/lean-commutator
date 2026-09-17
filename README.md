@@ -12,23 +12,6 @@ for every traceless complex matrix, same-size factors satisfy
 `A = B * C - C * B` and `‖B‖ * ‖C‖ ≤ (2 : ℝ)^3200 * ‖A‖`.
 The accompanying `_euclideanOperatorNorm` theorem spells out `Matrix.toEuclideanCLM`.
 
-The [14-page informal proof](output/pdf/commutator_bound_2pow3200.pdf) includes the
-new two-shear argument, the full trace-mass proof, exact constant estimates, and a
-Lean correspondence appendix. Its [LaTeX source](paper/commutator_bound_2pow3200.tex)
-is retained separately from the original manuscript.
-
-Reproduce the verification with:
-
-```sh
-lake build
-lake env lean verification/explicit_3200/Audit.lean
-```
-
-The [audit output](verification/explicit_3200/axioms_and_types.log) exposes the final
-types and records only `propext`, `Classical.choice`, and `Quot.sound`.
-The [manifest](verification/explicit_3200/manifest.json) records toolchain, Mathlib
-revision, and source hashes. The existing existential theorem remains available.
-
 ## Main theorem correspondence
 The following gives a one-to-one correspondence between the paper's theorems and the Lean code. The statements labeled **Theorem** are aligned with the paper. The **Lemma** and **Proposition** statements are not yet fully aligned because of some technical gaps, but they are broadly aligned overall.
 
