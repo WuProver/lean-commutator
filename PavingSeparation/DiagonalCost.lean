@@ -3,9 +3,9 @@ import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.LinearAlgebra.Matrix.IsDiag
 
 /-!
-# Explicit lower bounds for the diagonal-commutator cost of flat matrices
+# Explicit bounds for the diagonal-commutator cost of flat matrices
 
-The explicit planar energy lower bound controls every original-coordinate diagonal
+The explicit planar energy bound controls every original-coordinate diagonal
 commutator representation, both with square-normalized entries and after scaling
 an arbitrary diagonal factor. All norms are Euclidean operator norms.
 No optimality is claimed for the coefficients in these lower bounds.
