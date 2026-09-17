@@ -3,11 +3,12 @@ import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.LinearAlgebra.Matrix.IsDiag
 
 /-!
-# Exact diagonal-commutator cost of flat matrices
+# Explicit lower bounds for the diagonal-commutator cost of flat matrices
 
-The sharp planar energy bound controls every original-coordinate diagonal
+The explicit planar energy lower bound controls every original-coordinate diagonal
 commutator representation, both with square-normalized entries and after scaling
 an arbitrary diagonal factor. All norms are Euclidean operator norms.
+No optimality is claimed for the coefficients in these lower bounds.
 -/
 
 noncomputable section
@@ -52,7 +53,8 @@ private theorem card_one_lt {ι : Type*} [Fintype ι] (k : ℕ) (hk : 1 ≤ k)
   norm_num at hpow
   omega
 
-/-- The exact squared cost for a flat matrix and a square-normalized diagonal factor. -/
+/-- An explicit lower bound for the squared cost with a square-normalized diagonal factor
+and a flat matrix. -/
 theorem diagonal_commutator_cost_sq {ι : Type*} [Fintype ι] [DecidableEq ι]
     (k : ℕ) (hk : 1 ≤ k) (hn : Fintype.card ι = 4 ^ k)
     (A C : Matrix ι ι ℂ) (z : ι → ℂ)
@@ -113,7 +115,7 @@ theorem diagonal_commutator_cost_sq {ι : Type*} [Fintype ι] [DecidableEq ι]
     nlinarith
   exact (mul_le_mul_iff_right₀ hnpos).mp hcancel
 
-/-- The exact square-root cost appearing in the finite-dimensional separation theorem. -/
+/-- An explicit lower bound in square-root form for the finite-dimensional separation theorem. -/
 theorem diagonal_commutator_cost {ι : Type*} [Fintype ι] [DecidableEq ι]
     (k : ℕ) (hk : 1 ≤ k) (hn : Fintype.card ι = 4 ^ k)
     (A C : Matrix ι ι ℂ) (z : ι → ℂ)
@@ -125,7 +127,7 @@ theorem diagonal_commutator_cost {ι : Type*} [Fintype ι] [DecidableEq ι]
   apply Real.sqrt_le_iff.mpr
   exact ⟨norm_nonneg _, diagonal_commutator_cost_sq k hk hn A C z hz hflat hcomm⟩
 
-/-- The precise cost is at least the simpler lower bound √k / 4. -/
+/-- The explicit lower bound is at least the simpler lower bound √k / 4. -/
 theorem sqrt_k_lower_bound (k : ℕ) (hk : 1 ≤ k) (n : ℕ) (hn : 1 < n) :
     Real.sqrt (k : ℝ) / 4 ≤
       Real.sqrt ((((3 : ℝ) * k - 1) * n + 1) / (32 * ((n : ℝ) - 1))) := by
@@ -186,7 +188,7 @@ theorem diagonal_commutator_product_cost {ι : Type*} [Fintype ι] [DecidableEq 
     rw [norm_smul, Real.norm_eq_abs, abs_of_pos hr]
   rwa [hnorm] at hc
 
-/-- The same sharp product bound for a matrix satisfying `Matrix.IsDiag`. -/
+/-- The same explicit lower bound for the product cost of a matrix satisfying `Matrix.IsDiag`. -/
 theorem isDiag_commutator_product_cost {ι : Type*} [Fintype ι] [DecidableEq ι]
     (k : ℕ) (hk : 1 ≤ k) (hn : Fintype.card ι = 4 ^ k)
     (A D C : Matrix ι ι ℂ) (hD : D.IsDiag)
