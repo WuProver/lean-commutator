@@ -9,14 +9,13 @@ Empty fibers are permitted. The associated sigma equivalence preserves exactly t
 original index set, so this construction does not add matrix coordinates.
 -/
 
-open scoped Classical
-
 namespace NoEpsilon
 
 /-- Partition a finite type into L fibers, each of cardinality at most r. -/
 theorem exists_bounded_fibers {ν : Type*} [Fintype ν] (L r : ℕ)
     (hcard : Fintype.card ν ≤ L * r) :
     ∃ f : ν → Fin L, ∀ i, Fintype.card {x : ν // f x = i} ≤ r := by
+  classical
   have hgrid : Fintype.card ν ≤ Fintype.card (Fin L × Fin r) := by
     simpa only [Fintype.card_prod, Fintype.card_fin] using hcard
   obtain ⟨e⟩ := Function.Embedding.nonempty_of_card_le hgrid

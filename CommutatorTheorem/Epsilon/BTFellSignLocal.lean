@@ -88,9 +88,11 @@ theorem roots_reflectPolynomial {p : ℝ[X]} (hp : p.Monic)
               rw [hdegree, ← hpProd]
       _ = _ := hprod p.roots
   rw [heq]
-  convert roots_multiset_prod_X_sub_C (p.roots.map fun x => -x) using 1 <;>
-    simp [Multiset.map_map]
+  convert roots_multiset_prod_X_sub_C (p.roots.map fun x => -x) using 1
+  simp [Multiset.map_map]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedVariables false in
 theorem reflectPolynomial_realRooted {p : ℝ[X]} (hp : p.Monic)
     (hreal : RealRooted p) : RealRooted (reflectPolynomial p) := by
   unfold reflectPolynomial

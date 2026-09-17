@@ -67,12 +67,12 @@ theorem countP_lt_add_count_add_countP_gt_eq_card
       simp only [Multiset.countP_cons, Multiset.count_cons,
         Multiset.card_cons]
       rcases lt_trichotomy a b with hab | hab | hab
-      · simp [hab, hab.ne, Ne.symm hab.ne, not_lt_of_ge hab.le]
+      · simp [hab, Ne.symm hab.ne, not_lt_of_ge hab.le]
         omega
       · subst a
         simp
         omega
-      · simp [hab, hab.ne, Ne.symm hab.ne, not_lt_of_ge hab.le]
+      · simp [hab, hab.ne, not_lt_of_ge hab.le]
         omega
 
 theorem countP_le_eq_countP_lt_add_count (s : Multiset ℝ) (b : ℝ) :
@@ -82,13 +82,13 @@ theorem countP_le_eq_countP_lt_add_count (s : Multiset ℝ) (b : ℝ) :
   | @cons a s ih =>
       simp only [Multiset.countP_cons, Multiset.count_cons]
       rcases lt_trichotomy a b with hab | hab | hab
-      · simp [hab, hab.le, hab.ne, Ne.symm hab.ne, ih]
+      · simp [hab, hab.le, Ne.symm hab.ne, ih]
         omega
       · subst a
         simp [ih]
         omega
-      · simp [hab, not_le_of_gt hab, not_lt_of_ge hab.le,
-          hab.ne, Ne.symm hab.ne, ih]
+      · simp [not_le_of_gt hab, not_lt_of_ge hab.le,
+          hab.ne, ih]
 
 /-- Between consecutive distinct roots strictly to the right of `x`, Rolle's
 theorem supplies a derivative root which is still strictly to the right of

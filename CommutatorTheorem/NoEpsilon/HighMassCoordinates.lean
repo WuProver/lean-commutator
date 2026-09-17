@@ -29,6 +29,8 @@ def absorptionAmbientEquiv {L : ℕ} (r : ℕ) (d : Fin L → Type) :
   left_inv x := by rcases x with ⟨i, y⟩; cases i <;> rfl
   right_inv x := by cases x <;> rfl
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 /-- Complete the two bridge frames and divide all remaining coordinates into bounded fibers. -/
 theorem orthogonal_pair_partitioned_basis {r L : ℕ} (P Q : Matrix ι (Fin r) ℂ)
     (hP : Pᴴ * P = 1) (hQ : Qᴴ * Q = 1) (hPQ : Pᴴ * Q = 0)

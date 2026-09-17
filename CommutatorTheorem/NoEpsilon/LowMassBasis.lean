@@ -22,6 +22,9 @@ def transversalColumns {k R : ℕ} (V : Fin k → Matrix ι (Fin R) ℂ)
     (σ : Fin k → Equiv.Perm (Fin R)) : Matrix ι (Fin R × Fin k) ℂ :=
   fun i p ↦ V p.2 i (σ p.2 p.1)
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedSectionVars false in
 theorem transversalColumns_isometry {k R : ℕ} (V : Fin k → Matrix ι (Fin R) ℂ)
     (σ : Fin k → Equiv.Perm (Fin R))
     (hV : ∀ j l, (V j)ᴴ * V l = if j = l then 1 else 0) :
@@ -32,8 +35,10 @@ theorem transversalColumns_isometry {k R : ℕ} (V : Fin k → Matrix ι (Fin R)
   by_cases hjl : j = l
   · subst l
     simp [Matrix.one_apply, (σ j).injective.eq_iff]
-  · simp [hjl, Matrix.one_apply, Prod.mk.injEq]
+  · simp [hjl, Prod.mk.injEq]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 /-- A square-cardinality rectangular isometry specifies an orthonormal basis on its own index. -/
 theorem exists_basis_of_isometry {κ : Type*} [Fintype κ] [DecidableEq κ]
     (W : Matrix ι κ ℂ) (hW : Wᴴ * W = 1) (hcard : Fintype.card ι = Fintype.card κ) :
@@ -49,6 +54,9 @@ theorem exists_basis_of_isometry {κ : Type*} [Fintype κ] [DecidableEq κ]
   change b j i = W i j
   rw [hb j (Set.mem_univ j)]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedSectionVars false in
 theorem mul_concatenateGroups {k R : ℕ} (S : Matrix ι ι ℂ)
     (V : Fin k → Matrix ι (Fin R) ℂ) :
     S * concatenateGroups V = concatenateGroups (fun j ↦ S * V j) := rfl

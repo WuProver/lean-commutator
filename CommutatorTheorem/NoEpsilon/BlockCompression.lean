@@ -11,6 +11,9 @@ variable {α β γ : Type*} [Fintype α] [Fintype β] [Fintype γ]
 def coordinateInclusion (f : α → β) : Matrix β α ℂ :=
   fun b a ↦ if b = f a then 1 else 0
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedFintypeInType false in
+set_option linter.unusedSectionVars false in
 theorem coordinateInclusion_isometry (f : α → β) (hf : Function.Injective f) :
     (coordinateInclusion f).conjTranspose * coordinateInclusion f = 1 := by
   ext a a'
@@ -29,6 +32,10 @@ theorem coordinateInclusion_norm_le (f : α → β) (hf : Function.Injective f) 
   rw [h] at hle
   nlinarith [norm_nonneg (coordinateInclusion f)]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
+set_option linter.unusedSectionVars false in
 theorem submatrix_eq_coordinate_compression (A : Matrix β β ℂ)
     (f : α → β) (g : γ → β) :
     A.submatrix f g = (coordinateInclusion f).conjTranspose * A * coordinateInclusion g := by
@@ -36,6 +43,8 @@ theorem submatrix_eq_coordinate_compression (A : Matrix β β ℂ)
   simp [Matrix.mul_apply, coordinateInclusion, Matrix.conjTranspose_apply,
     mul_ite, ite_mul, Finset.sum_ite_eq']
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 /-- Rectangular coordinate compression is contractive in the Euclidean operator norm. -/
 theorem submatrix_operator_norm_le (A : Matrix β β ℂ)
     (f : α → β) (g : γ → β) (hf : Function.Injective f) (hg : Function.Injective g) :

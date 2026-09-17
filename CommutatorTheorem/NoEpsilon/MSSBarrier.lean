@@ -30,6 +30,9 @@ omit [Fintype σ] in
   funext i
   simp [coordinateShift]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
 /-- The coordinate logarithmic derivative at a point of the open upper orthant
 has nonpositive imaginary part. -/
 theorem logDerivative_im_nonpos {p : MvPolynomial σ ℂ} (hp : UpperStable p)
@@ -60,6 +63,9 @@ theorem logDerivative_im_nonpos {p : MvPolynomial σ ℂ} (hp : UpperStable p)
   simpa [f, derivative_stableLinePolynomial_eval_zero, eval_stableLinePolynomial,
     nonnegativeDirectionalDerivative, w, apply_ite] using hsum
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
 /-- The same sign extends to boundary points, provided the denominator does
 not vanish. This only uses continuity, not an assumed specialization theorem. -/
 theorem logDerivative_im_nonpos_closed {p : MvPolynomial σ ℂ} (hp : UpperStable p)
@@ -87,6 +93,8 @@ theorem logDerivative_im_nonpos_closed {p : MvPolynomial σ ℂ} (hp : UpperStab
   intro i
   simpa [zt, InUpperHalfPlane] using add_pos_of_nonneg_of_pos (hz i) ht
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedFintypeInType false in
 /-- Differentiating a coordinate restriction at its base point evaluates the
 corresponding polynomial partial derivative. -/
 theorem hasDerivAt_coordinateEval_zero (p : MvPolynomial σ ℂ) (z : σ → ℂ) (j : σ) :
@@ -151,6 +159,9 @@ noncomputable def mixedBarrierDerivative (p : MvPolynomial σ ℝ)
       MvPolynomial.eval z p - MvPolynomial.eval z (MvPolynomial.pderiv i p) *
       MvPolynomial.eval z (MvPolynomial.pderiv j p)) / (MvPolynomial.eval z p)^2
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
 /-- The mixed logarithmic derivative of a real stable polynomial is nonpositive
 at every real point where the polynomial is nonzero. This is the Rayleigh
 inequality, proved here from upper-half-plane stability and a boundary limit. -/
@@ -177,7 +188,11 @@ theorem mixedBarrierDerivative_nonpos {p : MvPolynomial σ ℝ} (hp : RealStable
       apply q.continuous_eval.comp
       apply continuous_pi
       intro k
-      by_cases hk : k = j <;> simp [coordinateShift, hk] <;> fun_prop
+      by_cases hk : k = j
+      · simp only [coordinateShift, hk, ↓reduceIte]
+        fun_prop
+      · simp only [coordinateShift, hk, ↓reduceIte, add_zero]
+        fun_prop
     exact (hc.continuousAt.eventually_ne (by simpa using hqzero)).filter_mono
       nhdsWithin_le_nhds
   have hsign : ∀ᶠ t : ℝ in 𝓝[>] 0, (f (Complex.I * (t : ℂ))).im ≤ 0 := by
@@ -195,6 +210,8 @@ omit [Fintype σ] in
   funext i
   by_cases hi : i = j <;> simp [coordinateShift, hi, add_assoc]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedFintypeInType false in
 /-- The algebraic mixed derivative is the actual derivative of the real
 coordinate barrier restriction. -/
 theorem hasDerivAt_barrier_coordinate (p : MvPolynomial σ ℝ) (z : σ → ℝ)
@@ -257,6 +274,8 @@ theorem le_coordinateShift (z : σ → ℝ) (j : σ) {t : ℝ} (ht : 0 ≤ t) :
   intro k
   by_cases hk : k = j <;> simp [coordinateShift, hk, ht]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedFintypeInType false in
 /-- Coordinate monotonicity in MSS Lemma 5.7, proved from real stability. -/
 theorem barrier_coordinate_antitone {p : MvPolynomial σ ℝ} (hp : RealStable p)
     {z : σ → ℝ} (hz : AboveRoots p z) (i j : σ) :
@@ -275,6 +294,9 @@ theorem barrier_coordinate_antitone {p : MvPolynomial σ ℝ} (hp : RealStable p
     exact mixedBarrierDerivative_nonpos hp _
       (hz _ (le_coordinateShift z j (interior_subset ht))).ne' i j
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
 /-- The coordinate monotonicity extends to arbitrary increases of all variables. -/
 theorem barrier_antitone_aboveRoots {p : MvPolynomial σ ℝ} (hp : RealStable p)
     {z y : σ → ℝ} (hz : AboveRoots p z) (hy : z ≤ y) (i : σ) :
@@ -306,6 +328,9 @@ theorem barrier_antitone_aboveRoots {p : MvPolynomial σ ℝ} (hp : RealStable p
       exact hm.trans ih
   simpa using hfin Finset.univ
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
 /-- MSS Lemma 5.9: a barrier below one keeps the entire upper orthant positive
 under the operator `1 - ∂ᵢ`. -/
 theorem aboveRoots_sub_pderiv {p : MvPolynomial σ ℝ} (hp : RealStable p)

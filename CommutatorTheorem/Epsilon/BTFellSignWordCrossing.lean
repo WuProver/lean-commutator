@@ -33,7 +33,7 @@ theorem changesFrom_eq_destutter_length_sub_one
         have hne : l.destutter' Ne b ≠ [] := by
           intro h
           have := List.mem_destutter' l Ne b
-          simpa [h] using this
+          simp [h] at this
         have hpos : 0 < (l.destutter' Ne b).length :=
           List.length_pos_of_ne_nil hne
         omega

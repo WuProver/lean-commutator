@@ -94,6 +94,8 @@ theorem even_rootsGTCount_iff_even_signVariations_taylor
         htmonic htconst
   exact even_iff_of_neg_one_pow_mul_pos hrootSign hvariationSign
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedVariables false in
 /-- Descartes' bound is exact when every root is positive.  This extreme
 threshold case combines real-rootedness (all degree-many roots are present)
 with the general degree upper bound for sign variations. -/

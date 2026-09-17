@@ -23,7 +23,7 @@ theorem normalized_low_mass_paving_of_selection {k h : ℕ} (hk : 0 < k)
       (by simpa only [Nat.cast_pow, Nat.cast_ofNat] using hLow)
   obtain ⟨b, hb⟩ := LowMassPaving.exists_paving_basis hk selection H G E
     hH hHt hG hGn hGt hE hE₁ hEt hlo hup
-  have hc₀ : c ≠ 0 := by intro h; simpa [h] using hc
+  have hc₀ : c ≠ 0 := by intro h; simp [h] at hc
   refine ⟨b, ?_⟩
   intro a
   let W := familyMatrix (fun j ↦ b (a, j))

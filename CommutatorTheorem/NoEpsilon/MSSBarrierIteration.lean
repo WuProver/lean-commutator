@@ -12,6 +12,8 @@ open scoped BigOperators
 variable {σ : Type*} [Fintype σ] [DecidableEq σ]
 
 omit [DecidableEq σ] in
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedFintypeInType false in
 theorem realStable_sub_pderiv {p : MvPolynomial σ ℝ} (hp : RealStable p) (i : σ) :
     RealStable (p - MvPolynomial.pderiv i p) := by
   change UpperStable ((p - MvPolynomial.pderiv i p).map Complex.ofRealHom)
@@ -46,6 +48,8 @@ theorem advance_le_uniform (t δ : ℝ) (hδ : 0 ≤ δ) (xs : List σ) (hxs : x
   intro k
   by_cases hk : k ∈ xs <;> simp [hk, hδ]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedFintypeInType false in
 /-- Finite iteration preserves all barrier bounds, with the point shifted in
 the same order as the polynomial difference operators. -/
 theorem iterate_quantitative_barrier {p : MvPolynomial σ ℝ} (hp : RealStable p)
@@ -65,6 +69,9 @@ theorem iterate_quantitative_barrier {p : MvPolynomial σ ℝ} (hp : RealStable 
       fun i ↦ (hstep.2 i).trans (hb i)
     simpa only [List.foldl_cons, advance] using ih hp' hstep.1 hb'
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
 /-- Applying any list of distinct MSS operators moves a uniform upper-root
 barrier by at most one coordinate shift, independently of the list length. -/
 theorem aboveRoots_fold_uniform {p : MvPolynomial σ ℝ} (hp : RealStable p)
@@ -90,6 +97,9 @@ theorem optimized_parameters {ε : ℝ} (hε : 0 < ε) :
     nlinarith
   · nlinarith
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
 /-- The optimized MSS bound for any real stable polynomial satisfying the
 explicit initial above-roots and trace-sized barrier estimates. -/
 theorem aboveRoots_fold_optimized {p : MvPolynomial σ ℝ} (hp : RealStable p)

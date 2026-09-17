@@ -64,6 +64,8 @@ noncomputable def simultaneousBudget (a : ℝ) (m : ℕ) : ℝ :=
 set_option maxHeartbeats 1600000 in
 -- The two-shear construction combines block identities and nonlinear norm estimates.
 omit [DecidableEq ι] in
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedFintypeInType false in
 theorem eliminate_simultaneously
     (P Q : Matrix n r ℂ) (V : ∀ i, Matrix n (d i) ℂ)
     (J : ∀ i, Matrix r (d i) ℂ)

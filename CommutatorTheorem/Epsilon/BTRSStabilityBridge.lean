@@ -75,6 +75,9 @@ theorem iteratedPDeriv_map {σ R S : Type*}
           (iteratedPDeriv is (MvPolynomial.pderiv i p))
       rw [MvPolynomial.pderiv_map, ih]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
 /-- The multivariate Gauss--Lucas/Hurwitz statement propagates stability
 through any finite sequence of coordinate derivatives. -/
 theorem mvStableOrZero_iteratedPDeriv

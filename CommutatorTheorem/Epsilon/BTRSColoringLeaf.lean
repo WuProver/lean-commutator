@@ -72,8 +72,7 @@ private theorem colorComplementList_delete_perm {n k : ℕ}
         simpa [hji] using hx
     · rintro (rfl | ⟨j, hj, rfl⟩)
       · exact hi
-      · change c (i.succAbove j) ≠ a
-        simpa using hj
+      · simpa using hj
 
 /-- A fixed branch of the recursive coloring expansion is precisely the
 characteristic polynomial of the principal compression on that color fiber. -/
@@ -124,7 +123,7 @@ theorem diagonalizeReal_iteratedPDeriv_colorComplement
           (BTMixedDet.principalCompression_isHermitian (hA a) c a)
         ext i j
         rfl
-      · push_neg at hall
+      · push Not at hall
         obtain ⟨i, hi⟩ := hall
         let D := deleteFamilyAt A i
         let d := deleteColoring i c

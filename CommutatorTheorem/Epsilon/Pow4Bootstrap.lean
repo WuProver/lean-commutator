@@ -224,7 +224,7 @@ private lemma zeroDiag_InUnitSquare_decomp_bounded_S1d {n : ℕ} (hn : 2 ≤ n)
   · have hC_entry : ∀ i j : Fin n, ‖C i j‖ ≤ (↑n - 1) * ‖A i j‖ := by
       intro i j; simp only [C, Matrix.of_apply]
       by_cases hij : i = j
-      · subst hij; simp; exact mul_nonneg (by linarith) (norm_nonneg _)
+      · subst hij; simp only [↓reduceIte, norm_zero]; exact mul_nonneg (by linarith) (norm_nonneg _)
       · rw [if_neg hij, norm_div, div_sub_div_same, norm_div]
         have hnorm_n1 : ‖(↑(n - 1 : ℕ) : ℂ)‖ = (↑(n - 1 : ℕ) : ℝ) := Complex.norm_natCast _
         have hn1_eq : (↑(n - 1 : ℕ) : ℝ) = (↑n : ℝ) - 1 := by
@@ -472,7 +472,7 @@ private noncomputable def canonicalProdEquiv_S1h {m : ℕ} (hm : 0 < m) :
   left_inv := by
     intro ⟨k, j⟩
     have hj := j.isLt
-    show (⟨_, _⟩, ⟨_, _⟩) = (k, j)
+    change (⟨_, _⟩, ⟨_, _⟩) = (k, j)
     refine Prod.ext ?_ ?_
     · ext; simp only [canonicalBlockEmbed_S1h]
       rw [show k.val * m + j.val = j.val + k.val * m from by omega]
@@ -483,7 +483,7 @@ private noncomputable def canonicalProdEquiv_S1h {m : ℕ} (hm : 0 < m) :
       simp [Nat.mod_eq_of_lt hj]
   right_inv := by
     intro i
-    show canonicalBlockEmbed_S1h _ _ = i
+    change canonicalBlockEmbed_S1h _ _ = i
     ext; simp only [canonicalBlockEmbed_S1h]
     exact Nat.div_add_mod' i.val m
 
@@ -565,7 +565,7 @@ lemma bt_paving_to_sigma_block (n : ℕ) (hn : 1 ≤ n) :
   -- H ∘ e k = σ' k
   have hH_e : ∀ k j, H (e k j) = σ' k j := by
     intro k j
-    show σ' (prodToFin.symm (prodToFin (k, j))).1 (prodToFin.symm (prodToFin (k, j))).2
+    change σ' (prodToFin.symm (prodToFin (k, j))).1 (prodToFin.symm (prodToFin (k, j))).2
        = σ' k j
     rw [prodToFin.symm_apply_apply]
   -- H is injective.
@@ -611,7 +611,7 @@ lemma bt_paving_to_sigma_block (n : ℕ) (hn : 1 ≤ n) :
   have he_surj : ∀ i : Fin (4 ^ n), ∃ k j, e k j = i := by
     intro i
     refine ⟨(prodToFin.symm i).1, (prodToFin.symm i).2, ?_⟩
-    show prodToFin ((prodToFin.symm i).1, (prodToFin.symm i).2) = i
+    change prodToFin ((prodToFin.symm i).1, (prodToFin.symm i).2) = i
     have : ((prodToFin.symm i).1, (prodToFin.symm i).2) = prodToFin.symm i := rfl
     rw [this, prodToFin.apply_symm_apply]
   -- Norm bound.
@@ -725,7 +725,7 @@ private lemma zeroDiag_InUnitSquare_decomp_bounded_S1f {n : ℕ} (hn : 2 ≤ n)
   · have hC_entry : ∀ i j : Fin n, ‖C i j‖ ≤ (↑n - 1) * ‖A i j‖ := by
       intro i j; simp only [C, Matrix.of_apply]
       by_cases hij : i = j
-      · subst hij; simp; exact mul_nonneg (by linarith) (norm_nonneg _)
+      · subst hij; simp only [↓reduceIte, norm_zero]; exact mul_nonneg (by linarith) (norm_nonneg _)
       · rw [if_neg hij, norm_div, div_sub_div_same, norm_div]
         have hnorm_n1 : ‖(↑(n - 1 : ℕ) : ℂ)‖ = (↑(n - 1 : ℕ) : ℝ) := Complex.norm_natCast _
         have hn1_eq : (↑(n - 1 : ℕ) : ℝ) = (↑n : ℝ) - 1 := by
@@ -819,6 +819,7 @@ lemma lambdaM_le_poly (m : ℕ) : lambdaM m ≤ (m : ℝ) * ((m : ℝ) - 1) := b
 /-! ## Strengthened canonical 4-block bound -/
 
 set_option maxHeartbeats 6400000 in
+-- Matrix and finite-sum calculations require additional elaboration steps.
 /-- Strengthened canonical 4-block bound (exposes per-block lambdaA).
     Same proof structure as `lambdaA_four_block_bound`, but the final inequality
     uses `⨆ k, lambdaA (diagBlock k)` instead of `lambdaM m`. This is the σ-aware
@@ -931,7 +932,7 @@ lemma lambdaA_four_block_bound_strong
         refine ⟨0, 0, ?_, ?_, ?_⟩
         · intro i j hij; simp
         · intro i; unfold InUnitSquare; simp
-        · ext i j; simp [matComm]
+        · ext i j; simp only [matComm, mul_zero, Matrix.sub_apply, Matrix.zero_apply, sub_self]
           have : i = j := Fin.ext (by omega)
           rw [this]; exact hzd_block k j
       · obtain ⟨B, C, hd, hu, hc, _⟩ :=
@@ -1037,10 +1038,10 @@ lemma lambdaA_four_block_bound_strong
           rw [abs_neg]; exact abs_of_nonneg (by linarith)
       have hcre_abs : ∀ k : Fin 4, |cornerRe k| = (1 + δ) / 2 := by
         intro k; apply corner_abs_helper
-        fin_cases k <;> simp [cornerRe] <;> ring
+        fin_cases k <;> simp [cornerRe]
       have hcim_abs : ∀ k : Fin 4, |cornerIm k| = (1 + δ) / 2 := by
         intro k; apply corner_abs_helper
-        fin_cases k <;> simp [cornerIm] <;> ring
+        fin_cases k <;> simp [cornerIm]
       obtain ⟨hbre, hbim⟩ := hBk_usq (blockIdx i) (localIdx i)
       have hre_eq : (↑((1 - δ) / 2) * Bk (blockIdx i) (localIdx i) (localIdx i) +
           cornerVal (blockIdx i)).re =
@@ -1100,7 +1101,8 @@ lemma lambdaA_four_block_bound_strong
         intro k; fin_cases k <;> simp [cornerRe, Matrix.cons_val_zero, Matrix.cons_val_one]
       have hcIm_vals : ∀ k : Fin 4, cornerIm k = (1 + δ) / 2 ∨ cornerIm k = -(1 + δ) / 2 := by
         intro k; fin_cases k <;> simp [cornerIm, Matrix.cons_val_zero, Matrix.cons_val_one]
-      have corner_inj : ∀ (a b : Fin 4), cornerRe a = cornerRe b → cornerIm a = cornerIm b → a = b := by
+      have corner_inj : ∀ (a b : Fin 4), cornerRe a = cornerRe b → cornerIm a = cornerIm b → a =
+        b := by
         intro a b h1 h2
         fin_cases a <;> fin_cases b <;> first | rfl |
           (simp [cornerRe, cornerIm, Matrix.cons_val_zero, Matrix.cons_val_one] at h1 h2; linarith)
@@ -1573,11 +1575,11 @@ private noncomputable def buildSigmaEquiv {m : ℕ}
       have h1 : e k j' = e k' j' := by rw [hkk']
       have h2 : e k j' = e k j := h1.trans hej'
       exact h2
-    show (k', j') = (k, j)
+    change (k', j') = (k, j)
     exact Prod.ext hkk' hjj'
   right_inv := by
     intro i
-    show e (hsurj i).choose ((hsurj i).choose_spec).choose = i
+    change e (hsurj i).choose ((hsurj i).choose_spec).choose = i
     exact (hsurj i).choose_spec.choose_spec
 
 /-! ## Canonical block embedding (matches tmp_S1f's signature) -/
@@ -1600,7 +1602,7 @@ private noncomputable def canonicalProdEquiv {m : ℕ} (hm : 0 < m) :
   left_inv := by
     intro ⟨k, j⟩
     have hj := j.isLt
-    show (⟨_, _⟩, ⟨_, _⟩) = (k, j)
+    change (⟨_, _⟩, ⟨_, _⟩) = (k, j)
     refine Prod.ext ?_ ?_
     · ext; simp only [canonicalBlockEmbed]
       rw [show k.val * m + j.val = j.val + k.val * m from by omega]
@@ -1611,13 +1613,14 @@ private noncomputable def canonicalProdEquiv {m : ℕ} (hm : 0 < m) :
       simp [Nat.mod_eq_of_lt hj]
   right_inv := by
     intro i
-    show canonicalBlockEmbed _ _ = i
+    change canonicalBlockEmbed _ _ = i
     ext; simp only [canonicalBlockEmbed]
     exact Nat.div_add_mod' i.val m
 
 /-! ## σ-aware four-block bound (parameterized by tmp_S1f conclusion) -/
 
 set_option maxHeartbeats 6400000 in
+-- Matrix and finite-sum calculations require additional elaboration steps.
 /-- σ-aware four-block bound: for any 4-block embedding `e` forming a bijection
     (Fin 4 × Fin m) ↔ Fin (4*m), `lambdaA A` is bounded by the max over k of
     `lambdaA(A.submatrix (e k) (e k))`, with the same constants as the canonical
@@ -1684,19 +1687,19 @@ lemma lambdaA_sigma_four_block_bound_param
         perm (canonicalBlockEmbed k j) = e k j := by
       intro k j
       have h1 : cEq.symm (canonicalBlockEmbed k j) = (k, j) := by
-        show (canonicalProdEquiv hm).symm (canonicalBlockEmbed k j) = (k, j)
+        change (canonicalProdEquiv hm).symm (canonicalBlockEmbed k j) = (k, j)
         rw [show canonicalBlockEmbed k j = (canonicalProdEquiv hm) (k, j) from rfl]
         exact (canonicalProdEquiv hm).symm_apply_apply (k, j)
       have h2 : σEq (k, j) = e k j := rfl
-      show σEq (cEq.symm (canonicalBlockEmbed k j)) = e k j
+      change σEq (cEq.symm (canonicalBlockEmbed k j)) = e k j
       rw [h1]; exact h2
     -- Apply hStrong to A' = A.submatrix perm perm
     let A' : Matrix (Fin (4 * m)) (Fin (4 * m)) ℂ :=
       A.submatrix (perm : Fin (4 * m) → Fin (4 * m)) perm
     have hzd' : ZeroDiag A' := by
-      intro i; show A (perm i) (perm i) = 0; exact hzd (perm i)
+      intro i; change A (perm i) (perm i) = 0; exact hzd (perm i)
     have hnorm' : ‖A'‖ = 1 := by
-      show ‖A.submatrix (perm : Fin (4 * m) → Fin (4 * m)) perm‖ = 1
+      change ‖A.submatrix (perm : Fin (4 * m) → Fin (4 * m)) perm‖ = 1
       rw [submatrix_perm_norm_eq_S1g perm A]; exact hnorm
     have hStrongApplied := hStrong A' hzd' hnorm'
     -- Show: A'.submatrix canonicalBlockEmbed_k canonicalBlockEmbed_k
@@ -1738,7 +1741,7 @@ lemma lambdaA_sigma_four_block_bound_param
         (⨆ k : Fin 4, lambdaA (A.submatrix (e k) (e k))) := by
       congr 1; ext k; rw [hblock_eq]
     have hLA_eq : lambdaA A' = lambdaA A := by
-      show lambdaA (A.submatrix (perm : Fin (4 * m) → Fin (4 * m)) perm) = lambdaA A
+      change lambdaA (A.submatrix (perm : Fin (4 * m) → Fin (4 * m)) perm) = lambdaA A
       exact lambdaA_conj_invariant_S1g A perm
     rw [hLA_eq, hsup_eq] at hStrongApplied
     exact hStrongApplied
@@ -1827,6 +1830,7 @@ private lemma blockDiag2_norm_le_of_blocks_S1tb {m : ℕ}
   convert hle_sq using 2
 
 set_option maxHeartbeats 6400000 in
+-- Matrix and finite-sum calculations require additional elaboration steps.
 /-- **Two-block decomposition (η-trick, natural `2/(1-δ)` coefficient).**
 
 Given two disjoint covering injections `H, H' : Fin (4^n) → Fin (2·4^n)`,
@@ -1975,7 +1979,7 @@ lemma lambdaA_two_block_decomp :
       refine ⟨0, 0, ?_, ?_, ?_⟩
       · intro i j hij; simp
       · intro i; unfold InUnitSquare; simp
-      · ext i j; simp [matComm]
+      · ext i j; simp only [matComm, mul_zero, Matrix.sub_apply, Matrix.zero_apply, sub_self]
         have : i = j := Fin.ext (by have := i.isLt; have := j.isLt; omega)
         rw [this]; exact hzd_block k j
     · obtain ⟨B, C, hd, hu, hc, _⟩ :=
@@ -2580,7 +2584,7 @@ lemma buildComplement_range_union_S1i {n : ℕ}
       intro hmem
       obtain ⟨i, _, hi⟩ := Finset.mem_image.mp hmem
       exact hx ⟨i, hi⟩
-    show x ∈ (Finset.univ \ Finset.univ.image H :
+    change x ∈ (Finset.univ \ Finset.univ.image H :
         Finset (Fin (2 * 4 ^ n)))
     exact Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hx_not⟩
 
@@ -2604,6 +2608,7 @@ private lemma lambdaM_nonneg_S1i (m : ℕ) : 0 ≤ lambdaM m := by
 /-! ## Main lemma -/
 
 set_option maxHeartbeats 4000000 in
+-- Matrix and finite-sum calculations require additional elaboration steps.
 /-- LOAD-BEARING BT-improved single-level recursion for `lambdaM(2·4^n)`.
 
 For every `n ≥ 1` and `δ ∈ (0,1)`:
@@ -2627,10 +2632,10 @@ shape matching the JOS recursion.
 The K_rec constant is genuinely a function of K_BT and C₁ — removing
 hSigma4 or weakening the BT per-block norm bound makes the proof fail. -/
 lemma lambdaM_2pow4n_bt_recursion_v2
-    (hBT      : Hyp_bt_paving_to_sigma_block_S1i)
-    (hScale   : Hyp_lambdaA_scale_bound_S1i)
-    (hSigma4  : Hyp_sigma_four_block_general_S1i)
-    (hTwoBlock: Hyp_two_block_decomp_S1i) :
+    (hBT : Hyp_bt_paving_to_sigma_block_S1i)
+    (hScale : Hyp_lambdaA_scale_bound_S1i)
+    (hSigma4 : Hyp_sigma_four_block_general_S1i)
+    (hTwoBlock : Hyp_two_block_decomp_S1i) :
     ∃ K_rec L_rec C_rec : ℝ, 0 < K_rec ∧ 0 < L_rec ∧ 0 < C_rec ∧
       ∀ (n : ℕ) (_hn : 1 ≤ n) (δ : ℝ) (_hδ : 0 < δ) (_hδ1 : δ < 1),
         lambdaM (2 * 4 ^ n) ≤
@@ -2655,16 +2660,16 @@ lemma lambdaM_2pow4n_bt_recursion_v2
   set RHS := K_rec / (1 - δ)^2 * lambdaM (4 ^ (n - 1)) +
     L_rec / (1 - δ) * lambdaM (4 ^ n) + Crec / (δ * (1 - δ)) with hRHS_def
   have hK_rec_pos : 0 < K_rec := by
-    show 0 < K_BT * C₁
+    change 0 < K_BT * C₁
     exact mul_pos hK_BT_pos hC₁_pos
   have hCrec_pos : 0 < Crec := by
-    show 0 < C_two + 2 * C₂ + 1
+    change 0 < C_two + 2 * C₂ + 1
     linarith
   have hRHS_nn : 0 ≤ RHS := by
     have hcoef1 : 0 ≤ K_rec / (1 - δ)^2 :=
       div_nonneg (le_of_lt hK_rec_pos) (le_of_lt h1δ2)
     have hcoef2 : 0 ≤ L_rec / (1 - δ) := by
-      apply div_nonneg _ (le_of_lt h1δ); show (0:ℝ) ≤ 2; norm_num
+      apply div_nonneg _ (le_of_lt h1δ); change (0:ℝ) ≤ 2; norm_num
     have hcoef3 : 0 ≤ Crec / (δ * (1 - δ)) :=
       div_nonneg (le_of_lt hCrec_pos) (le_of_lt hδδ')
     have ht1 : 0 ≤ K_rec / (1 - δ)^2 * lambdaM (4 ^ (n - 1)) :=
@@ -2739,18 +2744,18 @@ lemma lambdaM_2pow4n_bt_recursion_v2
       intro i
       obtain ⟨k, j, hkj⟩ := he_surj (castEq i)
       refine ⟨k, j, ?_⟩
-      show castEq.symm (e k j) = i
+      change castEq.symm (e k j) = i
       rw [hkj, castEq.symm_apply_apply]
     have hzd_B : ZeroDiag B := by
       intro i
-      show (A.submatrix H H) (castEq i) (castEq i) = 0
+      change (A.submatrix H H) (castEq i) (castEq i) = 0
       simp only [Matrix.submatrix_apply]
       exact hzd (H (castEq i))
     have hB_block_eq : ∀ k,
         B.submatrix (eCast k) (eCast k) = A.submatrix (H ∘ e k) (H ∘ e k) := by
       intro k
       ext i j
-      show (A.submatrix H H) (castEq (castEq.symm (e k i))) (castEq (castEq.symm (e k j)))
+      change (A.submatrix H H) (castEq (castEq.symm (e k i))) (castEq (castEq.symm (e k j)))
         = A (H (e k i)) (H (e k j))
       rw [castEq.apply_symm_apply, castEq.apply_symm_apply]
       simp [Matrix.submatrix_apply]
@@ -2760,7 +2765,7 @@ lemma lambdaM_2pow4n_bt_recursion_v2
         C₂ / δ * ‖B‖ :=
       hSigma4_spec δ hδ hδ1 B hzd_B eCast heCast_inj heCast_disj heCast_surj
     have hnorm_B_eq : ‖B‖ = ‖A.submatrix H H‖ := by
-      show ‖(A.submatrix H H).submatrix (castEq : Fin (4 * 4^(n-1)) → Fin (4^n)) castEq‖
+      change ‖(A.submatrix H H).submatrix (castEq : Fin (4 * 4^(n-1)) → Fin (4^n)) castEq‖
         = ‖A.submatrix H H‖
       have h_le : ‖(A.submatrix H H).submatrix
           (castEq : Fin (4 * 4^(n-1)) → Fin (4^n)) castEq‖ ≤ ‖A.submatrix H H‖ := by
@@ -2833,7 +2838,7 @@ lemma lambdaM_2pow4n_bt_recursion_v2
           -- B = (A.submatrix H H).submatrix castEq castEq = (B'*C' - C'*B').submatrix castEq castEq
           have hBeq : B = (B' * C' - C' * B').submatrix
               (castEq : Fin (4 * 4^(n-1)) → Fin (4^n)) castEq := by
-            show (A.submatrix H H).submatrix
+            change (A.submatrix H H).submatrix
                 (castEq : Fin (4 * 4^(n-1)) → Fin (4^n)) castEq =
               (B' * C' - C' * B').submatrix
                 (castEq : Fin (4 * 4^(n-1)) → Fin (4^n)) castEq
@@ -2865,7 +2870,7 @@ lemma lambdaM_2pow4n_bt_recursion_v2
           simp only [Matrix.submatrix_apply]; exact hu _
         · have hAHH_eq : A.submatrix H H =
               B.submatrix (castEq.symm : Fin (4^n) → Fin (4 * 4^(n-1))) castEq.symm := by
-            show A.submatrix H H =
+            change A.submatrix H H =
               ((A.submatrix H H).submatrix
                 (castEq : Fin (4 * 4^(n-1)) → Fin (4^n)) castEq).submatrix
                 (castEq.symm : Fin (4^n) → Fin (4 * 4^(n-1))) castEq.symm
@@ -2884,7 +2889,7 @@ lemma lambdaM_2pow4n_bt_recursion_v2
               B'.submatrix (castEq.symm : Fin (4^n) → Fin (4 * 4^(n-1))) castEq.symm :=
             (Matrix.submatrix_mul_equiv C' B'
               (castEq.symm : Fin (4^n) → Fin (4 * 4^(n-1))) castEq.symm castEq.symm).symm
-          show (B' * C' - C' * B').submatrix _ _ =
+          change (B' * C' - C' * B').submatrix _ _ =
               B'.submatrix _ _ * C'.submatrix _ _ - C'.submatrix _ _ * B'.submatrix _ _
           ext i j
           have h1ij := congr_fun (congr_fun h1 i) j
@@ -2899,7 +2904,7 @@ lemma lambdaM_2pow4n_bt_recursion_v2
           rw [hrw] at hsub
           linarith
       have hSet_eq : SAHH = SB := Set.eq_of_subset_of_subset hSAHH_to_SB hSB_to_SAHH
-      show sInf SAHH = sInf SB
+      change sInf SAHH = sInf SB
       rw [hSet_eq]
     -- Per-block bound: lambdaA(B.submatrix (eCast k) (eCast k)) ≤ K_BT/2 · lambdaM(4^(n-1))
     have h_block_bound : ∀ k : Fin 4,
@@ -2910,7 +2915,7 @@ lemma lambdaM_2pow4n_bt_recursion_v2
         intro i
         simp only [Matrix.submatrix_apply, Function.comp_apply]
         exact hzd (H (e k i))
-      have hnorm_block_le : ‖A.submatrix (H ∘ e k) (H ∘ e k)‖ ≤ K_BT * (1/2) :=
+      have hnorm_block_le : ‖A.submatrix (H ∘ e k) (H ∘ e k)‖ ≤ K_BT * (1 / 2) :=
         hnorm_block k
       calc lambdaA (A.submatrix (H ∘ e k) (H ∘ e k))
           ≤ ‖A.submatrix (H ∘ e k) (H ∘ e k)‖ * lambdaM (4 ^ (n - 1)) :=
@@ -2974,7 +2979,7 @@ lemma lambdaM_2pow4n_bt_recursion_v2
     --   Multiplying by δ(1-δ) > 0: 2·C₂ + C_two·(1-δ) ≤ Crec
     --   Since 1-δ ≤ 1 and C_two > 0: C_two·(1-δ) ≤ C_two, so LHS ≤ 2·C₂ + C_two.
     --   We have Crec = C_two + 2·C₂ + 1 ≥ 2·C₂ + C_two. ✓
-    show lambdaA A ≤
+    change lambdaA A ≤
       K_rec / (1 - δ)^2 * lambdaM (4 ^ (n - 1)) +
       L_rec / (1 - δ) * lambdaM (4 ^ n) +
       Crec / (δ * (1 - δ))
@@ -2985,7 +2990,7 @@ lemma lambdaM_2pow4n_bt_recursion_v2
         K_rec / (1 - δ)^2 * lambdaM (4 ^ (n - 1)) +
         2 * C₂ / (δ * (1 - δ)) +
         2 / (1 - δ) * lambdaM (4 ^ n) := by
-      show 2 / (1 - δ) *
+      change 2 / (1 - δ) *
           (C₁ * K_BT * (1/2) / (1 - δ) * lambdaM (4 ^ (n - 1)) + C₂ / δ +
             lambdaM (4 ^ n)) =
           K_BT * C₁ / (1 - δ)^2 * lambdaM (4 ^ (n - 1)) +
@@ -2999,12 +3004,12 @@ lemma lambdaM_2pow4n_bt_recursion_v2
     -- Target:    K_rec/(1-δ)^2 · L1 + L_rec/(1-δ) · L2 + Crec/(δ(1-δ))
     -- L_rec = 2 so the L2 term matches; need: 2·C₂/(δ(1-δ)) + C_two/δ ≤ Crec/(δ(1-δ))
     have hL2_term_eq : (2 : ℝ) / (1 - δ) = L_rec / (1 - δ) := by
-      show (2 : ℝ) / (1 - δ) = 2 / (1 - δ); rfl
+      change (2 : ℝ) / (1 - δ) = 2 / (1 - δ); rfl
     have hC_term : 2 * C₂ / (δ * (1 - δ)) + C_two / δ ≤ Crec / (δ * (1 - δ)) := by
       -- Multiplying by δ(1-δ): 2·C₂ + C_two·(1-δ) ≤ Crec.
       -- Since 1-δ ≤ 1: C_two·(1-δ) ≤ C_two; Crec = C_two + 2·C₂ + 1 ≥ 2·C₂ + C_two.
       have hSum_le : 2 * C₂ + C_two ≤ Crec := by
-        show 2 * C₂ + C_two ≤ C_two + 2 * C₂ + 1
+        change 2 * C₂ + C_two ≤ C_two + 2 * C₂ + 1
         linarith
       -- C_two/δ ≤ C_two/(δ(1-δ)): C_two·(1-δ) ≤ C_two.
       have hC_two_div_le : C_two / δ ≤ C_two / (δ * (1 - δ)) := by
@@ -3043,7 +3048,7 @@ lemma lambdaM_2pow4n_bt_recursion_v2
             Crec / (δ * (1 - δ)) := by
             apply add_le_add (le_refl _) hC_term
   · rw [Set.not_nonempty_iff_eq_empty.mp hne, Real.sSup_empty]
-    show (0 : ℝ) ≤ _
+    change (0 : ℝ) ≤ _
     rw [hRHS_def] at hRHS_nn
     exact hRHS_nn
 
@@ -3382,7 +3387,7 @@ private lemma crossBlock_sylvester_norm_le_re_pos {p q : ℕ}
       exact cross_submatrix_norm_le _ _ hf_inj hg_inj Apad
   have hXpad_cross : ∀ i j, Xpad (e (Sum.inl i)) (e (Sum.inr j)) = A i j / (Sd i - Td j) := by
     intro i j
-    show Apad (e (Sum.inl i)) (e (Sum.inr j)) /
+    change Apad (e (Sum.inl i)) (e (Sum.inr j)) /
       (Spad (e (Sum.inl i)) (e (Sum.inl i)) - Tpad (e (Sum.inr j)) (e (Sum.inr j))) = _
     rw [hApad_cross, hSpad_apply, hTpad_apply]
     show A i j / (Bs (e (Sum.inl i)) - Bt (e (Sum.inr j))) = A i j / (Sd i - Td j)
@@ -3396,7 +3401,7 @@ private lemma crossBlock_sylvester_norm_le_re_pos {p q : ℕ}
     ext i j; simp only [Xtarget, Matrix.of_apply, hXpad_cross]
   have hXtarget_le : ‖Xtarget‖ ≤ ‖Xpad‖ := by
     rw [hXtarget_eq]; exact cross_submatrix_norm_le _ _ hf_inj hg_inj Xpad
-  show ‖Xtarget‖ ≤ ‖A‖ / (2 * δ)
+  change ‖Xtarget‖ ≤ ‖A‖ / (2 * δ)
   calc ‖Xtarget‖
       ≤ ‖Xpad‖ := hXtarget_le
     _ ≤ ‖Apad‖ / (2 * δ) := hkey
@@ -3457,13 +3462,13 @@ lemma crossBlock_sylvester_norm_le {p q : ℕ}
       have hexpand : ((-Complex.I) * Sd i - (-Complex.I) * Td j).re = (Sd i - Td j).im := by
         simp only [Complex.mul_re, Complex.neg_re, Complex.I_re, Complex.neg_im,
           Complex.I_im, Complex.sub_re, Complex.sub_im]; ring
-      show 2 * δ ≤ ((-Complex.I) * Sd i - (-Complex.I) * Td j).re
+      change 2 * δ ≤ ((-Complex.I) * Sd i - (-Complex.I) * Td j).re
       rw [hexpand]; exact hpos_im i j
     have key := crossBlock_sylvester_norm_le_re_pos Sd' Td' A' δ hδ hpos
     have heq : ((fun i j => A' i j / (Sd' i - Td' j)) : Matrix (Fin p) (Fin q) ℂ) =
         ((fun i j => A i j / (Sd i - Td j)) : Matrix (Fin p) (Fin q) ℂ) := by
       ext i j
-      show (-Complex.I) * A i j / ((-Complex.I) * Sd i - (-Complex.I) * Td j) =
+      change (-Complex.I) * A i j / ((-Complex.I) * Sd i - (-Complex.I) * Td j) =
            A i j / (Sd i - Td j)
       have hne : (-Complex.I) ≠ 0 := by
         intro h; have := congr_arg Complex.im h; simp at this
@@ -3486,14 +3491,14 @@ lemma crossBlock_sylvester_norm_le {p q : ℕ}
       have hexpand : (Complex.I * Sd i - Complex.I * Td j).re = -(Sd i - Td j).im := by
         simp only [Complex.mul_re, Complex.I_re, Complex.I_im,
           Complex.sub_re, Complex.sub_im]; ring
-      show 2 * δ ≤ (Complex.I * Sd i - Complex.I * Td j).re
+      change 2 * δ ≤ (Complex.I * Sd i - Complex.I * Td j).re
       rw [hexpand]
       have := hneg_im i j; linarith
     have key := crossBlock_sylvester_norm_le_re_pos Sd' Td' A' δ hδ hpos
     have heq : ((fun i j => A' i j / (Sd' i - Td' j)) : Matrix (Fin p) (Fin q) ℂ) =
         ((fun i j => A i j / (Sd i - Td j)) : Matrix (Fin p) (Fin q) ℂ) := by
       ext i j
-      show Complex.I * A i j / (Complex.I * Sd i - Complex.I * Td j) = A i j / (Sd i - Td j)
+      change Complex.I * A i j / (Complex.I * Sd i - Complex.I * Td j) = A i j / (Sd i - Td j)
       have hne : Complex.I ≠ 0 := Complex.I_ne_zero
       rw [show Complex.I * Sd i - Complex.I * Td j =
           Complex.I * (Sd i - Td j) from by ring]
@@ -3524,16 +3529,14 @@ lemma unit_square_asymmetric_shift_neg {z : ℂ} (hz : InUnitSquare z)
   refine ⟨?_, ?_⟩
   · have hre_eq : ((-1 + (δ : ℂ)) + (δ : ℂ) * z).re
         = (-1 + δ) + δ * z.re := by
-      simp [Complex.add_re, Complex.mul_re, Complex.sub_re, Complex.one_re,
-            Complex.one_im, Complex.ofReal_re, Complex.ofReal_im,
-            Complex.neg_re, Complex.neg_im]
+      simp [Complex.add_re, Complex.mul_re, Complex.one_re, Complex.ofReal_re, Complex.ofReal_im,
+            Complex.neg_re]
     rw [hre_eq, abs_le]
     refine ⟨?_, ?_⟩ <;> nlinarith
   · have him_eq : ((-1 + (δ : ℂ)) + (δ : ℂ) * z).im
         = δ * z.im := by
-      simp [Complex.add_im, Complex.mul_im, Complex.sub_im, Complex.one_re,
-            Complex.one_im, Complex.ofReal_re, Complex.ofReal_im,
-            Complex.neg_re, Complex.neg_im]
+      simp [Complex.add_im, Complex.mul_im,
+            Complex.one_im, Complex.ofReal_re, Complex.ofReal_im, Complex.neg_im]
     rw [him_eq, abs_le]
     refine ⟨?_, ?_⟩ <;> nlinarith
 
@@ -3551,7 +3554,7 @@ Session: S435
 
     Ref: BLUEPRINT.md S434, S434a, project_state.md S434b. -/
 lemma unit_square_asymmetric_shift_pos {z : ℂ} (hz : InUnitSquare z)
-    {δ : ℝ} (hδ_pos : 0 < δ) (hδ_lt : δ < 1/2) :
+    {δ : ℝ} (hδ_pos : 0 < δ) (hδ_lt : δ < 1 / 2) :
     InUnitSquare ((2 * (δ : ℂ)) + (1 - 2 * (δ : ℂ)) * z) := by
   obtain ⟨hzre, hzim⟩ := hz
   rw [abs_le] at hzre hzim
@@ -3595,7 +3598,7 @@ private lemma claim2_asymmetric_block_witness {m : ℕ}
     · intro i j _; simp
     · intro i; refine ⟨?_, ?_⟩ <;> simp
     · ext i j
-      simp [matComm]
+      simp only [matComm, mul_zero, Matrix.sub_apply, Matrix.zero_apply, sub_self]
       interval_cases m
       · exact Fin.elim0 i
       · have hij : i = j := Fin.ext (by omega)
@@ -3618,6 +3621,8 @@ private lemma claim2_asymmetric_block_witness {m : ℕ}
       exists_lt_of_csInf_lt hne hlt
     exact ⟨B', C', hd', hu', hc', le_trans hnormC' (le_of_lt hclt)⟩
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedVariables false in
 /-- **Sub-lemma 3 of `claim2_asymmetric` (S435, paper-traceable).** Cross-block
     Sylvester bound for the asymmetric shift configuration. Given diagonal
     unit-square `B_11`, `B_22` and the paper's asymmetric shifts
@@ -3644,7 +3649,7 @@ Attempts: 1 / 20
 Session: S435
 -/
 private lemma claim2_asymmetric_cross_norm_le {m : ℕ}
-    (δ : ℝ) (hδ_pos : 0 < δ) (hδ_lt : δ < 1/2)
+    (δ : ℝ) (hδ_pos : 0 < δ) (hδ_lt : δ < 1 / 2)
     (B_11 B_22 : Matrix (Fin m) (Fin m) ℂ)
     (hB11_diag : IsDiagMatrix B_11) (hB11_unit : ∀ i, InUnitSquare (B_11 i i))
     (hB22_diag : IsDiagMatrix B_22) (hB22_unit : ∀ i, InUnitSquare (B_22 i i))
@@ -3666,11 +3671,11 @@ private lemma claim2_asymmetric_cross_norm_le {m : ℕ}
     obtain ⟨hu_re, _⟩ := hu
     rw [abs_le] at hu_re
     obtain ⟨_, hu_re_hi⟩ := hu_re
-    show ((-1 + (δ : ℂ)) + (δ : ℂ) * B_11 i i).re ≤ -1 + 2 * δ
+    change ((-1 + (δ : ℂ)) + (δ : ℂ) * B_11 i i).re ≤ -1 + 2 * δ
     have hre_eq : ((-1 + (δ : ℂ)) + (δ : ℂ) * B_11 i i).re
         = (-1 + δ) + δ * (B_11 i i).re := by
       simp [Complex.add_re, Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im,
-            Complex.neg_re, Complex.one_re, Complex.one_im]
+            Complex.neg_re, Complex.one_re]
     rw [hre_eq]; nlinarith
   have hTd_re_ge : ∀ j, -1 + 4 * δ ≤ (Td j).re := by
     intro j
@@ -3678,7 +3683,7 @@ private lemma claim2_asymmetric_cross_norm_le {m : ℕ}
     obtain ⟨hu_re, _⟩ := hu
     rw [abs_le] at hu_re
     obtain ⟨hu_re_lo, _⟩ := hu_re
-    show -1 + 4 * δ ≤ ((2 * (δ : ℂ)) + (1 - 2 * (δ : ℂ)) * B_22 j j).re
+    change -1 + 4 * δ ≤ ((2 * (δ : ℂ)) + (1 - 2 * (δ : ℂ)) * B_22 j j).re
     have hre_eq : ((2 * (δ : ℂ)) + (1 - 2 * (δ : ℂ)) * B_22 j j).re
         = 2 * δ + (1 - 2 * δ) * (B_22 j j).re := by
       simp [Complex.add_re, Complex.mul_re, Complex.sub_re, Complex.ofReal_re,
@@ -3700,7 +3705,7 @@ private lemma claim2_asymmetric_cross_norm_le {m : ℕ}
       have := hReGap i j
       rw [hre] at this
       linarith
-    show Sd i * (Matrix.of (fun i j => A_12 i j / (Sd i - Td j))) i j
+    change Sd i * (Matrix.of (fun i j => A_12 i j / (Sd i - Td j))) i j
           - (Matrix.of (fun i j => A_12 i j / (Sd i - Td j))) i j * Td j
         = A_12 i j
     simp only [Matrix.of_apply]
@@ -3718,6 +3723,8 @@ Priority: 1
 Attempts: 1 / 20
 Session: S435
 -/
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedVariables false in
 /-- **Sub-lemma 4 of `claim2_asymmetric` (S435, paper-traceable).** Same-block
     rescaled-C bound for the asymmetric setup. Given two zero-diagonal m×m blocks
     `A_11`, `A_22` with `lambdaA(A_ii) ≤ c_i`, η-slack witnesses (Sub-lemma 1)
@@ -3741,7 +3748,7 @@ Session: S435
 
     Ref: BLUEPRINT.md S434/S434a/S434b. Paper: JOS 2013 p.19253. -/
 private lemma claim2_asymmetric_same_block_norm_le {m : ℕ}
-    (δ : ℝ) (hδ_pos : 0 < δ) (hδ_lt : δ < 1/2)
+    (δ : ℝ) (hδ_pos : 0 < δ) (hδ_lt : δ < 1 / 2)
     (c₁ c₂ : ℝ) (_hc₁ : 0 < c₁) (hc₂ : 0 < c₂)
     (hkey_ext : c₁ / δ ≤ c₂ / (1 - 2 * δ))
     (η : ℝ) (hη : 0 < η)
@@ -3835,12 +3842,12 @@ private lemma claim2_asymmetric_same_block_norm_le {m : ℕ}
       omega
     have hfh_mono : StrictMono firstHalfFn := by
       intro a b hab
-      show (⟨a.val, _⟩ : Fin (2 * m)) < ⟨b.val, _⟩
+      change (⟨a.val, _⟩ : Fin (2 * m)) < ⟨b.val, _⟩
       rw [Fin.mk_lt_mk]
       exact hab
     have hsh_mono : StrictMono secondHalfFn := by
       intro a b hab
-      show (⟨m + a.val, _⟩ : Fin (2 * m)) < ⟨m + b.val, _⟩
+      change (⟨m + a.val, _⟩ : Fin (2 * m)) < ⟨m + b.val, _⟩
       rw [Fin.mk_lt_mk]
       omega
     set S : Finset (Fin (2 * m)) := Finset.image firstHalfFn Finset.univ with hS_def
@@ -3852,7 +3859,7 @@ private lemma claim2_asymmetric_same_block_norm_le {m : ℕ}
       simp only [Finset.mem_compl, hS_def, Finset.mem_image, Finset.mem_univ, true_and]
       constructor
       · intro hx
-        push_neg at hx
+        push Not at hx
         have hx_ge : ¬ (x.val < m) := by
           intro hxlt
           exact hx ⟨x.val, hxlt⟩ (Fin.ext rfl)
@@ -3860,7 +3867,7 @@ private lemma claim2_asymmetric_same_block_norm_le {m : ℕ}
         · have hxlt : x.val < 2 * m := x.isLt
           omega
         · apply Fin.ext
-          show m + (x.val - m) = x.val
+          change m + (x.val - m) = x.val
           omega
       · rintro ⟨k, hk_eq⟩ ⟨k', hk_eq'⟩
         have hv₁ : m + k.val = x.val := by
@@ -3883,7 +3890,7 @@ private lemma claim2_asymmetric_same_block_norm_le {m : ℕ}
     -- Helper: anything of the form firstHalfFn _ is in S.
     have hfh_in_S : ∀ y : Fin m, firstHalfFn y ∈ S := by
       intro y
-      show firstHalfFn y ∈ Finset.image firstHalfFn Finset.univ
+      change firstHalfFn y ∈ Finset.image firstHalfFn Finset.univ
       exact Finset.mem_image.mpr ⟨y, Finset.mem_univ _, rfl⟩
     have hsh_in_Sc : ∀ y : Fin m, secondHalfFn y ∈ Sᶜ := by
       intro y
@@ -3928,7 +3935,7 @@ private lemma claim2_asymmetric_same_block_norm_le {m : ℕ}
     have hMS : ∀ i j : Fin S.card, Cdiag (f i) (f j) = A_S i j := by
       intro i j
       rw [hf_apply i, hf_apply j]
-      show (Matrix.of _ : Matrix (Fin (2*m)) (Fin (2*m)) ℂ) _ _ = _
+      change (Matrix.of _ : Matrix (Fin (2*m)) (Fin (2*m)) ℂ) _ _ = _
       simp only [Matrix.of_apply]
       have hi : (Fin.cast hS_card i).val < m := (Fin.cast hS_card i).isLt
       have hj : (Fin.cast hS_card j).val < m := (Fin.cast hS_card j).isLt
@@ -3937,7 +3944,7 @@ private lemma claim2_asymmetric_same_block_norm_le {m : ℕ}
     have hMSc : ∀ i j : Fin Sᶜ.card, Cdiag (g i) (g j) = A_Sc i j := by
       intro i j
       rw [hg_apply i, hg_apply j]
-      show (Matrix.of _ : Matrix (Fin (2*m)) (Fin (2*m)) ℂ) _ _ = _
+      change (Matrix.of _ : Matrix (Fin (2*m)) (Fin (2*m)) ℂ) _ _ = _
       simp only [Matrix.of_apply]
       have hi_ge : ¬ ((m + (Fin.cast hSc_card i).val) < m) := by omega
       have hj_ge : ¬ ((m + (Fin.cast hSc_card j).val) < m) := by omega
@@ -3953,7 +3960,7 @@ private lemma claim2_asymmetric_same_block_norm_le {m : ℕ}
     have hM_cross_fg : ∀ (i : Fin S.card) (j : Fin Sᶜ.card), Cdiag (f i) (g j) = 0 := by
       intro i j
       rw [hf_apply i, hg_apply j]
-      show (Matrix.of _ : Matrix (Fin (2*m)) (Fin (2*m)) ℂ) _ _ = _
+      change (Matrix.of _ : Matrix (Fin (2*m)) (Fin (2*m)) ℂ) _ _ = _
       simp only [Matrix.of_apply]
       have hi : (Fin.cast hS_card i).val < m := (Fin.cast hS_card i).isLt
       have hj_ge : ¬ ((m + (Fin.cast hSc_card j).val) < m) := by omega
@@ -3961,7 +3968,7 @@ private lemma claim2_asymmetric_same_block_norm_le {m : ℕ}
     have hM_cross_gf : ∀ (i : Fin Sᶜ.card) (j : Fin S.card), Cdiag (g i) (f j) = 0 := by
       intro i j
       rw [hg_apply i, hf_apply j]
-      show (Matrix.of _ : Matrix (Fin (2*m)) (Fin (2*m)) ℂ) _ _ = _
+      change (Matrix.of _ : Matrix (Fin (2*m)) (Fin (2*m)) ℂ) _ _ = _
       simp only [Matrix.of_apply]
       have hi_ge : ¬ ((m + (Fin.cast hSc_card i).val) < m) := by omega
       have hj : (Fin.cast hS_card j).val < m := (Fin.cast hS_card j).isLt
@@ -4048,6 +4055,8 @@ Priority: 1
 Attempts: 1 / 50
 Session: S435
 -/
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedVariables false in
 /-- **Paper's asymmetric Claim 2** (JOS 2013, p.19253). For a 2m×2m zero-diagonal
     matrix A with ‖A‖ ≤ 1, decomposed into 4 m×m blocks via the canonical
     `Fin (2*m) ≃ Fin 2 × Fin m` equiv, with per-diagonal-block bounds
@@ -4154,11 +4163,11 @@ lemma lambdaA_two_block_decomp_asym {m : ℕ}
   set A_22 : Matrix (Fin m) (Fin m) ℂ :=
     Matrix.of fun i j : Fin m => A ⟨m + i.val, by omega⟩ ⟨m + j.val, by omega⟩ with hA22_def
   have hzd11 : ZeroDiag A_11 := by
-    intro i; show A ⟨i.val, _⟩ ⟨i.val, _⟩ = 0
+    intro i; change A ⟨i.val, _⟩ ⟨i.val, _⟩ = 0
     have : (⟨i.val, by omega⟩ : Fin (2 * m)) = ⟨i.val, by omega⟩ := rfl
     exact hzd ⟨i.val, by omega⟩
   have hzd22 : ZeroDiag A_22 := by
-    intro i; show A ⟨m + i.val, _⟩ ⟨m + i.val, _⟩ = 0
+    intro i; change A ⟨m + i.val, _⟩ ⟨m + i.val, _⟩ = 0
     exact hzd ⟨m + i.val, by omega⟩
   obtain ⟨B_11, C_11, hB11_diag, hB11_usq, hA11_eq, hC11_norm⟩ :=
     claim2_asymmetric_block_witness A_11 hzd11 c₁ hbnd₁ η hη_pos
@@ -4190,7 +4199,7 @@ lemma lambdaA_two_block_decomp_asym {m : ℕ}
     rw [abs_le] at hu1_re hu2_re
     obtain ⟨hu1_re_lo, hu1_re_hi⟩ := hu1_re
     obtain ⟨hu2_re_lo, hu2_re_hi⟩ := hu2_re
-    show 2 * δ ≤ (((2 * (δ : ℂ)) + (1 - 2 * (δ : ℂ)) * B_22 i i) -
+    change 2 * δ ≤ (((2 * (δ : ℂ)) + (1 - 2 * (δ : ℂ)) * B_22 i i) -
       ((-1 + (δ : ℂ)) + (δ : ℂ) * B_11 j j)).re
     have hre_eq : (((2 * (δ : ℂ)) + (1 - 2 * (δ : ℂ)) * B_22 i i) -
         ((-1 + (δ : ℂ)) + (δ : ℂ) * B_11 j j)).re =
@@ -4209,7 +4218,7 @@ lemma lambdaA_two_block_decomp_asym {m : ℕ}
   have hX21_eq : ∀ i j, Sd_GF i * X_21 i j - X_21 i j * Td_GF j = A_21 i j := by
     intro i j
     have hne := hSd_GF_ne_Td_GF i j
-    show Sd_GF i * (A_21 i j / (Sd_GF i - Td_GF j)) -
+    change Sd_GF i * (A_21 i j / (Sd_GF i - Td_GF j)) -
          (A_21 i j / (Sd_GF i - Td_GF j)) * Td_GF j = A_21 i j
     field_simp
   have hX21_norm : ‖X_21‖ ≤ ‖A_21‖ / (2 * δ) := by
@@ -4230,14 +4239,14 @@ lemma lambdaA_two_block_decomp_asym {m : ℕ}
       fullBval ⟨i.val, by omega⟩ = (-1 + (δ : ℂ)) + (δ : ℂ) * B_11 i i := by
     intro i
     have hi : (⟨i.val, by omega⟩ : Fin (2 * m)).val < m := i.isLt
-    show fullBval ⟨i.val, by omega⟩ = _
+    change fullBval ⟨i.val, by omega⟩ = _
     simp only [fullBval, hi, dite_true]
   have hfullBval_large : ∀ i : Fin m,
       fullBval ⟨m + i.val, by omega⟩ = (2 * (δ : ℂ)) + (1 - 2 * (δ : ℂ)) * B_22 i i := by
     intro i
     have hi_ge : ¬ ((⟨m + i.val, by omega⟩ : Fin (2 * m)).val < m) := by
-      show ¬ (m + i.val < m); omega
-    show fullBval ⟨m + i.val, by omega⟩ = _
+      change ¬ (m + i.val < m); omega
+    change fullBval ⟨m + i.val, by omega⟩ = _
     simp only [fullBval, hi_ge, dite_false]
     have heq : ((m + i.val) - m) = i.val := by omega
     have hfin : (⟨(m + i.val) - m, by omega⟩ : Fin m) = i := Fin.ext heq
@@ -4286,19 +4295,19 @@ lemma lambdaA_two_block_decomp_asym {m : ℕ}
         rw [hfullB_apply, hfullB_apply]
         have hBr_eq : fullBval r =
             (-1 + (δ : ℂ)) + (δ : ℂ) * B_11 ⟨r.val, hr⟩ ⟨r.val, hr⟩ := by
-          show (if hr' : r.val < m then
+          change (if hr' : r.val < m then
               (-1 + (δ : ℂ)) + (δ : ℂ) * B_11 ⟨r.val, hr'⟩ ⟨r.val, hr'⟩
             else _) = _
           rw [dif_pos hr]
         have hBc_eq : fullBval c =
             (-1 + (δ : ℂ)) + (δ : ℂ) * B_11 ⟨c.val, hc⟩ ⟨c.val, hc⟩ := by
-          show (if hc' : c.val < m then
+          change (if hc' : c.val < m then
               (-1 + (δ : ℂ)) + (δ : ℂ) * B_11 ⟨c.val, hc'⟩ ⟨c.val, hc'⟩
             else _) = _
           rw [dif_pos hc]
         rw [hBr_eq, hBc_eq]
         have hfullC_eq : fullC r c = Cdiag ⟨r.val, by omega⟩ ⟨c.val, by omega⟩ := by
-          show (if hr' : r.val < m then
+          change (if hr' : r.val < m then
               if hc' : c.val < m then
                 Cdiag ⟨r.val, by omega⟩ ⟨c.val, by omega⟩
               else _
@@ -4317,9 +4326,9 @@ lemma lambdaA_two_block_decomp_asym {m : ℕ}
         have hr2m : r.val < 2 * m := r.isLt
         have hreq : r = (⟨r.val, by omega⟩ : Fin (2 * m)) := Fin.ext rfl
         have hceq : c = (⟨m + (c.val - m), by have := c.isLt; omega⟩ : Fin (2 * m)) := by
-          apply Fin.ext; show c.val = m + (c.val - m); omega
+          apply Fin.ext; change c.val = m + (c.val - m); omega
         have hAA : A r c = A_12 ⟨r.val, hr⟩ ⟨c.val - m, hcvm_lt⟩ := by
-          show A r c = A ⟨(⟨r.val, hr⟩ : Fin m).val, by omega⟩
+          change A r c = A ⟨(⟨r.val, hr⟩ : Fin m).val, by omega⟩
             ⟨m + (⟨c.val - m, hcvm_lt⟩ : Fin m).val, by omega⟩
           conv_lhs => rw [hreq, hceq]
         rw [hAA]
@@ -4327,19 +4336,19 @@ lemma lambdaA_two_block_decomp_asym {m : ℕ}
         rw [← hX_at]
         have hBr_eq : fullBval r =
             (-1 + (δ : ℂ)) + (δ : ℂ) * B_11 ⟨r.val, hr⟩ ⟨r.val, hr⟩ := by
-          show (if hr' : r.val < m then
+          change (if hr' : r.val < m then
               (-1 + (δ : ℂ)) + (δ : ℂ) * B_11 ⟨r.val, hr'⟩ ⟨r.val, hr'⟩
             else _) = _
           rw [dif_pos hr]
         have hBc_eq : fullBval c =
             (2 * (δ : ℂ)) + (1 - 2 * (δ : ℂ)) * B_22 ⟨c.val - m, hcvm_lt⟩ ⟨c.val - m, hcvm_lt⟩ := by
-          show (if hc'' : c.val < m then _ else
+          change (if hc'' : c.val < m then _ else
               (2 * (δ : ℂ)) + (1 - 2 * (δ : ℂ)) *
-                B_22 ⟨c.val - m, by have := c.isLt; omega⟩ ⟨c.val - m, by have := c.isLt; omega⟩) = _
+                B_22 ⟨c.val - m, hcvm_lt⟩ ⟨c.val - m, hcvm_lt⟩) = _
           rw [dif_neg hc]
         rw [hfullB_apply, hfullB_apply, hBr_eq, hBc_eq]
         have hfullC_eq : fullC r c = X_12 ⟨r.val, hr⟩ ⟨c.val - m, hcvm_lt⟩ := by
-          show (if hr' : r.val < m then
+          change (if hr' : r.val < m then
               if hc'' : c.val < m then _
               else X_12 ⟨r.val, hr'⟩ ⟨c.val - m, by have := c.isLt; omega⟩
             else _) = _
@@ -4351,10 +4360,10 @@ lemma lambdaA_two_block_decomp_asym {m : ℕ}
         have hr_ge : m ≤ r.val := Nat.le_of_not_lt hr
         have hrvm_lt : r.val - m < m := by have := r.isLt; omega
         have hreq : r = (⟨m + (r.val - m), by have := r.isLt; omega⟩ : Fin (2 * m)) := by
-          apply Fin.ext; show r.val = m + (r.val - m); omega
+          apply Fin.ext; change r.val = m + (r.val - m); omega
         have hceq : c = (⟨c.val, by omega⟩ : Fin (2 * m)) := Fin.ext rfl
         have hAA : A r c = A_21 ⟨r.val - m, hrvm_lt⟩ ⟨c.val, hc⟩ := by
-          show A r c = A ⟨m + (⟨r.val - m, hrvm_lt⟩ : Fin m).val, by omega⟩
+          change A r c = A ⟨m + (⟨r.val - m, hrvm_lt⟩ : Fin m).val, by omega⟩
             ⟨(⟨c.val, hc⟩ : Fin m).val, by omega⟩
           conv_lhs => rw [hreq, hceq]
         rw [hAA]
@@ -4362,19 +4371,19 @@ lemma lambdaA_two_block_decomp_asym {m : ℕ}
         rw [← hX_at]
         have hBr_eq : fullBval r =
             (2 * (δ : ℂ)) + (1 - 2 * (δ : ℂ)) * B_22 ⟨r.val - m, hrvm_lt⟩ ⟨r.val - m, hrvm_lt⟩ := by
-          show (if hr'' : r.val < m then _ else
+          change (if hr'' : r.val < m then _ else
               (2 * (δ : ℂ)) + (1 - 2 * (δ : ℂ)) *
-                B_22 ⟨r.val - m, by have := r.isLt; omega⟩ ⟨r.val - m, by have := r.isLt; omega⟩) = _
+                B_22 ⟨r.val - m, hrvm_lt⟩ ⟨r.val - m, hrvm_lt⟩) = _
           rw [dif_neg hr]
         have hBc_eq : fullBval c =
             (-1 + (δ : ℂ)) + (δ : ℂ) * B_11 ⟨c.val, hc⟩ ⟨c.val, hc⟩ := by
-          show (if hc' : c.val < m then
+          change (if hc' : c.val < m then
               (-1 + (δ : ℂ)) + (δ : ℂ) * B_11 ⟨c.val, hc'⟩ ⟨c.val, hc'⟩
             else _) = _
           rw [dif_pos hc]
         rw [hfullB_apply, hfullB_apply, hBr_eq, hBc_eq]
         have hfullC_eq : fullC r c = X_21 ⟨r.val - m, hrvm_lt⟩ ⟨c.val, hc⟩ := by
-          show (if hr' : r.val < m then _
+          change (if hr' : r.val < m then _
             else
               if hc'' : c.val < m then
                 X_21 ⟨r.val - m, by have := r.isLt; omega⟩ ⟨c.val, hc''⟩
@@ -4389,11 +4398,11 @@ lemma lambdaA_two_block_decomp_asym {m : ℕ}
         have hrvm_lt : r.val - m < m := by have := r.isLt; omega
         have hcvm_lt : c.val - m < m := by have := c.isLt; omega
         have hreq : r = (⟨m + (r.val - m), by have := r.isLt; omega⟩ : Fin (2 * m)) := by
-          apply Fin.ext; show r.val = m + (r.val - m); omega
+          apply Fin.ext; change r.val = m + (r.val - m); omega
         have hceq : c = (⟨m + (c.val - m), by have := c.isLt; omega⟩ : Fin (2 * m)) := by
-          apply Fin.ext; show c.val = m + (c.val - m); omega
+          apply Fin.ext; change c.val = m + (c.val - m); omega
         have hAA : A r c = A_22 ⟨r.val - m, hrvm_lt⟩ ⟨c.val - m, hcvm_lt⟩ := by
-          show A r c = A ⟨m + (⟨r.val - m, hrvm_lt⟩ : Fin m).val, by omega⟩
+          change A r c = A ⟨m + (⟨r.val - m, hrvm_lt⟩ : Fin m).val, by omega⟩
             ⟨m + (⟨c.val - m, hcvm_lt⟩ : Fin m).val, by omega⟩
           conv_lhs => rw [hreq, hceq]
         rw [hAA]
@@ -4405,21 +4414,21 @@ lemma lambdaA_two_block_decomp_asym {m : ℕ}
         rw [hA22_at]
         have hBr_eq : fullBval r =
             (2 * (δ : ℂ)) + (1 - 2 * (δ : ℂ)) * B_22 ⟨r.val - m, hrvm_lt⟩ ⟨r.val - m, hrvm_lt⟩ := by
-          show (if hr' : r.val < m then _ else
+          change (if hr' : r.val < m then _ else
               (2 * (δ : ℂ)) + (1 - 2 * (δ : ℂ)) *
-                B_22 ⟨r.val - m, by have := r.isLt; omega⟩ ⟨r.val - m, by have := r.isLt; omega⟩) = _
+                B_22 ⟨r.val - m, hrvm_lt⟩ ⟨r.val - m, hrvm_lt⟩) = _
           rw [dif_neg hr]
         have hBc_eq : fullBval c =
             (2 * (δ : ℂ)) + (1 - 2 * (δ : ℂ)) * B_22 ⟨c.val - m, hcvm_lt⟩ ⟨c.val - m, hcvm_lt⟩ := by
-          show (if hc' : c.val < m then _ else
+          change (if hc' : c.val < m then _ else
               (2 * (δ : ℂ)) + (1 - 2 * (δ : ℂ)) *
-                B_22 ⟨c.val - m, by have := c.isLt; omega⟩ ⟨c.val - m, by have := c.isLt; omega⟩) = _
+                B_22 ⟨c.val - m, hcvm_lt⟩ ⟨c.val - m, hcvm_lt⟩) = _
           rw [dif_neg hc]
         rw [hfullB_apply, hfullB_apply, hBr_eq, hBc_eq]
         have hfullC_eq : fullC r c =
             ((1 - 2 * (δ : ℂ)))⁻¹ * C_22 ⟨r.val - m, hrvm_lt⟩ ⟨c.val - m, hcvm_lt⟩ := by
           have hfc_raw : fullC r c = Cdiag ⟨r.val, by omega⟩ ⟨c.val, by omega⟩ := by
-            show (if hr' : r.val < m then _
+            change (if hr' : r.val < m then _
               else if hc' : c.val < m then _
               else Cdiag ⟨r.val, by omega⟩ ⟨c.val, by omega⟩) = _
             rw [dif_neg hr, dif_neg hc]
@@ -4429,9 +4438,9 @@ lemma lambdaA_two_block_decomp_asym {m : ℕ}
           have hr_isLt := r.isLt
           have hc_isLt := c.isLt
           have hri : (⟨m + (r.val - m), by omega⟩ : Fin (2 * m)) =
-              ⟨r.val, by omega⟩ := Fin.ext (by show m + (r.val - m) = r.val; omega)
+              ⟨r.val, by omega⟩ := Fin.ext (by change m + (r.val - m) = r.val; omega)
           have hcj : (⟨m + (c.val - m), by omega⟩ : Fin (2 * m)) =
-              ⟨c.val, by omega⟩ := Fin.ext (by show m + (c.val - m) = c.val; omega)
+              ⟨c.val, by omega⟩ := Fin.ext (by change m + (c.val - m) = c.val; omega)
           rw [hri, hcj] at hCd
           exact hCd
         rw [hfullC_eq]
@@ -4457,19 +4466,19 @@ lemma lambdaA_two_block_decomp_asym {m : ℕ}
         else 0 with hcrossGF_def
   have hfullC_decomp : fullC = Cdiag + crossFG + crossGF := by
     ext r c
-    show fullC r c = Cdiag r c + crossFG r c + crossGF r c
+    change fullC r c = Cdiag r c + crossFG r c + crossGF r c
     by_cases hr : r.val < m
     · by_cases hc : c.val < m
       · -- diag-diag (top-left): fullC = Cdiag, crossFG = crossGF = 0.
         have hfc : fullC r c = Cdiag ⟨r.val, by omega⟩ ⟨c.val, by omega⟩ := by
-          show (if hr' : r.val < m then if hc' : c.val < m then _
+          change (if hr' : r.val < m then if hc' : c.val < m then _
             else _ else _) = _
           rw [dif_pos hr, dif_pos hc]
         have hcfg : crossFG r c = 0 := by
-          show (if hr' : r.val < m then if hc' : c.val < m then 0 else _ else 0) = 0
+          change (if hr' : r.val < m then if hc' : c.val < m then 0 else _ else 0) = 0
           rw [dif_pos hr, dif_pos hc]
         have hcgf : crossGF r c = 0 := by
-          show (if hr' : r.val < m then 0 else _) = 0
+          change (if hr' : r.val < m then 0 else _) = 0
           rw [dif_pos hr]
         have hCdEq : Cdiag r c = Cdiag ⟨r.val, by omega⟩ ⟨c.val, by omega⟩ := by
           have hr_e : r = (⟨r.val, by omega⟩ : Fin (2 * m)) := Fin.ext rfl
@@ -4479,20 +4488,20 @@ lemma lambdaA_two_block_decomp_asym {m : ℕ}
       · -- top-right: fullC = X_12, Cdiag(top-right) = 0, crossFG = X_12, crossGF = 0.
         have hcvm_lt : c.val - m < m := by have := c.isLt; omega
         have hfc : fullC r c = X_12 ⟨r.val, hr⟩ ⟨c.val - m, hcvm_lt⟩ := by
-          show (if hr' : r.val < m then if hc' : c.val < m then _
+          change (if hr' : r.val < m then if hc' : c.val < m then _
             else X_12 ⟨r.val, hr'⟩ ⟨c.val - m, by have := c.isLt; omega⟩ else _) = _
           rw [dif_pos hr, dif_neg hc]
         have hcfg : crossFG r c = X_12 ⟨r.val, hr⟩ ⟨c.val - m, hcvm_lt⟩ := by
-          show (if hr' : r.val < m then if hc' : c.val < m then 0
+          change (if hr' : r.val < m then if hc' : c.val < m then 0
             else X_12 ⟨r.val, hr'⟩ ⟨c.val - m, by have := c.isLt; omega⟩ else 0) = _
           rw [dif_pos hr, dif_neg hc]
         have hcgf : crossGF r c = 0 := by
-          show (if hr' : r.val < m then 0 else _) = 0
+          change (if hr' : r.val < m then 0 else _) = 0
           rw [dif_pos hr]
         have hCdEq : Cdiag r c = 0 := by
           have hr_e : r = (⟨r.val, by omega⟩ : Fin (2 * m)) := Fin.ext rfl
           have hc_e : c = (⟨m + (c.val - m), by have := c.isLt; omega⟩ : Fin (2 * m)) := by
-            apply Fin.ext; show c.val = m + (c.val - m); omega
+            apply Fin.ext; change c.val = m + (c.val - m); omega
           conv_lhs => rw [hr_e, hc_e]
           exact hCdiag_TR ⟨r.val, hr⟩ ⟨c.val - m, hcvm_lt⟩
         rw [hfc, hcfg, hcgf, hCdEq]; ring
@@ -4500,21 +4509,21 @@ lemma lambdaA_two_block_decomp_asym {m : ℕ}
       · -- bottom-left: fullC = X_21, Cdiag(bottom-left) = 0, crossFG = 0, crossGF = X_21.
         have hrvm_lt : r.val - m < m := by have := r.isLt; omega
         have hfc : fullC r c = X_21 ⟨r.val - m, hrvm_lt⟩ ⟨c.val, hc⟩ := by
-          show (if hr' : r.val < m then _
+          change (if hr' : r.val < m then _
             else if hc' : c.val < m then
               X_21 ⟨r.val - m, by have := r.isLt; omega⟩ ⟨c.val, hc'⟩ else _) = _
           rw [dif_neg hr, dif_pos hc]
         have hcfg : crossFG r c = 0 := by
-          show (if hr' : r.val < m then _ else 0) = 0
+          change (if hr' : r.val < m then _ else 0) = 0
           rw [dif_neg hr]
         have hcgf : crossGF r c = X_21 ⟨r.val - m, hrvm_lt⟩ ⟨c.val, hc⟩ := by
-          show (if hr' : r.val < m then 0
+          change (if hr' : r.val < m then 0
             else if hc' : c.val < m then
               X_21 ⟨r.val - m, by have := r.isLt; omega⟩ ⟨c.val, hc'⟩ else 0) = _
           rw [dif_neg hr, dif_pos hc]
         have hCdEq : Cdiag r c = 0 := by
           have hr_e : r = (⟨m + (r.val - m), by have := r.isLt; omega⟩ : Fin (2 * m)) := by
-            apply Fin.ext; show r.val = m + (r.val - m); omega
+            apply Fin.ext; change r.val = m + (r.val - m); omega
           have hc_e : c = (⟨c.val, by omega⟩ : Fin (2 * m)) := Fin.ext rfl
           conv_lhs => rw [hr_e, hc_e]
           exact hCdiag_BL ⟨r.val - m, hrvm_lt⟩ ⟨c.val, hc⟩
@@ -4523,15 +4532,15 @@ lemma lambdaA_two_block_decomp_asym {m : ℕ}
         have hrvm_lt : r.val - m < m := by have := r.isLt; omega
         have hcvm_lt : c.val - m < m := by have := c.isLt; omega
         have hfc : fullC r c = Cdiag ⟨r.val, by omega⟩ ⟨c.val, by omega⟩ := by
-          show (if hr' : r.val < m then _
+          change (if hr' : r.val < m then _
             else if hc' : c.val < m then _
             else Cdiag ⟨r.val, by omega⟩ ⟨c.val, by omega⟩) = _
           rw [dif_neg hr, dif_neg hc]
         have hcfg : crossFG r c = 0 := by
-          show (if hr' : r.val < m then _ else 0) = 0
+          change (if hr' : r.val < m then _ else 0) = 0
           rw [dif_neg hr]
         have hcgf : crossGF r c = 0 := by
-          show (if hr' : r.val < m then 0
+          change (if hr' : r.val < m then 0
             else if hc' : c.val < m then _ else 0) = 0
           rw [dif_neg hr, dif_neg hc]
         have hCdEq : Cdiag r c = Cdiag ⟨r.val, by omega⟩ ⟨c.val, by omega⟩ := by
@@ -4556,7 +4565,7 @@ lemma lambdaA_two_block_decomp_asym {m : ℕ}
       simp only [crossFG]
       by_cases hr : r.val < m
       · exfalso; apply hrow ⟨r.val, hr⟩
-        show (⟨r.val, by omega⟩ : Fin (2 * m)) = r; exact Fin.ext rfl
+        change (⟨r.val, by omega⟩ : Fin (2 * m)) = r; exact Fin.ext rfl
       · simp only [hr, dite_false]
     · -- col-zero
       intro r c hcol
@@ -4568,16 +4577,16 @@ lemma lambdaA_two_block_decomp_asym {m : ℕ}
       · -- c.val ≥ m: col is gG (c.val - m). hcol forces contradiction.
         have hc_isLt := c.isLt
         exfalso; apply hcol ⟨c.val - m, by omega⟩
-        show (⟨m + (c.val - m), by omega⟩ : Fin (2 * m)) = c
-        exact Fin.ext (by show m + (c.val - m) = c.val; omega)
+        change (⟨m + (c.val - m), by omega⟩ : Fin (2 * m)) = c
+        exact Fin.ext (by change m + (c.val - m) = c.val; omega)
     · -- crossFG (fF i) (gG j) = X_12 i j
       intro i j
-      show crossFG (⟨i.val, by omega⟩ : Fin (2 * m)) (⟨m + j.val, by omega⟩ : Fin (2 * m)) =
+      change crossFG (⟨i.val, by omega⟩ : Fin (2 * m)) (⟨m + j.val, by omega⟩ : Fin (2 * m)) =
           X_12 i j
       simp only [crossFG]
       have hi : (⟨i.val, by omega⟩ : Fin (2 * m)).val < m := i.isLt
       have hj_ge : ¬ ((⟨m + j.val, by omega⟩ : Fin (2 * m)).val < m) := by
-        show ¬ (m + j.val < m); omega
+        change ¬ (m + j.val < m); omega
       simp only [hi, hj_ge, dite_true, dite_false]
       have heq : ((m + j.val) - m) = j.val := by omega
       have hfin : (⟨(m + j.val) - m, by omega⟩ : Fin m) = j := Fin.ext heq
@@ -4593,8 +4602,8 @@ lemma lambdaA_two_block_decomp_asym {m : ℕ}
       · -- r.val ≥ m: row is gG. hrow forces contradiction.
         have hr_isLt := r.isLt
         exfalso; apply hrow ⟨r.val - m, by omega⟩
-        show (⟨m + (r.val - m), by omega⟩ : Fin (2 * m)) = r
-        exact Fin.ext (by show m + (r.val - m) = r.val; omega)
+        change (⟨m + (r.val - m), by omega⟩ : Fin (2 * m)) = r
+        exact Fin.ext (by change m + (r.val - m) = r.val; omega)
     · intro r c hcol
       simp only [crossGF]
       by_cases hr : r.val < m
@@ -4602,14 +4611,14 @@ lemma lambdaA_two_block_decomp_asym {m : ℕ}
       · -- r.val ≥ m
         by_cases hc : c.val < m
         · exfalso; apply hcol ⟨c.val, hc⟩
-          show (⟨c.val, by omega⟩ : Fin (2 * m)) = c; exact Fin.ext rfl
+          change (⟨c.val, by omega⟩ : Fin (2 * m)) = c; exact Fin.ext rfl
         · simp only [hr, hc, dite_false]
     · intro i j
-      show crossGF (⟨m + i.val, by omega⟩ : Fin (2 * m)) (⟨j.val, by omega⟩ : Fin (2 * m)) =
+      change crossGF (⟨m + i.val, by omega⟩ : Fin (2 * m)) (⟨j.val, by omega⟩ : Fin (2 * m)) =
           X_21 i j
       simp only [crossGF]
       have hi_ge : ¬ ((⟨m + i.val, by omega⟩ : Fin (2 * m)).val < m) := by
-        show ¬ (m + i.val < m); omega
+        change ¬ (m + i.val < m); omega
       have hj : (⟨j.val, by omega⟩ : Fin (2 * m)).val < m := j.isLt
       simp only [hi_ge, hj, dite_false, dite_true]
       have heq : ((m + i.val) - m) = i.val := by omega

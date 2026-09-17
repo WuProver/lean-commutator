@@ -31,6 +31,8 @@ private lemma norm_diag_mul_mul_diag' {m : ℕ} (d e : Fin m → ℂ) (A : Matri
     _ = ‖d‖ * ‖A‖ * ‖e‖ := by
         rw [Matrix.l2_opNorm_diagonal, Matrix.l2_opNorm_diagonal]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedVariables false in
 private lemma pi_norm_mul_pi_norm_le {m : ℕ} [NeZero m]
     {f : Fin m → ℂ} {g : Fin m → ℂ} {C : ℝ} (hC : 0 ≤ C)
     (h : ∀ i j, ‖f i‖ * ‖g j‖ ≤ C) :
@@ -52,6 +54,8 @@ private lemma pi_norm_mul_pi_norm_le {m : ℕ} [NeZero m]
   rw [hi₀, hj₀]
   exact h i₀ j₀
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedVariables false in
 lemma integrand_norm_bound {m : ℕ} [NeZero m]
     (S T A : Matrix (Fin m) (Fin m) ℂ) (δ : ℝ) (hδ : 0 < δ)
     (hRe : ∀ i j, δ ≤ (S i i - T j j).re) (u : ℝ) (hu : 0 ≤ u) :
@@ -67,7 +71,7 @@ lemma integrand_norm_bound {m : ℕ} [NeZero m]
         apply pi_norm_mul_pi_norm_le (Real.exp_pos _).le
         intro i j
         rw [norm_cexp_neg_mul_real (S i i) u]
-        show Real.exp (-(S i i).re * u) * ‖Complex.exp ((T j j) * ↑u)‖ ≤ _
+        change Real.exp (-(S i i).re * u) * ‖Complex.exp ((T j j) * ↑u)‖ ≤ _
         rw [Complex.norm_exp]
         simp only [mul_re, ofReal_re, ofReal_im, mul_zero, sub_zero]
         rw [← Real.exp_add]

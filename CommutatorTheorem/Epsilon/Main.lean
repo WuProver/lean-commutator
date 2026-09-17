@@ -943,7 +943,7 @@ private lemma block_decomp_approx (ε : ℝ) (hε : 0 < ε) (hε1 : ε < 1) (k :
     obtain ⟨Bi, Ci, hd, hl, hcomm⟩ := mu_set_nonempty ε hε (k + 1) Aii hzd hcard
     refine ⟨Bi, 0, hd, hl, ?_, ?_⟩
     · rw [hAii_zero]; simp [matComm]
-    · simp
+    · simp only [norm_zero]
       have hmsup_nn : 0 ≤ mu_sup' ε (k + 1) (4 ^ (k + 1)) := by
         unfold mu_sup'
         by_cases hne : {y : ℝ | ∃ (A : Matrix (Fin (4 ^ (k + 1))) (Fin (4 ^ (k + 1))) ℂ),
@@ -982,6 +982,8 @@ private lemma block_decomp_approx (ε : ℝ) (hε : 0 < ε) (hε1 : ε < 1) (k :
             apply mul_le_mul hnorm_le hnorm_ci (norm_nonneg _) (by linarith)
         _ = mu_sup' ε (k + 1) (4 ^ (k + 1)) + η := one_mul _
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedVariables false in
 /-- Norm of blockDiagC ≤ 2/(1-ε) * bound when each ‖Cs i‖ ≤ bound. -/
 private lemma blockDiagC_norm_le {k : ℕ} (ε : ℝ) (hε : 0 < ε) (hε1 : ε < 1)
     (Cs : Fin 4 → Matrix (Fin (4 ^ (k + 1))) (Fin (4 ^ (k + 1))) ℂ)
@@ -1288,6 +1290,8 @@ private lemma schur_div_op_norm_bound_4way {m : ℕ}
         ≤ ‖-A‖ / δ := hbnd_norm
       _ = ‖A‖ / δ := by rw [norm_neg]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedVariables false in
 /-- Schur multiplier norm bound for the cross-block division construction.
     Given a diagonal matrix D (block-structured with 4 blocks around different corners)
     and a cross-block matrix A, the entrywise solution C(r,c) = A(r,c)/(D(r,r)-D(c,c))
@@ -1852,7 +1856,7 @@ private lemma comm_decomp_sum {k : ℕ}
         fullB_diag_entry ε Bs c
       rw [h1, h2, heq]; ring
     have hbC : blockDiagC ε Cs r c = (2 / (1 - ↑ε) : ℂ) * Cs ci.1 ri.2 ci.2 := by
-      show (if ri.1 = ci.1 then (2 / (1 - ↑ε) : ℂ) * Cs ri.1 ri.2 ci.2 else 0) = _
+      change (if ri.1 = ci.1 then (2 / (1 - ↑ε) : ℂ) * Cs ri.1 ri.2 ci.2 else 0) = _
       rw [if_pos heq, heq]
     rw [hfB, hbC]
     have hε_ne : (1 - (ε : ℂ)) ≠ 0 := by
@@ -1984,7 +1988,7 @@ theorem claim1_mu_recursion (ε : ℝ) (hε : 0 < ε) (hε1 : ε < 1) {k : ℕ}
         2 / (1 - ε) * M + 6 / ε ^ 2 * ‖A‖ +
         2 / (1 - ε) * η by
     by_contra hlt
-    push_neg at hlt
+    push Not at hlt
     set bound := 2 / (1 - ε) * M + 6 / ε ^ 2 * ‖A‖ with hbound_def
     set m := mu ε (k + 2) A with hm_def
     have hm_gt : bound < m := hlt
@@ -2147,7 +2151,8 @@ private lemma mu_pointwise_base (ε : ℝ) (hε : 0 < ε) (hε1 : ε < 1) :
 /- (by claude)
 State: 🔄 partial (1 live sorry: paving_improved_mu_core — witness construction for JOS 2013 Claim 2)
 Priority: 1
-Chain: paving_mu_direct_bound → paving_witness_construction → paving_analytical_mu_bound → paving_improved_mu_bound
+Chain: paving_mu_direct_bound → paving_witness_construction → paving_analytical_mu_bound →
+  paving_improved_mu_bound
   → claim2_improved_reassembly → paving_witness_improved_coeff
   → paving_mu_bound_core → paving_decomp_improved → paving_mu_core_ineq
   → paving_mu_improved_bound → paving_improved_witness → mu_paving_improved_step
@@ -2398,6 +2403,8 @@ private lemma abs_sep_to_signed_sep {n₁ n₂ : ℕ}
       rw [abs_of_nonneg (by linarith)] at hlt
       linarith
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedVariables false in
 /-- For distinct 4-block indices i≠j, the off-diagonal block of any matrix A can be
     solved by a Sylvester equation with dim-free bound ‖C'_{ij}‖ ≤ ‖A_{ij}‖/(2ε).
     The diagonal blocks Si, Tj of fullB are spectrally separated by ≥ 2ε in Re or Im. -/
@@ -3018,7 +3025,7 @@ private lemma zeroDiag_InUnitSquare_decomp_bounded {n : ℕ} (hn : 2 ≤ n)
     have hC_entry : ∀ i j : Fin n, ‖C i j‖ ≤ (↑n - 1) * ‖A i j‖ := by
       intro i j; simp only [C, Matrix.of_apply]
       by_cases hij : i = j
-      · subst hij; simp; exact mul_nonneg (by linarith) (norm_nonneg _)
+      · subst hij; simp only [↓reduceIte, norm_zero]; exact mul_nonneg (by linarith) (norm_nonneg _)
       · rw [if_neg hij, norm_div, div_sub_div_same, norm_div]
         have hnorm_n1 : ‖(↑(n - 1 : ℕ) : ℂ)‖ = (↑(n - 1 : ℕ) : ℝ) := Complex.norm_natCast _
         have hn1_eq : (↑(n - 1 : ℕ) : ℝ) = (↑n : ℝ) - 1 := by
@@ -3026,7 +3033,8 @@ private lemma zeroDiag_InUnitSquare_decomp_bounded {n : ℕ} (hn : 2 ≤ n)
         have hnorm_diff_ge1 : (1 : ℝ) ≤ ‖(↑↑i : ℂ) - ↑↑j‖ := by
           rw [show (↑↑i : ℂ) - ↑↑j = ↑((i.val : ℤ) - (j.val : ℤ)) from by push_cast; ring]
           rw [Complex.norm_intCast]
-          exact_mod_cast Int.one_le_abs (sub_ne_zero.mpr (by exact_mod_cast Fin.val_ne_of_ne hij : (i.val : ℤ) ≠ j.val))
+          exact_mod_cast Int.one_le_abs (sub_ne_zero.mpr (by exact_mod_cast Fin.val_ne_of_ne hij
+            : (i.val : ℤ) ≠ j.val))
         rw [div_div_eq_mul_div, hnorm_n1, hn1_eq]
         rw [mul_comm ‖A i j‖ (↑n - 1)]
         exact div_le_self (by positivity) hnorm_diff_ge1
@@ -3053,7 +3061,8 @@ private lemma zeroDiag_InUnitSquare_decomp_bounded {n : ℕ} (hn : 2 ≤ n)
           apply mul_le_mul_of_nonneg_right _ (by positivity)
           rw [Real.sqrt_le_left (Nat.cast_nonneg n)]
           calc (↑n : ℝ) = ↑n * 1 := (mul_one _).symm
-            _ ≤ ↑n * ↑n := mul_le_mul_of_nonneg_left (by exact_mod_cast (show 1 ≤ n by omega)) (Nat.cast_nonneg n)
+            _ ≤ ↑n * ↑n := mul_le_mul_of_nonneg_left (by exact_mod_cast (show 1 ≤ n by omega))
+              (Nat.cast_nonneg n)
             _ = (↑n : ℝ) ^ 2 := (sq _).symm
       _ = ↑n * (↑n - 1) * ‖A‖ := by ring
 
@@ -3236,6 +3245,7 @@ private lemma lambdaA_le_lambdaM {m : ℕ}
 
 
 set_option maxHeartbeats 800000 in
+-- Matrix and finite-sum calculations require additional elaboration steps.
 /-- Pointwise 4-block bound: for any (4m)×(4m) zero-diagonal unit-norm matrix A,
     lambdaA A ≤ 2/(1-δ) · lambdaM(m) + 6/δ.
     The construction: view Fin(4m) as 4 blocks of m. For each diagonal block k,
@@ -3314,7 +3324,7 @@ lemma lambdaA_four_block_bound {m : ℕ} (δ : ℝ) (hδ : 0 < δ) (hδ1 : δ < 
         refine ⟨0, 0, ?_, ?_, ?_⟩
         · intro i j hij; simp
         · intro i; unfold InUnitSquare; simp
-        · ext i j; simp [matComm]
+        · ext i j; simp only [matComm, mul_zero, Matrix.sub_apply, Matrix.zero_apply, sub_self]
           have : i = j := Fin.ext (by omega)
           rw [this]; exact hzd_block k j
       · -- m ≥ 2
@@ -3437,10 +3447,10 @@ lemma lambdaA_four_block_bound {m : ℕ} (δ : ℝ) (hδ : 0 < δ) (hδ1 : δ < 
           rw [abs_neg]; exact abs_of_nonneg (by linarith)
       have hcre_abs : ∀ k : Fin 4, |cornerRe k| = (1 + δ) / 2 := by
         intro k; apply corner_abs_helper
-        fin_cases k <;> simp [cornerRe] <;> ring
+        fin_cases k <;> simp [cornerRe]
       have hcim_abs : ∀ k : Fin 4, |cornerIm k| = (1 + δ) / 2 := by
         intro k; apply corner_abs_helper
-        fin_cases k <;> simp [cornerIm] <;> ring
+        fin_cases k <;> simp [cornerIm]
       obtain ⟨hbre, hbim⟩ := hBk_usq (blockIdx i) (localIdx i)
       have hre_eq : (↑((1 - δ) / 2) * Bk (blockIdx i) (localIdx i) (localIdx i) +
           cornerVal (blockIdx i)).re =
@@ -3503,7 +3513,8 @@ lemma lambdaA_four_block_bound {m : ℕ} (δ : ℝ) (hδ : 0 < δ) (hδ1 : δ < 
         intro k; fin_cases k <;> simp [cornerRe, Matrix.cons_val_zero, Matrix.cons_val_one]
       have hcIm_vals : ∀ k : Fin 4, cornerIm k = (1 + δ) / 2 ∨ cornerIm k = -(1 + δ) / 2 := by
         intro k; fin_cases k <;> simp [cornerIm, Matrix.cons_val_zero, Matrix.cons_val_one]
-      have corner_inj : ∀ (a b : Fin 4), cornerRe a = cornerRe b → cornerIm a = cornerIm b → a = b := by
+      have corner_inj : ∀ (a b : Fin 4), cornerRe a = cornerRe b → cornerIm a = cornerIm b → a =
+        b := by
         intro a b h1 h2
         fin_cases a <;> fin_cases b <;> first | rfl |
           (simp [cornerRe, cornerIm, Matrix.cons_val_zero, Matrix.cons_val_one] at h1 h2; linarith)
@@ -4026,7 +4037,7 @@ lemma lambdaM_pow4_linear_2n_bound :
             ext i j; fin_cases i; fin_cases j; exact hzd 0
           rw [this, norm_zero] at hnorm; linarith
         · rw [Set.not_nonempty_iff_eq_empty.mp hne]; simp
-      show lambdaM (4 ^ 0) ≤ 17 * ((0 : ℕ) : ℝ) * (2 : ℝ) ^ 0 + (2 : ℝ) ^ 0
+      change lambdaM (4 ^ 0) ≤ 17 * ((0 : ℕ) : ℝ) * (2 : ℝ) ^ 0 + (2 : ℝ) ^ 0
       simp only [pow_zero, Nat.cast_zero, mul_zero, zero_mul, zero_add]
       exact hlm1
   | succ n ih =>
@@ -4035,7 +4046,7 @@ lemma lambdaM_pow4_linear_2n_bound :
       have hn2_pos : (0 : ℝ) < (n : ℝ) + 2 := by
         have : (0 : ℝ) ≤ (n : ℝ) := Nat.cast_nonneg n
         linarith
-      have hδ_pos : 0 < δ := by simp [hδ_def]; positivity
+      have hδ_pos : 0 < δ := by rw [hδ_def]; positivity
       have hδ_lt_one : δ < 1 := by
         rw [hδ_def, div_lt_one hn2_pos]; linarith
       have hrec :
@@ -4749,7 +4760,7 @@ private lemma poly_le_const_mul_geom (p : ℕ) {r : ℝ} (hr : 1 < r) :
   by_cases hn : n < N
   · have h_sup :
         ((n : ℝ) + 1) ^ p / r ^ n ≤ Mfin := by
-      show ((n : ℝ) + 1) ^ p / r ^ n ≤
+      change ((n : ℝ) + 1) ^ p / r ^ n ≤
         (Finset.range N).sup' hrange_ne
           (fun i => ((i : ℝ) + 1) ^ p / r ^ i)
       rw [Finset.le_sup'_iff]
@@ -4761,7 +4772,7 @@ private lemma poly_le_const_mul_geom (p : ℕ) {r : ℝ} (hr : 1 < r) :
         ≤ Mfin * r ^ n := h_div
       _ ≤ (max Mfin 1 + 1) * r ^ n :=
           mul_le_mul_of_nonneg_right hMle hrn_nn
-  · push_neg at hn
+  · push Not at hn
     have h_bd := hN n hn
     rw [Real.norm_eq_abs, Real.norm_eq_abs,
         abs_of_nonneg hnp1_nn, abs_of_nonneg hrn_nn, one_mul] at h_bd
@@ -4773,6 +4784,8 @@ private lemma poly_le_const_mul_geom (p : ℕ) {r : ℝ} (hr : 1 < r) :
       _ ≤ (max Mfin 1 + 1) * r ^ n :=
           mul_le_mul_of_nonneg_right h_one_le hrn_nn
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedVariables false in
 /-- For every `ε ∈ (0,1)` there is a constant `K > 0` such that
 `lambdaM (4^n) ≤ K · (4^n)^ε` for all `n`.
 
@@ -4968,6 +4981,8 @@ State: ✅ done
 Priority: 1
 Attempts: 1 / 20
 -/
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedVariables false in
 /-- Extract witnesses from a lambdaA bound: if lambdaA A ≤ M and A is zero-diagonal,
     then for any δ > 0, there exist diagonal B (InUnitSquare) and C with
     A = [B, C] and ‖C‖ ≤ M + δ. -/

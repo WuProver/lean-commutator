@@ -31,5 +31,6 @@ import CommutatorTheorem.NoEpsilon.Induction
 # The no-epsilon theorem and its verified components
 
 The main theorem is `NoEpsilon.uniformCommutatorBound`, proving the exact target
-`NoEpsilon.UniformCommutatorBound`. Its full kernel dependency audit is in the repository-root `AxiomAudit.lean`.
+`NoEpsilon.UniformCommutatorBound`. Its full kernel dependency audit is in the repository-root
+  `AxiomAudit.lean`.
 -/

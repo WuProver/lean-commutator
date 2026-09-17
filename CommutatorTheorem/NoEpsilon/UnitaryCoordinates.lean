@@ -26,11 +26,16 @@ theorem isometry_compression_norm_le (U : Matrix ι κ ℂ) (hU : Uᴴ * U = 1)
     _ ≤ (1 * ‖A‖) * 1 := by gcongr
     _ = ‖A‖ := by ring
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 theorem basis_compression_trace (b : OrthonormalBasis κ ℂ (EuclideanSpace ℂ ι))
     (A : Matrix ι ι ℂ) :
     Matrix.trace ((familyMatrix b)ᴴ * A * familyMatrix b) = Matrix.trace A := by
   rw [Matrix.trace_mul_cycle, (basisMatrix_unitary b).2, Matrix.one_mul]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedSectionVars false in
 theorem rectangular_unitary_conjugate_mul (U : Matrix ι κ ℂ) (hU : Uᴴ * U = 1)
     (B C : Matrix κ κ ℂ) :
     (U * B * Uᴴ) * (U * C * Uᴴ) = U * (B * C) * Uᴴ := by

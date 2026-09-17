@@ -19,6 +19,7 @@ namespace CommutatorTheorem.THConvexity
 
 -- For any x with ‖x‖ < 1 and nonzero k in kernel of L, ∃ y on unit sphere with L(y) = L(x).
 set_option maxHeartbeats 800000 in
+-- Matrix and finite-sum calculations require additional elaboration steps.
 lemma exists_unit_preimage_of_kernel {E F : Type*}
     [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [NormedAddCommGroup F] [InnerProductSpace ℝ F]
@@ -62,6 +63,7 @@ lemma exists_unit_preimage_of_kernel {E F : Type*}
 
 -- Vector construction from S² coords, Y₀ > -1
 set_option maxHeartbeats 6400000 in
+-- Matrix and finite-sum calculations require additional elaboration steps.
 private lemma construct_vector_from_sphere (M : Matrix (Fin 2) (Fin 2) ℂ)
     (Y₀ Y₁ Y₂ : ℝ)
     (hy_sq : Y₀ ^ 2 + Y₁ ^ 2 + Y₂ ^ 2 = 1)
@@ -107,8 +109,7 @@ private lemma construct_vector_from_sphere (M : Matrix (Fin 2) (Fin 2) ℂ)
     exact Complex.mul_conj v₁
   set v : Fin 2 → ℂ := ![↑α, v₁]
   refine ⟨v, ?_, ?_⟩
-  · simp only [v, Fin.sum_univ_two, Matrix.cons_val_zero, Matrix.cons_val_one,
-      Matrix.head_cons, Matrix.head_fin_const]
+  · simp only [v, Fin.sum_univ_two, Matrix.cons_val_zero, Matrix.cons_val_one]
     rw [Complex.conj_ofReal]
     have t1 : (↑α : ℂ) * M 0 0 * ↑α = ↑((1 + Y₀) / 2) * M 0 0 := by
       rw [show (↑α : ℂ) * M 0 0 * ↑α = ↑(α * α) * M 0 0 from by push_cast; ring, hα_sq]
@@ -122,8 +123,7 @@ private lemma construct_vector_from_sphere (M : Matrix (Fin 2) (Fin 2) ℂ)
       rw [show starRingEnd ℂ v₁ * M 1 1 * v₁ = (starRingEnd ℂ v₁ * v₁) * M 1 1 from by ring,
         h_cv1_v1, hv1_normSq]
     rw [t1, t2, t3, t4]; push_cast; ring
-  · simp only [v, Fin.sum_univ_two, Matrix.cons_val_zero, Matrix.cons_val_one,
-      Matrix.head_cons, Matrix.head_fin_const]
+  · simp only [v, Fin.sum_univ_two, Matrix.cons_val_zero, Matrix.cons_val_one]
     rw [Complex.normSq_ofReal, hv1_normSq, show α * α = (1 + Y₀) / 2 from hα_sq]; ring
 
 -- Helper to simplify WithLp access
@@ -132,6 +132,7 @@ private lemma withLp_symm_ofLp_eq {n : ℕ} (x : Fin n → ℝ) (i : Fin n) :
 
 -- [M₀₀, M₁₁] ⊆ NR(M) for any 2×2 matrix M
 set_option maxHeartbeats 3200000 in
+-- Matrix and finite-sum calculations require additional elaboration steps.
 theorem segment_diag_in_nr_2x2
     (M : Matrix (Fin 2) (Fin 2) ℂ) (t : ℝ) (ht0 : 0 ≤ t) (ht1 : t ≤ 1) :
     ∃ v : Fin 2 → ℂ,
@@ -141,14 +142,14 @@ theorem segment_diag_in_nr_2x2
   by_cases ht_end : t = 0 ∨ t = 1
   · rcases ht_end with rfl | rfl
     · refine ⟨![0, 1], ?_, ?_⟩
-      · simp [Fin.sum_univ_two, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons]
-      · simp [Fin.sum_univ_two, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
+      · simp [Fin.sum_univ_two, Matrix.cons_val_zero, Matrix.cons_val_one]
+      · simp [Fin.sum_univ_two, Matrix.cons_val_zero, Matrix.cons_val_one,
           Complex.normSq_zero, Complex.normSq_one]
     · refine ⟨![1, 0], ?_, ?_⟩
-      · simp [Fin.sum_univ_two, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons]
-      · simp [Fin.sum_univ_two, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
+      · simp [Fin.sum_univ_two, Matrix.cons_val_zero, Matrix.cons_val_one]
+      · simp [Fin.sum_univ_two, Matrix.cons_val_zero, Matrix.cons_val_one,
           Complex.normSq_zero, Complex.normSq_one]
-  · push_neg at ht_end
+  · push Not at ht_end
     have ht_pos : 0 < t := lt_of_le_of_ne ht0 (Ne.symm ht_end.1)
     have ht_lt1 : t < 1 := lt_of_le_of_ne ht1 ht_end.2
     set p := (M 0 0 - M 1 1) / 2
@@ -180,8 +181,7 @@ theorem segment_diag_in_nr_2x2
       apply Real.sqrt_lt_sqrt (sq_nonneg _)
       rw [EuclideanSpace.norm_sq_eq]
       simp only [x₀, Fin.sum_univ_three, withLp_symm_ofLp_eq,
-        Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
-        Matrix.head_fin_const, Real.norm_eq_abs]
+        Matrix.cons_val_zero, Matrix.cons_val_one, Real.norm_eq_abs]
       rw [show (![2 * t - 1, 0, 0] : Fin 3 → ℝ) 2 = 0 from rfl,
         show |2 * t - 1| ^ 2 = (2 * t - 1) ^ 2 from sq_abs _,
         show |(0:ℝ)| ^ 2 = 0 from by simp]
@@ -202,7 +202,7 @@ theorem segment_diag_in_nr_2x2
       change L₀ (y.ofLp) = L₀ (x₀.ofLp) at h1
       simp only [L₀, LinearMap.coe_mk, AddHom.coe_mk] at h1
       simp only [x₀, withLp_symm_ofLp_eq, Matrix.cons_val_zero,
-        Matrix.cons_val_one, Matrix.head_cons, Matrix.head_fin_const] at h1
+        Matrix.cons_val_one] at h1
       rw [show (![2 * t - 1, 0, 0] : Fin 3 → ℝ) 2 = 0 from rfl] at h1
       simp only [Complex.ofReal_zero, mul_zero, add_zero] at h1
       exact h1
@@ -219,7 +219,7 @@ theorem segment_diag_in_nr_2x2
         (p * ↑Y₀ + (b + c) / 2 * ↑Y₁ + Complex.I * ((b - c) / 2) * ↑Y₂) =
         (M 0 0 + M 1 1) / 2 + p * ↑(2 * t - 1) from by rw [hLy]]
       exact htarget
-    · push_neg at hY0
+    · push Not at hY0
       have hY0_eq : Y₀ = -1 := le_antisymm hY0
         (by nlinarith [hy_sq, sq_nonneg Y₁, sq_nonneg Y₂])
       have hY1 : Y₁ = 0 := by nlinarith [sq_nonneg Y₁, sq_nonneg Y₂, hY0_eq]
@@ -243,9 +243,11 @@ theorem segment_diag_in_nr_2x2
           · norm_num at h
         exact sub_eq_zero.mp this
       refine ⟨![0, 1], ?_, ?_⟩
-      · simp [Fin.sum_univ_two, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons]
+      · simp only [Fin.sum_univ_two, Fin.isValue, Matrix.cons_val_zero, mul_zero,
+          Matrix.cons_val_one, Matrix.cons_val_fin_one, mul_one, zero_add, map_zero, zero_mul,
+          map_one, one_mul, ofReal_sub, ofReal_one]
         rw [hM_eq]; ring
-      · simp [Fin.sum_univ_two, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
+      · simp [Fin.sum_univ_two, Matrix.cons_val_zero, Matrix.cons_val_one,
           Complex.normSq_zero, Complex.normSq_one]
 
 end CommutatorTheorem.THConvexity

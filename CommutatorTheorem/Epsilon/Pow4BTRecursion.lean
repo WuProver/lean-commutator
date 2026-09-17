@@ -183,7 +183,7 @@ private lemma lambdaM_four_block_recursion_local (δ : ℝ) (hδ : 0 < δ) (hδ1
             IsDiagMatrix B ∧ (∀ i, InUnitSquare (B i i)) ∧ A = ⁅B, C⁆ₘ ∧ ‖C‖ ≤ c}).Nonempty
     · exact le_csInf hne (fun c ⟨_, _, _, _, _, hle⟩ => le_trans (norm_nonneg _) hle)
     · rw [Set.not_nonempty_iff_eq_empty.mp hne]; simp
-  show sSup (lambdaA '' {A : Matrix (Fin (4 * m)) (Fin (4 * m)) ℂ | ZeroDiag A ∧ ‖A‖ = 1}) ≤
+  change sSup (lambdaA '' {A : Matrix (Fin (4 * m)) (Fin (4 * m)) ℂ | ZeroDiag A ∧ ‖A‖ = 1}) ≤
       2 / (1 - δ) * lambdaM m + 6 / δ
   set S := lambdaA '' {A : Matrix (Fin (4 * m)) (Fin (4 * m)) ℂ | ZeroDiag A ∧ ‖A‖ = 1}
   by_cases hne : S.Nonempty
@@ -221,7 +221,8 @@ private lemma lambdaM_four_block_recursion_local (δ : ℝ) (hδ : 0 < δ) (hδ1
           ≤ ‖A.submatrix (blockEmbed k) (blockEmbed k)‖ * lambdaM m := h_scale
         _ ≤ 1 * lambdaM m := mul_le_mul_of_nonneg_right (hnorm_block_le k) hlM_m_nn
         _ = lambdaM m := one_mul _
-    have hsup_le : (⨆ k : Fin 4, lambdaA (A.submatrix (blockEmbed k) (blockEmbed k))) ≤ lambdaM m := by
+    have hsup_le : (⨆ k : Fin 4, lambdaA (A.submatrix (blockEmbed k) (blockEmbed k))) ≤ lambdaM
+      m := by
       apply ciSup_le
       intro k; exact h_block_le k
     -- combine
@@ -297,8 +298,7 @@ lemma bt_paving_depth_l_construction_uniform :
   classical
   obtain ⟨K, hK_pos, hK_spec⟩ := bourgain_tzafriri_iterated
   refine ⟨K, hK_pos, ?_⟩
-  intro n l hl
-  intro A hzd hnorm
+  intro n l hl A hzd hnorm
   -- Apply BT at depth l.
   obtain ⟨σ, hσ_inj, hσ_disj, hσ_bound⟩ := hK_spec n A hzd hnorm l hl
   -- The canonical split equivalence.
@@ -314,7 +314,7 @@ lemma bt_paving_depth_l_construction_uniform :
   -- H ∘ e k = σ k.
   have hH_e : ∀ k j, H (e k j) = σ k j := by
     intro k j
-    show σ (splitEq.symm (splitEq (k, j))).1 (splitEq.symm (splitEq (k, j))).2
+    change σ (splitEq.symm (splitEq (k, j))).1 (splitEq.symm (splitEq (k, j))).2
        = σ k j
     rw [splitEq.symm_apply_apply]
   -- H injective.
@@ -355,7 +355,7 @@ lemma bt_paving_depth_l_construction_uniform :
   have he_surj : ∀ i : Fin (4 ^ n), ∃ k j, e k j = i := by
     intro i
     refine ⟨(splitEq.symm i).1, (splitEq.symm i).2, ?_⟩
-    show splitEq ((splitEq.symm i).1, (splitEq.symm i).2) = i
+    change splitEq ((splitEq.symm i).1, (splitEq.symm i).2) = i
     have : ((splitEq.symm i).1, (splitEq.symm i).2) = splitEq.symm i := rfl
     rw [this, splitEq.apply_symm_apply]
   -- Norm bound: A.submatrix (H ∘ e k) (H ∘ e k) = A.submatrix (σ k) (σ k).
@@ -619,7 +619,7 @@ spectral gap `≥ 2δ`. All four conjuncts are `nlinarith`/`abs_le` facts.
 2. `B'₁₁`-entries `(-1+δ)+δx` stay in `[-1,1]` when `|x| ≤ 1`;
 3. `B'₂₂`-entries `2δ+(1-2δ)x` stay in `[-1,1]` when `|x| ≤ 1`;
 4. the real-axis gap between the two perturbed blocks is `≥ 2δ`. -/
-lemma asym_eta_trick_arith (δ : ℝ) (hδ0 : 0 < δ) (hδ : δ ≤ 1/4) :
+lemma asym_eta_trick_arith (δ : ℝ) (hδ0 : 0 < δ) (hδ : δ ≤ 1 / 4) :
     (1 / (1 - 2*δ) ≤ 1 + 4*δ) ∧
     (∀ x : ℝ, |x| ≤ 1 → |(-1 + δ) + δ*x| ≤ 1) ∧
     (∀ x : ℝ, |x| ≤ 1 → |(2*δ) + (1 - 2*δ)*x| ≤ 1) ∧
@@ -640,6 +640,7 @@ lemma asym_eta_trick_arith (δ : ℝ) (hδ0 : 0 < δ) (hδ : δ ≤ 1/4) :
     nlinarith [hx.1, hx.2, hy.1, hy.2, hδ0, hδ]
 
 set_option maxHeartbeats 800000 in
+-- Matrix and finite-sum calculations require additional elaboration steps.
 /-- Reindexed form of the paper's asymmetric Claim 2.
 
 The analytical theorem in `Pow4Bootstrap` is stated for the canonical first
@@ -697,7 +698,7 @@ lemma lambdaA_two_block_decomp_asym_reindex
         have hfin := hH'_inj hH'xy
         apply Fin.ext
         have hvals := congrArg Fin.val hfin
-        simp only [Fin.val_mk] at hvals
+        simp only [] at hvals
         omega
   have hsplit_surj : Function.Surjective splitMap := by
     intro z
@@ -950,7 +951,8 @@ private lemma four_block_step_norm_le_one
     have hN_zd : ZeroDiag N := by
       intro i
       simp only [hN_def, Matrix.smul_apply, smul_eq_mul, hzd i, mul_zero]
-    -- Apply lambdaA_sigma_four_block_bound_param to N (with hStrong = lambdaA_four_block_bound_strong).
+    -- Apply lambdaA_sigma_four_block_bound_param to N (with hStrong =
+    -- lambdaA_four_block_bound_strong).
     have hStrong :
         ∀ (A' : Matrix (Fin (4 * m)) (Fin (4 * m)) ℂ),
           ZeroDiag A' → ‖A'‖ = 1 →
@@ -1233,6 +1235,8 @@ private lemma lambdaA_perm_invariant_He {N : ℕ}
 
 /-! ### Per-step engine. -/
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedVariables false in
 /-- Per-step engine.  Given a depth-`d` embedding and a refining
 depth-`(d+1)` embedding, the iSup at depth `d` is bounded by
 `2/(1-δ) · iSup at depth (d+1) + 6/δ`. -/
@@ -1322,7 +1326,7 @@ private lemma iter_4block_per_step_He
     intro k i
     obtain ⟨k', j, hkj⟩ := hsplit_surj k (castEq i)
     refine ⟨k', j, ?_⟩
-    show castEq.symm (split k k' j) = i
+    change castEq.symm (split k k' j) = i
     rw [hkj, castEq.symm_apply_apply]
   -- Apply four_block_step_norm_le_one to each N k.
   have hstep : ∀ k : Fin (4 ^ d),
@@ -1337,7 +1341,7 @@ private lemma iter_4block_per_step_He
       A.submatrix (H ∘ e' (combine k k')) (H ∘ e' (combine k k')) := by
     intro k k'
     ext i j
-    show A (f k (castEq.symm (split k k' i))) (f k (castEq.symm (split k k' j))) =
+    change A (f k (castEq.symm (split k k' i))) (f k (castEq.symm (split k k' j))) =
       A (H (e' (combine k k') i)) (H (e' (combine k k') j))
     simp only [f, castEq, Equiv.apply_symm_apply]
     rw [hcoh k k' i, hcoh k k' j]
@@ -1410,6 +1414,8 @@ private noncomputable def finPowDecompEquiv (n d : ℕ) (hd : d ≤ n) :
     Fin (4 ^ d) × Fin (4 ^ (n - d)) ≃ Fin (4 ^ n) :=
   (finPowProdEquiv d (n - d)).trans (Fin.castOrderIso (by rw [Nat.add_sub_cancel' hd])).toEquiv
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedVariables false in
 /-- Promote a user-given paving `e : Fin(4^l) → Fin(4^(n-l)) → Fin(4^n)` to a
 genuine equivalence using injective/disjoint/surjective hypotheses. -/
 private noncomputable def chainEEq (n l : ℕ) (hl : l ≤ n)
@@ -1440,7 +1446,7 @@ private noncomputable def chainEEq (n l : ℕ) (hl : l ≤ n)
     intro i
     obtain ⟨k, j, hkj⟩ := he_surj i
     refine ⟨(k, j), ?_⟩
-    show e k j = i
+    change e k j = i
     exact hkj
   -- Build equivalence via Equiv.ofBijective.
   exact Equiv.ofBijective f ⟨hf_inj, hf_surj⟩
@@ -1627,7 +1633,7 @@ private lemma iter_4block_chain_He
         obtain ⟨K, J, hKJ⟩ := hE1_surj i
         let kk : Fin (4 ^ 0) × Fin 4 := combineEq.symm K
         refine ⟨kk.2, J, ?_⟩
-        show Fin.cast (by simp : 4 ^ n = 4 ^ (n - 0))
+        change Fin.cast (by simp : 4 ^ n = 4 ^ (n - 0))
               (E 1 hd1l (combineEq (0, kk.2)) J) = j
         have hkk1 : kk.1 = 0 := by
           have : kk.1.val < 4 ^ 0 := kk.1.isLt
@@ -1635,11 +1641,11 @@ private lemma iter_4block_chain_He
           apply Fin.ext; omega
         have hKeq : K = combineEq (0, kk.2) := by
           have : combineEq (kk.1, kk.2) = K := by
-            show combineEq kk = K
+            change combineEq kk = K
             simp only [kk, Equiv.apply_symm_apply]
           rw [← this, hkk1]
         rw [← hKeq, hKJ]
-        show (Fin.castOrderIso (by simp : 4 ^ n = 4 ^ (n - 0))).toEquiv
+        change (Fin.castOrderIso (by simp : 4 ^ n = 4 ^ (n - 0))).toEquiv
               ((Fin.castOrderIso (by simp : 4 ^ (n - 0) = 4 ^ n)).toEquiv j) = j
         exact (Fin.castOrderIso (by simp : 4 ^ n = 4 ^ (n - 0))).toEquiv.left_inv j
       · intro k k₁ j'
@@ -1648,13 +1654,13 @@ private lemma iter_4block_chain_He
           have h40 : (4 : ℕ) ^ 0 = 1 := pow_zero 4
           apply Fin.ext; omega
         rw [hk0]
-        show E 0 hdl (0 : Fin (4 ^ 0)) (split 0 k₁ j') = E 1 hd1l (combine 0 k₁) j'
-        show E 0 hdl (0 : Fin (4 ^ 0))
+        change E 0 hdl (0 : Fin (4 ^ 0)) (split 0 k₁ j') = E 1 hd1l (combine 0 k₁) j'
+        change E 0 hdl (0 : Fin (4 ^ 0))
               (Fin.cast (by simp : 4 ^ n = 4 ^ (n - 0))
                 (E 1 hd1l (combineEq (0, k₁)) j')) =
               E 1 hd1l (combineEq (0, k₁)) j'
         simp only [E, dite_true]
-        show (Fin.castOrderIso (by simp : 4 ^ (n - 0) = 4 ^ n)).toEquiv
+        change (Fin.castOrderIso (by simp : 4 ^ (n - 0) = 4 ^ n)).toEquiv
               ((Fin.castOrderIso (by simp : 4 ^ n = 4 ^ (n - 0))).toEquiv
                 (E 1 hd1l (combineEq (0, k₁)) j')) =
               E 1 hd1l (combineEq (0, k₁)) j'
@@ -1680,7 +1686,7 @@ private lemma iter_4block_chain_He
       · intro k j
         let p : Fin 4 × Fin (4 ^ (n - (d + 1))) := splitEq.symm j
         refine ⟨p.1, p.2, ?_⟩
-        show splitEq (p.1, p.2) = j
+        change splitEq (p.1, p.2) = j
         rw [show (p.1, p.2) = p from rfl]
         simp only [p, Equiv.apply_symm_apply]
       · intro k k₁ j'
@@ -2344,7 +2350,7 @@ private lemma lambdaM_le_lambdaM_double_phase4 (n : ℕ) :
   have h : 4 ^ n ≤ 2 * 4 ^ n := by
     have : 1 * 4 ^ n ≤ 2 * 4 ^ n :=
       Nat.mul_le_mul_right _ (by norm_num)
-    simpa using this
+    simp
   set m₁ := 4 ^ n with hm₁_def
   set m₂ := 2 * 4 ^ n with hm₂_def
   -- The supremum target is nonneg (used in the empty branch).
@@ -2731,6 +2737,8 @@ noncomputable def btClaimThreshold (K : ℝ) (n l : ℕ) : ℝ :=
 noncomputable def btClaimFactor (l : ℕ) : ℝ :=
   1 + 8 / (l : ℝ) ^ 2
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedVariables false in
 /-- Numerical wrapper around the reindexed asymmetric Claim 2.  Supplying a
 bound `small` on the selected half and `large` on the complement yields the
 standard logarithmic threshold recurrence. -/
@@ -2851,7 +2859,7 @@ private lemma joinHalfMaps_injective {m : ℕ}
         apply Fin.ext
         omega
       have hpre := congrArg Fin.val (hF₁ hloc)
-      simp only [Fin.val_mk] at hpre
+      simp only [] at hpre
       apply Fin.ext
       omega
 
@@ -3063,6 +3071,7 @@ lemma lambdaM_two_pow4_claim2_recursion :
     simpa [hc₂_def] using hRHS_nn
 
 set_option maxHeartbeats 800000 in
+-- Matrix and finite-sum calculations require additional elaboration steps.
 /-- Apply the BT selected-half estimate separately in the two canonical
 `2·4^n` halves of a `4·4^n` matrix, then join the two selected quarters.
 The joined principal submatrix is a half of the original matrix and is still
@@ -3099,7 +3108,7 @@ lemma lambdaA_pow4_good_half_uniform :
     intro i j hij
     apply Fin.ext
     have hval := congrArg Fin.val hij
-    simp only [E₁, Fin.val_mk] at hval
+    simp only [E₁] at hval
     omega
   set A₀ := A.submatrix E₀ E₀ with hA₀_def
   set A₁ := A.submatrix E₁ E₁ with hA₁_def
@@ -3184,7 +3193,7 @@ lemma lambdaA_pow4_good_half_uniform :
     ext i j
     have hi : ¬(4 ^ n + i.val < 4 ^ n) := by omega
     have hj : ¬(4 ^ n + j.val < 4 ^ n) := by omega
-    simp [hAG_def, hG_def, joinHalfMaps, hi, hj, hA₁_def, E₁,
+    simp [hAG_def, hG_def, joinHalfMaps, hA₁_def, E₁,
       Matrix.submatrix_apply, Matrix.of_apply]
   have hbnd₀' : lambdaA
       (Matrix.of (fun i j : Fin (4 ^ n) =>
@@ -3235,6 +3244,7 @@ lemma lambdaA_pow4_good_half_uniform :
       nlinarith
 
 set_option maxHeartbeats 800000 in
+-- Matrix and finite-sum calculations require additional elaboration steps.
 /-- Second paper recurrence.  Two BT-selected quarters form a controlled half
 of a `4^(n+1)` matrix; Claim 2 combines it with the complementary half, whose
 scale is `lambdaM (2·4^n)`. -/
@@ -3386,6 +3396,7 @@ theorem lambdaM_pow4_claim2_recursion :
       ring
 
 set_option maxHeartbeats 1200000 in
+-- Matrix and finite-sum calculations require additional elaboration steps.
 /-- A direct consequence of the genuine Claim 2 recurrence: for every fixed
 base `r > 1`, `lambdaM (4^n)` is `O(r^n)`.  We choose one sufficiently large
 BT depth `l`.  The loss `(1+8/l²)^2` is then below `r`, while exponential
@@ -3484,7 +3495,7 @@ theorem lambdaM_pow4_geometric_bound (r : ℝ) (hr : 1 < r) :
           _ = Cbase := hCbase_def.symm
           _ ≤ C := hCbase_le
           _ ≤ C * r ^ n := by nlinarith
-      · push_neg at hnl
+      · push Not at hnl
         cases n with
         | zero => omega
         | succ m =>

@@ -13,14 +13,14 @@ the conditional-expectation recursion.
 
 namespace NoEpsilon.MSSCharpoly
 
-set_option maxHeartbeats 800000
-
 open Polynomial NoEpsilon.MSSStability NoEpsilon.MSSExpectation
 open CommutatorTheorem CommutatorTheorem.BTMDPSelection
 open scoped BigOperators Polynomial ComplexOrder
 
 variable {ι κ : Type*} [Fintype ι] [DecidableEq ι] [Fintype κ]
 
+set_option maxHeartbeats 800000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- A Hermitian constant term does not affect the positive imaginary quadratic form
 of a positive semidefinite pencil. -/
 theorem det_hermitian_affine_pencil_ne_zero (B : Matrix ι ι ℂ) (hB : B.IsHermitian)
@@ -56,6 +56,8 @@ theorem det_hermitian_affine_pencil_ne_zero (B : Matrix ι ι ℂ) (hB : B.IsHer
   simp only [Complex.zero_im] at him
   linarith
 
+set_option maxHeartbeats 800000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- The complex affine determinant pencil is upper stable. -/
 theorem hermitian_affine_pencil_upperStable (B : Matrix ι ι ℂ) (hB : B.IsHermitian)
     (A : κ → Matrix ι ι ℂ) (hA : ∀ i, (A i).PosSemidef)
@@ -73,6 +75,8 @@ theorem hermitian_affine_pencil_upperStable (B : Matrix ι ι ℂ) (hB : B.IsHer
   rw [show (MvPolynomial.eval z).mapMatrix _ = _ from heq]
   exact det_hermitian_affine_pencil_ne_zero B hB A hA hTotal z hz
 
+set_option maxHeartbeats 800000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- Stability of the flat sequence of MSS differential operators. -/
 theorem mixedDifference_upperStable {σ : Type*} [Finite σ]
     (xs : List σ) {p : MvPolynomial σ ℂ} (hp : UpperStable p) :
@@ -81,6 +85,8 @@ theorem mixedDifference_upperStable {σ : Type*} [Finite σ]
   | nil => exact hp
   | cons i xs ih => exact ih.sub_pderiv i
 
+set_option maxHeartbeats 800000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- The characteristic polynomial identity for all finite independent rank-one laws,
 with an arbitrary deterministic base matrix. -/
 theorem expected_charpoly_eq_flatMixedDet {R Ω : Type*} [CommRing R] [Fintype Ω]
@@ -119,6 +125,8 @@ section CharacteristicSpecialization
 
 variable {R σ : Type*} [CommRing R]
 
+set_option maxHeartbeats 800000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- Regard the distinguished coordinate as the univariate coefficient variable. -/
 noncomputable def optionToIter : MvPolynomial (Option σ) R →+* MvPolynomial σ R[X] :=
   MvPolynomial.eval₂Hom (MvPolynomial.C.comp Polynomial.C)
@@ -136,6 +144,8 @@ noncomputable def optionToIter : MvPolynomial (Option σ) R →+* MvPolynomial �
     optionToIter (MvPolynomial.X (some i) : MvPolynomial (Option σ) R) =
       MvPolynomial.X i := by simp [optionToIter]
 
+set_option maxHeartbeats 800000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- Only the nondistinguished variables are differentiated by MSS. -/
 theorem pderiv_optionToIter (i : σ) (p : MvPolynomial (Option σ) R) :
     MvPolynomial.pderiv i (optionToIter p) =
@@ -152,6 +162,8 @@ theorem pderiv_optionToIter (i : σ) (p : MvPolynomial (Option σ) R) :
       · subst j; simp [hp]
       · simp [hp, h]
 
+set_option maxHeartbeats 800000 in
+-- Retain the original elaboration budget locally for this declaration.
 theorem mixedDifference_optionToIter (xs : List σ) (p : MvPolynomial (Option σ) R) :
     mixedDifference xs (optionToIter p) =
       optionToIter (mixedDifference (xs.map some) p) := by
@@ -161,6 +173,8 @@ theorem mixedDifference_optionToIter (xs : List σ) (p : MvPolynomial (Option σ
     simp only [mixedDifference, List.foldr_cons, List.map_cons] at ih ⊢
     rw [ih, pderiv_optionToIter, map_sub]
 
+set_option maxHeartbeats 800000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- Setting the nondistinguished variables to zero leaves the coordinate polynomial. -/
 theorem eval_zero_optionToIter [DecidableEq σ] (p : MvPolynomial (Option σ) R) :
     MvPolynomial.eval (fun _ ↦ (0 : R[X])) (optionToIter p) =
@@ -175,6 +189,8 @@ theorem eval_zero_optionToIter [DecidableEq σ] (p : MvPolynomial (Option σ) R)
       simpa [MSSSpecialization.coordinatePolynomial] using congrArg (· * Polynomial.X) hp
     | some j => simp [MSSSpecialization.coordinatePolynomial]
 
+set_option maxHeartbeats 800000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- The full characteristic pencil, with its spectral variable distinguished. -/
 noncomputable def characteristicPencil (n : ℕ) (B : Matrix ι ι R)
     (A : Fin n → Matrix ι ι R) : MvPolynomial (Option (Fin n)) R :=
@@ -183,6 +199,8 @@ noncomputable def characteristicPencil (n : ℕ) (B : Matrix ι ι R)
       ((i.elim 1 A).map MvPolynomial.C :
         Matrix ι ι (MvPolynomial (Option (Fin n)) R))).det
 
+set_option maxHeartbeats 800000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- Moving the spectral variable into the coefficient ring gives the characteristic matrix. -/
 theorem optionToIter_characteristicPencil (n : ℕ) (B : Matrix ι ι R)
     (A : Fin n → Matrix ι ι R) :
@@ -197,13 +215,16 @@ theorem optionToIter_characteristicPencil (n : ℕ) (B : Matrix ι ι R)
     Matrix.neg_apply, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul,
     map_add, map_sum, map_mul, map_neg, Fintype.sum_option, Option.elim,
     optionToIter_C, optionToIter_X_none, optionToIter_X_some]
-  simp [Matrix.charmatrix, Matrix.map_apply, Matrix.sub_apply, Matrix.scalar_apply,
-    Matrix.diagonal_apply, Matrix.one_apply]
+  simp only [Matrix.one_apply, MonoidWithZeroHom.map_ite_one_zero, mul_ite, mul_one,
+    mul_zero, Matrix.charmatrix, Matrix.scalar_apply, RingHom.mapMatrix_apply, Matrix.sub_apply,
+    Matrix.diagonal_apply, Matrix.map_apply, MvPolynomial.C_sub]
   split_ifs
   · ring
   · rw [MvPolynomial.C_0]
     ring
 
+set_option maxHeartbeats 800000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- The flat mixed characteristic polynomial is the spectral coordinate restriction
 of the stable multivariate differential polynomial. -/
 theorem flatMixedDet_charmatrix_eq_coordinate (n : ℕ) (B : Matrix ι ι R)
@@ -218,6 +239,8 @@ theorem flatMixedDet_charmatrix_eq_coordinate (n : ℕ) (B : Matrix ι ι R)
 
 end CharacteristicSpecialization
 
+set_option maxHeartbeats 800000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- The spectral variable contributes the identity, so no nondegeneracy condition
 on the sum of the covariance matrices is necessary. -/
 theorem characteristicPencil_upperStable (n : ℕ) (B : Matrix ι ι ℂ)
@@ -233,6 +256,8 @@ theorem characteristicPencil_upperStable (n : ℕ) (B : Matrix ι ι ℂ)
   · simp only [Fintype.sum_option, Option.elim]
     exact Matrix.PosDef.one.add_posSemidef (Matrix.posSemidef_sum _ (fun i _ ↦ hA i))
 
+set_option maxHeartbeats 800000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- Upper stability of the full differential polynomial underlying an arbitrary
 finite conditional expected characteristic polynomial. -/
 theorem characteristic_mixedDifference_upperStable (n : ℕ) (B : Matrix ι ι ℂ)
@@ -245,6 +270,12 @@ section RealExpectedPolynomial
 
 variable {Ω : Type*} [Fintype Ω]
 
+set_option maxHeartbeats 800000 in
+-- Retain the original elaboration budget locally for this declaration.
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
+set_option linter.unusedSectionVars false in
 /-- The rank-one sum at a fixed outcome is Hermitian. -/
 theorem outcome_isHermitian (n : ℕ) (B : Matrix ι ι ℂ) (hB : B.IsHermitian)
     (v : Fin n → Ω → ι → ℂ) (q : Fin n → Ω) :
@@ -252,6 +283,8 @@ theorem outcome_isHermitian (n : ℕ) (B : Matrix ι ι ℂ) (hB : B.IsHermitian
   hB.add (Matrix.posSemidef_sum _
     (fun i _ ↦ Matrix.posSemidef_vecMulVec_self_star (v i (q i)))).1
 
+set_option maxHeartbeats 800000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- A finite expected characteristic polynomial over the real coefficient field. -/
 noncomputable def realExpectedCharpoly (n : ℕ) (B : Matrix ι ι ℂ) (hB : B.IsHermitian)
     (v : Fin n → Ω → ι → ℂ) (p : Fin n → Ω → ℝ) : ℝ[X] :=
@@ -259,6 +292,8 @@ noncomputable def realExpectedCharpoly (n : ℕ) (B : Matrix ι ι ℂ) (hB : B.
     realCharpoly (B + ∑ i, Matrix.vecMulVec (v i (q i)) (star (v i (q i))))
       (outcome_isHermitian n B hB v q)
 
+set_option maxHeartbeats 800000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- Independent product weights remain normalized. -/
 theorem sum_product_weights {S : Type*} [CommSemiring S]
     (n : ℕ) (p : Fin n → Ω → S) (hp : ∀ i, ∑ ω, p i ω = 1) :
@@ -267,6 +302,8 @@ theorem sum_product_weights {S : Type*} [CommSemiring S]
   have h := Finset.prod_univ_sum (fun _ : Fin n ↦ (Finset.univ : Finset Ω)) p
   simpa only [hp, Finset.prod_const_one, Fintype.piFinset_univ] using h.symm
 
+set_option maxHeartbeats 800000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- The finite expected polynomial is monic of exactly the original matrix dimension. -/
 theorem realExpectedCharpoly_monic_natDegree (n : ℕ) (B : Matrix ι ι ℂ)
     (hB : B.IsHermitian) (v : Fin n → Ω → ι → ℂ) (p : Fin n → Ω → ℝ)
@@ -277,6 +314,8 @@ theorem realExpectedCharpoly_monic_natDegree (n : ℕ) (B : Matrix ι ι ℂ)
   · intro q; exact realCharpoly_monic _ _
   · intro q; exact realCharpoly_natDegree _ _
 
+set_option maxHeartbeats 800000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- Complexification is the ordinary expected characteristic polynomial. -/
 theorem map_realExpectedCharpoly (n : ℕ) (B : Matrix ι ι ℂ) (hB : B.IsHermitian)
     (v : Fin n → Ω → ι → ℂ) (p : Fin n → Ω → ℝ) :
@@ -290,6 +329,8 @@ theorem map_realExpectedCharpoly (n : ℕ) (B : Matrix ι ι ℂ) (hB : B.IsHerm
   rw [Polynomial.map_smul, realCharpoly_map_complex]
   simp only [Polynomial.smul_eq_C_mul, map_prod, Complex.ofRealHom_eq_coe]
 
+set_option maxHeartbeats 800000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- The expected real polynomial is precisely the spectral coordinate restriction
 of the mean-covariance differential pencil. -/
 theorem map_realExpectedCharpoly_eq_coordinate (n : ℕ) (B : Matrix ι ι ℂ)
@@ -306,6 +347,8 @@ theorem map_realExpectedCharpoly_eq_coordinate (n : ℕ) (B : Matrix ι ι ℂ)
     (fun i ω ↦ (p i ω : ℂ)) hsum]
   exact flatMixedDet_charmatrix_eq_coordinate n B _
 
+set_option maxHeartbeats 800000 in
+-- Retain the original elaboration budget locally for this declaration.
 /-- Every finite independent rank-one expected characteristic polynomial is real-rooted,
 also after adding any fixed Hermitian matrix. This theorem has no interlacing premise. -/
 theorem realExpectedCharpoly_realRooted (n : ℕ) (B : Matrix ι ι ℂ)

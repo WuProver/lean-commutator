@@ -14,6 +14,8 @@ open NoEpsilon.MSSBarrier NoEpsilon.MSSCrossBarrier NoEpsilon.MSSBarrierAlgebra
 
 variable {σ : Type*} [Fintype σ] [DecidableEq σ]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedFintypeInType false in
 /-- If the old barrier in coordinate `j` is at most `1 - 1/δ`, applying
 `1 - ∂ⱼ` and moving by `δ` in coordinate `j` keeps the point above all roots
 and does not increase any coordinate barrier. -/

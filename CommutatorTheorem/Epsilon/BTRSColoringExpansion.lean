@@ -38,6 +38,7 @@ theorem prod_chooseUndifferentiated
   classical
   rw [← Finset.prod_erase_mul Finset.univ
     (chooseUndifferentiated x a f) (Finset.mem_univ a)]
+  rw [mul_comm (f a)]
   apply congrArg₂ (· * ·)
   · apply Finset.prod_congr rfl
     intro b hb
@@ -65,7 +66,7 @@ private theorem chooseUndifferentiated_multiaffine
   intro b
   classical
   by_cases hba : b = a
-  · simp [chooseUndifferentiated, hba, hf b]
+  · simpa only [chooseUndifferentiated, if_pos hba] using hf b
   · simp only [chooseUndifferentiated, hba, ↓reduceIte]
     calc
       MvPolynomial.pderiv y
@@ -109,10 +110,10 @@ theorem iteratedPDeriv_blocks_eq_recursiveColoringExpansion
           MvPolynomial.pderiv y (MvPolynomial.pderiv y (f a)) = 0 := by
         intro y hy
         exact hf y (by simp [hy])
-      simp_rw [ih (fun y hy =>
+      simp_rw [ih _ (fun y hy ↦
         chooseUndifferentiated_multiaffine x y _ f (htail y hy))]
       simp only [recursiveColoringExpansion, List.length_cons]
-      rw [Finset.mul_sum]
+      simp only [Finset.mul_sum]
       apply Finset.sum_congr rfl
       intro a _
       rw [pow_succ]

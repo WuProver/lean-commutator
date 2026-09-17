@@ -137,6 +137,8 @@ theorem repeatedPDeriv_succ_mul_of_left_multiaffine
       simp only [Nat.cast_add, Nat.cast_one, add_smul, one_smul]
       module
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 private theorem pderiv_prod_eq_zero_of_derivatives_zero
     {sigma iota : Type*} [Fintype iota] [DecidableEq iota]
     (x : sigma) (f : iota → MvPolynomial sigma ℂ)
@@ -410,11 +412,11 @@ private theorem prod_erase_zero_fin_succ
   rw [Finset.prod_subtype
     (p := fun x : Fin (n + 1) ↦ x ≠ 0)
     ((Finset.univ : Finset (Fin (n + 1))).erase 0) (by simp) f]
-  symm
-  apply Fintype.prod_equiv
-    (CommutatorTheorem.BTMDPDeletionIdentity.finSuccAboveEquiv 0)
-  intro x
-  rfl
+  · symm
+    apply Fintype.prod_equiv
+      (CommutatorTheorem.BTMDPDeletionIdentity.finSuccAboveEquiv 0)
+    intro x
+    rfl
 
 private def optionEraseSuccEquiv {n : ℕ} (a : Fin n) :
     Option {y : Fin n // y ≠ a} ≃ {x : Fin (n + 1) // x ≠ a.succ} where
@@ -633,8 +635,9 @@ theorem coloringExpansion_finRange
       by_cases hba : b = a
       · subst a
         simp only [CommutatorTheorem.BTMDPDeletionIdentity.coloringExtensionEquiv_apply]
-        simp [CommutatorTheorem.BTMDPDeletionIdentity.extendColoring,
-          List.finRange_succ]
+        simp only [↓reduceIte, CommutatorTheorem.BTMDPDeletionIdentity.extendColoring,
+          Fin.insertNth_zero', List.finRange_succ, Fin.cons_zero, bne_self_eq_false,
+          Bool.false_eq_true, not_false_eq_true, List.filter_cons_of_neg]
         rw [List.filter_map, List.map_map]
         have hfilter :
             ((fun i : Fin (n + 1) ↦
@@ -646,8 +649,10 @@ theorem coloringExpansion_finRange
         rw [hfilter]
       · simp only [CommutatorTheorem.BTMDPDeletionIdentity.coloringExtensionEquiv_apply]
         have hab : a ≠ b := Ne.symm hba
-        simp [CommutatorTheorem.BTMDPDeletionIdentity.extendColoring,
-          hba, hab, List.finRange_succ, List.filter_map, List.map_map]
+        simp only [hba, ↓reduceIte, CommutatorTheorem.BTMDPDeletionIdentity.extendColoring,
+          Fin.insertNth_zero', List.finRange_succ, Fin.cons_zero, bne_iff_ne, ne_eq, hab,
+          not_false_eq_true, List.filter_cons_of_pos, List.filter_map, List.map_cons, List.map_map,
+          iteratedPDeriv_cons]
         have hfilter :
             ((fun i : Fin (n + 1) ↦
                 (Fin.cons a d : Fin (n + 1) → Fin (m + 1)) i != b) ∘

@@ -36,20 +36,34 @@ def secondIndex (j : Fin r) : Ambient r d := ⟨none, Sum.inr j⟩
 
 def outsideIndex (i : ι) (j : d i) : Ambient r d := ⟨some i, j⟩
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
+set_option linter.unusedSectionVars false in
 theorem firstIndex_injective : Function.Injective (firstIndex r d) := by
   intro x y h
   exact Sum.inl_injective (eq_of_heq (Sigma.mk.inj_iff.mp h).2)
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
+set_option linter.unusedSectionVars false in
 theorem secondIndex_injective : Function.Injective (secondIndex r d) := by
   intro x y h
   exact Sum.inr_injective (eq_of_heq (Sigma.mk.inj_iff.mp h).2)
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
+set_option linter.unusedSectionVars false in
 theorem outsideIndex_injective (i : ι) : Function.Injective (outsideIndex r d i) := by
   intro x y h
   exact eq_of_heq (Sigma.mk.inj_iff.mp h).2
 
 variable {r d}
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 theorem coordinateInclusion_orthogonal {α β γ : Type*}
     [Fintype γ] [DecidableEq α] [DecidableEq β] [DecidableEq γ]
     (f : α → γ) (g : β → γ) (h : ∀ a b, f a ≠ g b) :
@@ -58,6 +72,9 @@ theorem coordinateInclusion_orthogonal {α β γ : Type*}
   simpa [Matrix.mul_apply, coordinateInclusion, Matrix.conjTranspose_apply]
     using (h a b).symm
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedSectionVars false in
 /-- The trace of the full matrix is the sum of the traces of its diagonal blocks. -/
 theorem trace_eq_sum_blocks (A : Matrix (Ambient r d) (Ambient r d) ℂ) :
     trace A = trace (BlockAssembly.block A none none) +

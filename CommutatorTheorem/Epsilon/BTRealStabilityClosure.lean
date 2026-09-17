@@ -96,6 +96,8 @@ theorem MvStableOrZero.mul {σ : Type*} {p q : MvPolynomial σ ℂ}
   rw [MvPolynomial.eval_mul]
   exact mul_ne_zero (hp z hz) (hq z hz)
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 /-- A finite product of stable-or-zero polynomials is stable-or-zero. -/
 theorem mvStableOrZero_prod {ι σ : Type*} [DecidableEq ι]
     {s : Finset ι} {p : ι → MvPolynomial σ ℂ}
@@ -166,6 +168,9 @@ def MultivariateGaussLucasHurwitz : Prop :=
     MvStableOrZero p → (∀ i, 0 ≤ w i) →
       MvStableOrZero (nonnegativeDirectionalDerivative w p)
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
 /-- The Hurwitz closure implies ordinary coordinate partial-derivative
 closure. -/
 theorem mvStableOrZero_pderiv_of_gaussLucasHurwitz

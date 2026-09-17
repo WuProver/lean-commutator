@@ -36,7 +36,7 @@ theorem exists_absolute_majorant (H : Matrix ι ι ℂ) (hH : H.IsHermitian)
       have hd : (1 : Matrix ι ι ℂ) - D =
           Matrix.diagonal (fun i ↦ ((1 - |hH.eigenvalues i| : ℝ) : ℂ)) := by
         ext i j
-        by_cases hij : i = j <;> simp [D, Matrix.diagonal_apply, Matrix.one_apply, hij]
+        by_cases hij : i = j <;> simp [D, hij]
       rw [hd]
       apply Matrix.posSemidef_diagonal_iff.mpr
       intro i

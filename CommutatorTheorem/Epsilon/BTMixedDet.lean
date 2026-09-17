@@ -437,7 +437,9 @@ private lemma two_mul_esymm_two (s : Multiset ℂ) :
   | empty => simp [Multiset.esymm]
   | cons z s ih =>
       have hesymm : (z ::ₘ s).esymm 2 = s.esymm 2 + z * s.sum := by
-        simp [Multiset.esymm, Multiset.powersetCard_cons, Multiset.powersetCard_one]
+        simp only [Multiset.esymm, Multiset.powersetCard_cons, Nat.reduceAdd,
+          Multiset.powersetCard_one, Multiset.map_map, Function.comp_apply, Multiset.map_add,
+          Multiset.prod_cons, Multiset.prod_singleton, Multiset.sum_add, add_right_inj]
         rw [Multiset.sum_map_mul_left]
         simp
       rw [hesymm, mul_add, ih]

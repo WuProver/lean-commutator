@@ -160,6 +160,7 @@ theorem insertion_norm_le (Q : Matrix n r ℂ) (V : Matrix n k ℂ)
     _ = ‖X‖ := by ring
 
 set_option maxHeartbeats 2000000 in
+-- Matrix and finite-sum calculations require additional elaboration steps.
 theorem shear_factor_norm_le (N : Matrix n n ℂ) :
     ‖1 - N‖ ≤ 1 + ‖N‖ ∧ ‖1 + N‖ ≤ 1 + ‖N‖ := by
   have hOne : ‖(1 : Matrix n n ℂ)‖ ≤ 1 := NoEpsilon.matrix_norm_one_le
@@ -241,6 +242,8 @@ theorem stepBudget_eq (a : ℝ) : stepBudget a = a * stepCondition a := by
 
 universe u
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedFintypeInType false in
 /-- Clear one external block by explicit invertible factors, with quantitative control.
 Every orthogonal outside compression is preserved, so the operation can be iterated. -/
 theorem eliminate_one (A : Matrix n n ℂ)
@@ -321,6 +324,9 @@ theorem eliminate_one (A : Matrix n n ℂ)
       outside_shear_unchanged A Q V W _ hWQ hVW]
 
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
 /-- Clear any finite family of outside blocks. The ambient dimension stays fixed, and
 the total condition-number estimate telescopes through the same norm-growth function. -/
 theorem eliminate_finset {ι : Type*} [DecidableEq ι]

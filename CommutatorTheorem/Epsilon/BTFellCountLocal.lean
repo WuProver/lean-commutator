@@ -50,12 +50,12 @@ theorem eventually_rootsGTCount_eq
           hcont (isOpen_Iio.mem_nhds hneg)
         filter_upwards [hev] with t ht
         right
-        simp [sign_apply, hneg, ht]
+        simp [hneg, ht]
       · have hev : ∀ᶠ t in 𝓝 t₀, 0 < (P t).coeff i :=
           hcont (isOpen_Ioi.mem_nhds hpos)
         filter_upwards [hev] with t ht
         right
-        simp [sign_apply, hpos, ht]
+        simp [hpos, ht]
   filter_upwards [hsignNhds.filter_mono inf_le_left,
     self_mem_nhdsWithin] with t hsign ht
   have ht0 : 0 ≤ t := ht.1

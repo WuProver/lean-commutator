@@ -17,6 +17,9 @@ open scoped Matrix Matrix.Norms.L2Operator ComplexConjugate
 
 variable {ι κ : Type*} [Fintype ι] [Fintype κ] [DecidableEq ι] [DecidableEq κ]
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedSectionVars false in
 /-- Complete a prescribed orthonormal family, preserving the original order of its columns. -/
 theorem exists_orthonormalBasis_sum_extension (p : κ → EuclideanSpace ℂ ι)
     (hp : Orthonormal ℂ p) :
@@ -40,6 +43,9 @@ theorem exists_orthonormalBasis_sum_extension (p : κ → EuclideanSpace ℂ ι)
   obtain ⟨b, hb⟩ := hp'.exists_orthonormalBasis_extension_of_card_eq hDim
   exact ⟨b, fun i ↦ hb (Sum.inl i) ⟨i, rfl⟩⟩
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
+set_option linter.unusedFintypeInType false in
 /-- The columns of a rectangular isometry form an orthonormal family in Euclidean space. -/
 theorem orthonormal_columns_of_isometry (V : Matrix ι κ ℂ) (hV : Vᴴ * V = 1) :
     Orthonormal ℂ (fun j ↦ (WithLp.toLp 2 (fun i ↦ V i j) : EuclideanSpace ℂ ι)) := by
@@ -60,6 +66,8 @@ theorem basisMatrix_unitary (b : OrthonormalBasis κ ℂ (EuclideanSpace ℂ ι)
     simpa only [finrank_euclideanSpace] using Module.finrank_eq_card_basis b.toBasis
   exact ⟨hLeft, (Matrix.mul_eq_one_comm_of_equiv (Fintype.equivOfCardEq hCard.symm)).mp hLeft⟩
 
+-- Preserve the existing parameter list for downstream callers.
+set_option linter.unusedDecidableInType false in
 /-- Complete two orthogonal isometries, placing `Q` first and `P` second in the core. -/
 theorem orthogonal_pair_basis_completion {r : ℕ} (P Q : Matrix ι (Fin r) ℂ)
     (hP : Pᴴ * P = 1) (hQ : Qᴴ * Q = 1) (hPQ : Pᴴ * Q = 0) :
