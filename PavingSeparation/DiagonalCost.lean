@@ -53,7 +53,7 @@ private theorem card_one_lt {ι : Type*} [Fintype ι] (k : ℕ) (hk : 1 ≤ k)
   norm_num at hpow
   omega
 
-/-- An explicit lower bound for the squared cost with a square-normalized diagonal factor
+/-- An explicit bound for the squared cost with a square-normalized diagonal factor
 and a flat matrix. -/
 theorem diagonal_commutator_cost_sq {ι : Type*} [Fintype ι] [DecidableEq ι]
     (k : ℕ) (hk : 1 ≤ k) (hn : Fintype.card ι = 4 ^ k)
