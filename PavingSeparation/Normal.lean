@@ -122,8 +122,9 @@ theorem commutator_cost_lower {A B C : Matrix ι ι ℂ} (hA : ‖A‖ = 1)
 noncomputable def unrestrictedCost (A : Matrix ι ι ℂ) : ℝ :=
   sInf {t : ℝ | ∃ B C : Matrix ι ι ℂ, A = B * C - C * B ∧ t = ‖B‖ * ‖C‖}
 
-/-- The paper's `λ(A)`: the infimum of `‖C‖` for a diagonal first factor whose
-entries lie in `[-1, 1] + i[-1, 1]`, in the prescribed coordinate basis. -/
+/-- Legacy name for the paper's square-normalized diagonal cost `λ(A)`: the infimum of `‖C‖`
+for a diagonal first factor whose entries lie in `[-1, 1] + i[-1, 1]`, in the prescribed
+coordinate basis. The invariant for two unrestricted normal factors is `twoNormalCost`. -/
 noncomputable def normalCost (A : Matrix ι ι ℂ) : ℝ :=
   sInf {t : ℝ | ∃ z : ι → ℂ, ∃ C : Matrix ι ι ℂ,
     (∀ i, |(z i).re| ≤ 1 ∧ |(z i).im| ≤ 1) ∧
@@ -133,7 +134,8 @@ noncomputable def normalCost (A : Matrix ι ι ℂ) : ℝ :=
 theorem normalCost_eq_lambdaA {n : ℕ} (A : Matrix (Fin n) (Fin n) ℂ) :
     normalCost A = lambdaA A := rfl
 
-/-- Both factors must be normal, as in the PDF's definition of `κ_normal`. -/
+/-- The product-cost infimum for two unrestricted normal factors, as in the PDF's `κ_normal`.
+This differs from the square-normalized diagonal cost with the legacy name `normalCost`. -/
 noncomputable def twoNormalCost (A : Matrix ι ι ℂ) : ℝ :=
   sInf {t : ℝ | ∃ B C : Matrix ι ι ℂ,
     IsStarNormal B ∧ IsStarNormal C ∧ A = B * C - C * B ∧ t = ‖B‖ * ‖C‖}

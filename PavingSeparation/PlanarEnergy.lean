@@ -7,7 +7,9 @@ import Mathlib.Tactic
 # Inverse-square energy in a bounded planar square
 
 A clipped grid has exactly four to the scale many cells, including the boundary.
-Retaining the exact collision count gives the constant stated in the supplied PDF.
+Retaining the exact collision count gives an explicit lower bound for the energy.
+No optimality is claimed for its coefficient: for four points, this bound is `36 / 32`,
+whereas the diameter of the square already gives `12 / 8`.
 -/
 
 namespace PavingSeparation.PlanarEnergy
@@ -169,7 +171,7 @@ private theorem scale_collision_lower {ι : Type*} [Fintype ι] [DecidableEq ι]
   rw [collision_offdiag, color_card] at hc
   nlinarith
 
-/-- The sharp dyadic lower bound, with ordered distinct pairs and all boundary points. -/
+/-- An explicit dyadic lower bound, with ordered distinct pairs and all boundary points. -/
 theorem energy_lower_bound {ι : Type*} [Fintype ι] [DecidableEq ι]
     (k : ℕ) (hn : Fintype.card ι = 4 ^ k) (z : ι → ℂ)
     (hz : ∀ i, |(z i).re| ≤ 1 ∧ |(z i).im| ≤ 1) (hinj : Function.Injective z) :
