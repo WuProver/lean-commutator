@@ -8,6 +8,7 @@ paper/
 *.command
 *.txt
 verification/
+output/
 scripts/
 *.pdf
-
+/tmp/pdfs/

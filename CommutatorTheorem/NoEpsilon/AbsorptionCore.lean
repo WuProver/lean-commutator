@@ -1,4 +1,4 @@
-import CommutatorTheorem.NoEpsilon.FiniteAbsorption
+import CommutatorTheorem.NoEpsilon.SimultaneousAbsorption
 import CommutatorTheorem.NoEpsilon.BlockAssembly
 import CommutatorTheorem.NoEpsilon.CoreTheorem
 
@@ -68,7 +68,7 @@ theorem trace_eq_sum_blocks (A : Matrix (Ambient r d) (Ambient r d) ℂ) :
 /-- The explicit norm budget depends only on the initial norm and the number of
 outside blocks, and is independent of their individual dimensions. -/
 noncomputable def absorptionBudget (a : ℝ) (m : ℕ) : ℝ :=
-  let b := (stepBudget^[m]) a
+  let b := simultaneousBudget a m
   (b / a) ^ 2 *
     (4 * (m + 1) * identityCornerNormBudget b + 2 * (m + 1) ^ 2 * b)
 
@@ -114,15 +114,15 @@ theorem identity_corner_absorption (A : Matrix (Ambient r d) (Ambient r d) ℂ)
   have hPbridge : Pᴴ * A * Q = 1 := by
     rw [← submatrix_eq_coordinate_compression]
     exact hbridge
-  obtain ⟨S, T, hST, hTS, hbridge', hzero, _, htr, hnorm, hcondition⟩ :=
-    eliminate_finset d P Q V J hPP hQQ hPQ hVV hPV hVQ hOrth hJJ
-      Finset.univ A a ha.le hPbridge hA
+  obtain ⟨S, T, hST, hTS, hbridge', hzero, htr, hnorm, hcondition⟩ :=
+    eliminate_simultaneously d P Q V J hPP hQQ hPQ hVV hPV hVQ hOrth hJJ
+      A a ha.le hPbridge hA
   let M := T * A * S
-  let b := (stepBudget^[Fintype.card ι]) a
+  let b := simultaneousBudget a (Fintype.card ι)
   have hnormM : ‖M‖ ≤ b := by simpa using hnorm
   have hb : 0 ≤ b := (norm_nonneg M).trans hnormM
   have hzero' (i : ι) : BlockAssembly.block M (some i) (some i) = 0 := by
-    have hi := hzero i (Finset.mem_univ i)
+    have hi := hzero i
     rw [← submatrix_eq_coordinate_compression] at hi
     exact hi
   have htraceM : trace M = 0 := htr.trans hTrace

@@ -54,10 +54,12 @@ theorem lowMassPavingBlocksInput_of_basis (R : ℕ) (paving : lowMassPavingInput
   exact paving_basis_to_blocks_generic (R := R) (k := k) A b
     (319 / (2 : ℝ) ^ 26) hb
 
-/-- Full same-dimension induction, reduced only to the quantitative low-mass basis theorem. -/
-theorem uniformCommutatorBound_of_lowMassBlocksAt (R : ℕ) (hR : R = 2 ^ 26)
+/-- The final induction with its explicit, dimension-independent budget exposed. -/
+theorem boundedCommutator_of_lowMassBlocksAt (R : ℕ) (hR : R = 2 ^ 26)
     (paving : lowMassPavingBlocksInputAt R) :
-    UniformCommutatorBound := by
+    ∀ (n : ℕ) (A : Matrix (Fin n) (Fin n) ℂ), Matrix.trace A = 0 →
+      ∃ B C : Matrix (Fin n) (Fin n) ℂ,
+        A = B * C - C * B ∧ ‖B‖ * ‖C‖ ≤ globalNormBudget * ‖A‖ := by
   let K := globalNormBudget
   have hK : 0 ≤ K := globalNormBudget_pos.le
   have hBase : (2 : ℝ) ^ 42 ≤ K := by
@@ -68,7 +70,6 @@ theorem uniformCommutatorBound_of_lowMassBlocksAt (R : ℕ) (hR : R = 2 ^ 26)
   have hDirect : 65536 * H + 2 ^ 42 ≤ K := le_max_left _ _
   have hClose : 65536 * (319 / (2 : ℝ) ^ 26) * K + 2 ^ 42 ≤ K :=
     globalNormBudget_closes
-  refine ⟨K, globalNormBudget_pos, ?_⟩
   intro n
   induction n using Nat.strong_induction_on with
   | h n ih =>
@@ -170,6 +171,13 @@ theorem uniformCommutatorBound_of_lowMassBlocksAt (R : ℕ) (hR : R = 2 ^ 26)
           dsimp only [p]
           rw [hXnorm]
           nlinarith [mul_le_mul_of_nonneg_right hClose (norm_nonneg A)]
+
+/-- Full same-dimension induction, reduced only to the quantitative low-mass basis theorem. -/
+theorem uniformCommutatorBound_of_lowMassBlocksAt (R : ℕ) (hR : R = 2 ^ 26)
+    (paving : lowMassPavingBlocksInputAt R) :
+    UniformCommutatorBound :=
+  ⟨globalNormBudget, globalNormBudget_pos,
+    boundedCommutator_of_lowMassBlocksAt R hR paving⟩
 
 /-- The orthonormal paving interface supplies the block form used in the full induction. -/
 theorem uniformCommutatorBound_of_lowMassPaving (paving : lowMassPavingInput) :
