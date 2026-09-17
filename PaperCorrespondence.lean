@@ -1,5 +1,6 @@
 import CommutatorTheorem.NoEpsilon.Main
 import PavingSeparation.Theorem1
+import KadisonSinger.Main
 
 /-!
 # Declaration index for the revised 23-page paper (checked 2026-09-07)
@@ -22,6 +23,10 @@ It does not equate differently normalized statements or assert coverage of the p
 #check NoEpsilon.exists_sylvester_solution_scalar_centers
 #check NoEpsilon.Absorption.identity_corner_absorption
 #check NoEpsilon.MSSFinite.finite_mss
+#check NoEpsilon.MSSFinite.finite_mss_supported
+#check NoEpsilon.MSSFinite.finite_mss_positive_probability
+#check KadisonSinger.kadison_singer_state_extension
+#check KadisonSinger.kadison_singer
 #check NoEpsilon.MSSPadding.finite_mss_le
 #check NoEpsilon.highMass_compression_contains_disk
 #check NoEpsilon.exists_unit_neutral_large_image_of_numericalRange
@@ -114,6 +119,10 @@ It does not equate differently normalized statements or assert coverage of the p
 #print axioms NoEpsilon.uniformCommutatorBound
 #print axioms NoEpsilon.uniformCommutatorBound_euclideanOperatorNorm
 #print axioms NoEpsilon.MSSFinite.finite_mss
+#print axioms NoEpsilon.MSSFinite.finite_mss_supported
+#print axioms NoEpsilon.MSSFinite.finite_mss_positive_probability
+#print axioms KadisonSinger.kadison_singer_state_extension
+#print axioms KadisonSinger.kadison_singer
 #print axioms NoEpsilon.normalized_low_mass_paving
 #print axioms PavingSeparation.paving_commutator_separation
 #print axioms PavingSeparation.finFamily_lambdaA_lower_bound

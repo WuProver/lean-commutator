@@ -165,4 +165,65 @@ theorem finite_mss {κ : Type*} [Fintype κ]
     rw [hz, norm_zero]
     exact sq_nonneg _
 
+/-- Finite MSS selection in the positive support of each marginal distribution.
+Zero-weight vector values do not affect the covariance or expected energy. -/
+theorem finite_mss_supported {κ : Type*} [Fintype κ]
+    (v : κ → Ω → ι → ℂ) (p : κ → Ω → ℝ)
+    (hp : ∀ i ω, 0 ≤ p i ω) (hsum : ∀ i, ∑ ω, p i ω = 1)
+    (hTotal : (∑ i, ∑ ω, (p i ω : ℂ) •
+      Matrix.vecMulVec (v i ω) (star (v i ω))) = 1)
+    (ε : ℝ) (hε : 0 < ε)
+    (henergy : ∀ i, ∑ ω, p i ω * MSSSelection.energy (v i ω) ≤ ε) :
+    ∃ q : κ → Ω, (∀ i, 0 < p i (q i)) ∧
+      ‖∑ i, Matrix.vecMulVec (v i (q i)) (star (v i (q i)))‖ ≤
+        (1 + Real.sqrt ε)^2 := by
+  classical
+  have hex (i : κ) : ∃ ω, 0 < p i ω := by
+    by_contra h
+    have hz : ∀ ω, p i ω = 0 := fun ω ↦
+      le_antisymm (le_of_not_gt (fun hpos ↦ h ⟨ω, hpos⟩)) (hp i ω)
+    have hi := hsum i
+    simp [hz] at hi
+  choose s hs using hex
+  let repair : κ → Ω → Ω := fun i ω ↦ if 0 < p i ω then ω else s i
+  have hsupport (i : κ) (ω : Ω) : 0 < p i (repair i ω) := by
+    dsimp [repair]
+    split_ifs with h
+    · exact h
+    · exact hs i
+  let w : κ → Ω → ι → ℂ := fun i ω ↦ v i (repair i ω)
+  have hcov (i : κ) (ω : Ω) :
+      (p i ω : ℂ) • Matrix.vecMulVec (w i ω) (star (w i ω)) =
+        (p i ω : ℂ) • Matrix.vecMulVec (v i ω) (star (v i ω)) := by
+    by_cases h : 0 < p i ω
+    · simp [w, repair, h]
+    · have hz : p i ω = 0 := le_antisymm (le_of_not_gt h) (hp i ω)
+      simp [hz]
+  have henergy' (i : κ) : ∑ ω, p i ω * MSSSelection.energy (w i ω) ≤ ε := by
+    have heq (ω : Ω) : p i ω * MSSSelection.energy (w i ω) =
+        p i ω * MSSSelection.energy (v i ω) := by
+      by_cases h : 0 < p i ω
+      · simp [w, repair, h]
+      · have hz : p i ω = 0 := le_antisymm (le_of_not_gt h) (hp i ω)
+        simp [hz]
+    simpa only [heq] using henergy i
+  obtain ⟨q, hq⟩ := finite_mss w p hp hsum (by simpa only [hcov] using hTotal)
+    ε hε henergy'
+  exact ⟨fun i ↦ repair i (q i), fun i ↦ hsupport i (q i), hq⟩
+
+/-- The supported MSS outcome has strictly positive joint weight under the finite
+product distribution, exhibiting a positive-probability good outcome. -/
+theorem finite_mss_positive_probability {κ : Type*} [Fintype κ]
+    (v : κ → Ω → ι → ℂ) (p : κ → Ω → ℝ)
+    (hp : ∀ i ω, 0 ≤ p i ω) (hsum : ∀ i, ∑ ω, p i ω = 1)
+    (hTotal : (∑ i, ∑ ω, (p i ω : ℂ) •
+      Matrix.vecMulVec (v i ω) (star (v i ω))) = 1)
+    (ε : ℝ) (hε : 0 < ε)
+    (henergy : ∀ i, ∑ ω, p i ω * MSSSelection.energy (v i ω) ≤ ε) :
+    ∃ q : κ → Ω, 0 < ∏ i, p i (q i) ∧
+      ‖∑ i, Matrix.vecMulVec (v i (q i)) (star (v i (q i)))‖ ≤
+        (1 + Real.sqrt ε)^2 := by
+  obtain ⟨q, hsupport, hq⟩ := finite_mss_supported v p hp hsum hTotal ε hε henergy
+  exact ⟨q, Finset.prod_pos (fun i _ ↦ hsupport i), hq⟩
+
 end NoEpsilon.MSSFinite

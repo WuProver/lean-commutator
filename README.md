@@ -41,7 +41,7 @@ The following gives a one-to-one correspondence between the paper's theorems and
 | Lemma 3.1 | Identity-corner commutator representation. | [NoEpsilon.identityCorner_bounded_from_whole_norm](CommutatorTheorem/NoEpsilon/CoreTheorem.lean) |
 | Lemma 3.2 | Rectangular Sylvester equation with separated scalar centers. | [NoEpsilon.exists_sylvester_solution](CommutatorTheorem/NoEpsilon/Sylvester.lean) |
 | Proposition 3.3 | Finite-shear absorption of external diagonal blocks. | [NoEpsilon.Absorption.identity_corner_absorption](CommutatorTheorem/NoEpsilon/AbsorptionCore.lean) |
-| Theorem 4.1 | Finite-support MSS vector selection theorem. | [NoEpsilon.MSSFinite.finite_mss](CommutatorTheorem/NoEpsilon/MSSFinite.lean) |
+| Theorem 4.1 | MSS vector selection with positive marginal support and positive joint weight. | [NoEpsilon.MSSFinite.finite_mss_supported](CommutatorTheorem/NoEpsilon/MSSFinite.lean); `finite_mss_positive_probability` |
 | Lemma 4.3 | Numerical-range disk in low-codimension compressions. | [NoEpsilon.highMass_compression_contains_disk](CommutatorTheorem/NoEpsilon/HighMassCompression.lean) |
 | Lemma 4.4 | Unit vector with zero expectation and large image norm. | [NoEpsilon.exists_unit_neutral_large_image_of_numericalRange](CommutatorTheorem/NoEpsilon/HighMassGeometry.lean) |
 | Proposition 4.5 | High-trace-mass branch. | [NoEpsilon.highMass_bounded_commutator](CommutatorTheorem/NoEpsilon/HighMassTheorem.lean) |
@@ -51,6 +51,45 @@ The following gives a one-to-one correspondence between the paper's theorems and
 | Lemma 5.1 | Finite block assembly with a common norm budget. | [NoEpsilon.BlockAssembly.assemble_fixed_constants](CommutatorTheorem/NoEpsilon/BlockAssembly.lean) |
 | Lemma 5.3 | Recursive skew-matrix identities. | [PavingSeparation.skew_mul_self](PavingSeparation/Family.lean) |
 | Lemma 5.4 | Planar inverse-square energy lower bound. | [PavingSeparation.PlanarEnergy.energy_lower_bound](PavingSeparation/PlanarEnergy.lean) |
+
+## Formal statement alignment for the revised manuscript
+
+The numbering in the table above follows an earlier manuscript. For the revised
+MSS statement and Appendix A, use these precise public declarations:
+
+- `NoEpsilon.MSSFinite.finite_mss_supported` retains the hypotheses of `finite_mss`
+  and concludes that the selected outcome satisfies `∀ i, 0 < p i (q i)`, together
+  with the same Euclidean operator norm bound. Zero-weight vector values are replaced
+  by values from positive support before applying `finite_mss`; all weighted
+  covariances and expected energies are unchanged. The corollary
+  `finite_mss_positive_probability` gives `0 < ∏ i, p i (q i)`, the probability of
+  that outcome under the finite independent product law. The original `finite_mss`
+  remains available. In the paired selection used by Lemma 3.8, all four outcomes
+  already have weight `1 / 4` (`MSSPaired.lean`).
+- [`KadisonSinger.kadison_singer_state_extension`](KadisonSinger/Main.lean)
+  states `∃! ψ : State Operator, ∀ d : Diagonal,
+  ψ.val (diagonalRepresentation d) = φ.val d`, assuming only that `φ` is pure.
+  Uniqueness ranges over **all states**, with no purity condition on `ψ`.
+  The existing `kadison_singer` follows by proving that this unique extension is
+  pure; its uniqueness quantifier alone ranges over pure extensions. Display
+  `kadison_singer_state_extension` in Appendix A to match the introduction.
+
+For the appendix, prioritize these theorem signatures, the
+`Matrix.Norms.L2Operator` norm convention, the dependency descriptions, and the
+commands below. Generic definitions of `lp`, `Matrix.vecMulVec`, and
+`Matrix.diagonal` need not be reproduced. State positivity, normalization, purity,
+and the faithful diagonal representation are described in
+[`KadisonSinger/README.md`](KadisonSinger/README.md).
+
+```sh
+lake build
+lake env lean PaperCorrespondence.lean
+lake env lean KadisonSinger/Verification.lean
+```
+
+The two audit files print the supported MSS statements and the all-state
+Kadison–Singer statement, and check their transitive axiom dependencies.
+Expected axioms are only `propext`, `Classical.choice`, and `Quot.sound`.
 
 ## Johnson–Ozawa–Schechtman theorem
 
