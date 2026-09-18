@@ -1,7 +1,9 @@
-# [A Dimension-Independent Commutator Bound](https://arxiv.org/abs/2609.09938)
+# A Dimension-Independent Commutator Bound
 
 Lean 4 formalizations of two commutator theorems for traceless complex matrices.
 All norms below are Euclidean operator norms, and both factors have the same size as the input.
+
+Paper: [arXiv:2609.09938](https://arxiv.org/abs/2609.09938).
 
 ## Main theorem correspondence
 The following lists the Lean entry points corresponding to the paper's results. The main theorem statements agree with the manuscript. Some intermediate results use different formulations or quantitative bounds.
@@ -26,10 +28,9 @@ The following lists the Lean entry points corresponding to the paper's results. 
 | Lemma 4.1 | Recursive skew-matrix identities. | [PavingSeparation.skew_mul_self](PavingSeparation/Family.lean) |
 | Lemma 4.2 | Planar inverse-square energy lower bound. | [PavingSeparation.PlanarEnergy.energy_lower_bound](PavingSeparation/PlanarEnergy.lean) |
 
-## Formal statement alignment for the revised manuscript
+## Formal statement notes
 
-The numbering in the table above follows
-[A Dimension-Independent Commutator Bound](https://arxiv.org/abs/2609.09938).
+The numbering in the table above follows the paper linked above.
 The following public declarations clarify the MSS and Kadison–Singer formulations:
 
 - `NoEpsilon.MSSFinite.finite_mss_supported` retains the hypotheses of `finite_mss`
