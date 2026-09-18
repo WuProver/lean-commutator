@@ -17,28 +17,29 @@ The following gives a one-to-one correspondence between the paper's theorems and
 
 | Paper result | Content | Lean entry point |
 |---|---|---|
-| Theorem 1.1 | Dimension-independent commutator bound. | [NoEpsilon.uniformCommutatorBound](CommutatorTheorem/NoEpsilon/Main.lean) |
+| Theorem 1.2 | Dimension-independent commutator bound. | [NoEpsilon.uniformCommutatorBound](CommutatorTheorem/NoEpsilon/Main.lean) |
 | Theorem 1.4 | Exact paving and normal-factor cost, including the square-normalized λ lower bound. | [PavingSeparation.paving_commutator_separation](PavingSeparation/Theorem1.lean); [PavingSeparation.finFamily_lambdaA_lower_bound](PavingSeparation/Lambda.lean) |
 | Lemma 2.1 | Hermitian commutator decomposition with a unitary first factor. | [NoEpsilon.hermitianUnitaryCommutatorBound](CommutatorTheorem/NoEpsilon/CyclicCommutator.lean) |
 | Corollary 2.2 | Sum of two commutators with unitary first factors. | [NoEpsilon.adaptiveTwoCommutatorBound](CommutatorTheorem/NoEpsilon/CyclicCommutator.lean) |
-| Lemma 3.1 | Identity-corner commutator representation. | [NoEpsilon.identityCorner_bounded_from_whole_norm](CommutatorTheorem/NoEpsilon/CoreTheorem.lean) |
-| Lemma 3.2 | Rectangular Sylvester equation with separated scalar centers. | [NoEpsilon.exists_sylvester_solution](CommutatorTheorem/NoEpsilon/Sylvester.lean) |
-| Proposition 3.3 | Finite-shear absorption of external diagonal blocks. | [NoEpsilon.Absorption.identity_corner_absorption](CommutatorTheorem/NoEpsilon/AbsorptionCore.lean) |
-| Theorem 4.1 | MSS vector selection with positive marginal support and positive joint weight. | [NoEpsilon.MSSFinite.finite_mss_supported](CommutatorTheorem/NoEpsilon/MSSFinite.lean); `finite_mss_positive_probability` |
-| Lemma 4.3 | Numerical-range disk in low-codimension compressions. | [NoEpsilon.highMass_compression_contains_disk](CommutatorTheorem/NoEpsilon/HighMassCompression.lean) |
-| Lemma 4.4 | Unit vector with zero expectation and large image norm. | [NoEpsilon.exists_unit_neutral_large_image_of_numericalRange](CommutatorTheorem/NoEpsilon/HighMassGeometry.lean) |
-| Proposition 4.5 | High-trace-mass branch. | [NoEpsilon.highMass_bounded_commutator](CommutatorTheorem/NoEpsilon/HighMassTheorem.lean) |
-| Lemma 4.6 | Simultaneous diagonal control for three Hermitian matrices. | [NoEpsilon.ThreeHermitian.exists_diagonal_control](CommutatorTheorem/NoEpsilon/ThreeHermitianBasis.lean) |
-| Lemma 4.7 | Balanced transversals. | [NoEpsilon.LowMassPaving.exists_transversals](CommutatorTheorem/NoEpsilon/LowMassTransversals.lean) |
-| Proposition 4.8 | Equal-rank, trace-zero paving. | [NoEpsilon.normalized_low_mass_paving](CommutatorTheorem/NoEpsilon/LowMassTheorem.lean) |
-| Lemma 5.1 | Finite block assembly with a common norm budget. | [NoEpsilon.BlockAssembly.assemble_fixed_constants](CommutatorTheorem/NoEpsilon/BlockAssembly.lean) |
-| Lemma 5.3 | Recursive skew-matrix identities. | [PavingSeparation.skew_mul_self](PavingSeparation/Family.lean) |
-| Lemma 5.4 | Planar inverse-square energy lower bound. | [PavingSeparation.PlanarEnergy.energy_lower_bound](PavingSeparation/PlanarEnergy.lean) |
+| Lemma 2.3 | Identity-corner commutator representation. | [NoEpsilon.identityCorner_bounded_from_whole_norm](CommutatorTheorem/NoEpsilon/CoreTheorem.lean) |
+| Lemma 2.4 | Rectangular Sylvester equation with separated scalar centers. | [NoEpsilon.exists_sylvester_solution](CommutatorTheorem/NoEpsilon/Sylvester.lean) |
+| Proposition 2.6 | Finite-shear absorption of external diagonal blocks. | [NoEpsilon.Absorption.identity_corner_absorption](CommutatorTheorem/NoEpsilon/AbsorptionCore.lean) |
+| Theorem 3.1 | MSS vector selection with positive marginal support and positive joint weight. | [NoEpsilon.MSSFinite.finite_mss_supported](CommutatorTheorem/NoEpsilon/MSSFinite.lean); `finite_mss_positive_probability` |
+| Lemma 3.4 | Numerical-range disk in low-codimension compressions. | [NoEpsilon.highMass_compression_contains_disk](CommutatorTheorem/NoEpsilon/HighMassCompression.lean) |
+| Lemma 3.5 | Unit vector with zero expectation and large image norm. | [NoEpsilon.exists_unit_neutral_large_image_of_numericalRange](CommutatorTheorem/NoEpsilon/HighMassGeometry.lean) |
+| Proposition 3.6 | High-trace-mass branch. | [NoEpsilon.highMass_bounded_commutator](CommutatorTheorem/NoEpsilon/HighMassTheorem.lean) |
+| Lemma 3.7 | Simultaneous diagonal control for three Hermitian matrices. | [NoEpsilon.ThreeHermitian.exists_diagonal_control](CommutatorTheorem/NoEpsilon/ThreeHermitianBasis.lean) |
+| Lemma 3.8 | Balanced transversals. | [NoEpsilon.LowMassPaving.exists_transversals](CommutatorTheorem/NoEpsilon/LowMassTransversals.lean) |
+| Proposition 3.9 | Equal-rank, trace-zero paving. | [NoEpsilon.normalized_low_mass_paving](CommutatorTheorem/NoEpsilon/LowMassTheorem.lean) |
+| Lemma 3.11 | Finite block assembly with a common norm budget. | [NoEpsilon.BlockAssembly.assemble_fixed_constants](CommutatorTheorem/NoEpsilon/BlockAssembly.lean) |
+| Lemma 4.1 | Recursive skew-matrix identities. | [PavingSeparation.skew_mul_self](PavingSeparation/Family.lean) |
+| Lemma 4.2 | Planar inverse-square energy lower bound. | [PavingSeparation.PlanarEnergy.energy_lower_bound](PavingSeparation/PlanarEnergy.lean) |
 
 ## Formal statement alignment for the revised manuscript
 
-The numbering in the table above follows an earlier manuscript. For the revised
-MSS statement and Appendix A, use these precise public declarations:
+The numbering in the table above follows
+`A_dimension_independent_commutator_boundvia_trace_mass_splitting (14).pdf`.
+For the MSS statement and Appendix A, use these precise public declarations:
 
 - `NoEpsilon.MSSFinite.finite_mss_supported` retains the hypotheses of `finite_mss`
   and concludes that the selected outcome satisfies `∀ i, 0 < p i (q i)`, together
