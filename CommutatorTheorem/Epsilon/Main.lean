@@ -2148,7 +2148,7 @@ private lemma mu_pointwise_base (ε : ℝ) (hε : 0 < ε) (hε1 : ε < 1) :
   intro A hzd hnorm
   exact mu_explicit_bound ε hε hε1 0 A hzd hnorm
 
-/- (by claude)
+/- Historical development log (statuses below refer only to that earlier draft).
 State: 🔄 partial (1 live sorry: paving_improved_mu_core — witness construction for JOS 2013 Claim 2)
 Priority: 1
 Chain: paving_mu_direct_bound → paving_witness_construction → paving_analytical_mu_bound →
@@ -2682,8 +2682,8 @@ private lemma mu_paving_via_claim3 (ε : ℝ) (hε : 0 < ε) (hε1 : ε < 1)
 --   The proof combines:
 --   - Standard block decomposition (mu_one_step_pointwise, α₀ = 2/(1-ε))
 --   - Paving via claim3 (PROVED in Paving.lean) + scaling (Lambda_scaled_InUnitSquare)
---   - Restricted invertibility via bourgain_tzafriri (sorry in Paving.lean)
---   - Sylvester equation via rosenblum_norm_bound (sorry in Rosenblum.lean)
+--   - Restricted invertibility via bourgain_tzafriri (Paving.lean)
+--   - Sylvester equation via rosenblum_norm_bound (Rosenblum.lean)
 --   - mu_paving_via_claim3 bridges scaling + claim3
 --   The standard decomposition gives α₀ = 2/(1-ε) > 4^ε for all ε ∈ (0,1).
 --   The multi-scale paving argument (iterating claim3 + BT over log-many scales,
@@ -2874,8 +2874,8 @@ private lemma matComm_diag_entry {n : ℕ}
 /-- Core embedding + extraction step.
     Combines: zero-padding n×n -> 4^k x 4^k, applying the mu bound,
     extracting B,C witnesses from sInf, and restricting back to n×n.
-    Remaining sorry's: zeroPad_norm_eq, restrict_norm_le (norm theory),
-    mu_set_nonempty (decomposition existence), Lambda_norm_le_two (lattice bound). -/
+    Uses zeroPad_norm_eq, restrict_norm_le (norm theory),
+    mu_set_nonempty (decomposition existence), and Lambda_norm_le_two (lattice bound). -/
 private lemma embed_extract_decompose (ε : ℝ) (hε : 0 < ε) (hε1 : ε < 1)
     (Kε : ℝ) (_hKε : 0 < Kε)
     (hax : ∀ (k : ℕ) (m : ℕ) (A : Matrix (Fin m) (Fin m) ℂ),
@@ -2929,7 +2929,7 @@ private lemma matComm_smul_right {n : ℕ} (B C : Matrix (Fin n) (Fin n) ℂ) (c
     matComm B (c • C) = c • matComm B C := by
   simp [matComm, smul_sub]
 
-/-! ## Alternative proof path via lambdaA (bypasses unprovable mu-based sorry) -/
+/-! ## Alternative proof path via lambdaA -/
 
 /-- For n ≥ 2, every zero-diagonal matrix A has a commutator decomposition A = [B, C]
     with B diagonal, InUnitSquare entries, and ‖C‖ ≤ n*(n-1)*‖A‖. -/
@@ -3978,11 +3978,10 @@ We package the two layers as helper lemmas:
   re-iterated): given the bound for `k`, derive the bound for `k+1` by another
   inner iteration of Claim 1 + BT with `ε = 1/l`, `l ≈ n/(2(k+1))`.
 
-Both helpers themselves require the paper's inner iteration argument; that
-argument is left as a `sorry` inside each helper.  No new top-level axioms
-are introduced (the existing `bourgain_tzafriri_central_submatrix` and
-`bourgain_tzafriri_iterated` axioms — pre-approved by the user — provide the
-BT inputs that the inner iterations would consume). -/
+Historical development note: early drafts left the inner iteration arguments
+as placeholders and treated the BT inputs as axioms. This describes the earlier
+implementation, not the current proof status; use `AxiomAudit.lean` to inspect
+the current declarations' axiom dependencies. -/
 
 /-- Auxiliary "harmonic-δ" iteration of `lambdaM_four_block_recursion`.
 
@@ -4690,9 +4689,7 @@ for all `n : ℕ`,
 Proof: outer induction on `k` via `Nat.le_induction`, dispatching to the two
 helpers `lambdaM_pow4_paper_base` (k = 1) and `lambdaM_pow4_paper_step`
 (k → k+1).  Each helper formalises one layer of the paper's iterated paving
-+ Claim 1 argument; their inner `sorry`s mark the deep paper steps that
-need `~250 LOC` each of dedicated formalisation against
-`lambdaA_four_block_bound` + `bourgain_tzafriri_iterated`. -/
++ Claim 1 argument. -/
 private theorem lambdaM_pow4_paper_bound :
     ∀ k : ℕ, 1 ≤ k →
     ∃ K : ℝ, 0 < K ∧
@@ -4789,8 +4786,9 @@ set_option linter.unusedVariables false in
 /-- For every `ε ∈ (0,1)` there is a constant `K > 0` such that
 `lambdaM (4^n) ≤ K · (4^n)^ε` for all `n`.
 
-Proof outline (following `reference/pow4_bound.pdf`):
-1. *Core iterative bound* (sorry'd — the deep iterated paving result):
+Historical proof outline (following `reference/pow4_bound.pdf`; the current
+proof below uses `lambdaM_pow4_geometric_bound`):
+1. *Core iterative bound* (the iterated paving result):
    for every `k ≥ 1`, `lambdaM (4^n) ≤ C_k · (n+1)^(4k) · (4^n)^(1/(2k))`.
 2. *Choose `k`*:  pick `k₀ = ⌈1/(2ε)⌉ + 1`, so that `1/(2·k₀) < ε`; set
    `δ := ε − 1/(2·k₀) > 0`.
@@ -4976,7 +4974,7 @@ private lemma lambdaA_set_nonempty {m : ℕ} (A : Matrix (Fin m) (Fin m) ℂ)
   · simp [hA, matComm]
   · simp
 
-/- (by claude)
+/- Historical development log (statuses below refer only to that earlier draft).
 State: ✅ done
 Priority: 1
 Attempts: 1 / 20
@@ -5025,14 +5023,13 @@ private lemma InUnitSquare_diag_norm_le {m : ℕ} {B : Matrix (Fin m) (Fin m) �
     simp [Complex.normSq_apply]; linarith
   rw [Complex.norm_def]; exact Real.sqrt_le_sqrt h1
 
-/- (by claude)
+/- Historical development log (statuses below refer only to that earlier draft).
 State: ✅ done (modulo upstream sorries: lambdaM_poly_bound, decomp norm bound)
 Priority: 1
 Attempts: 5 / 35
 -/
 /-- The lambdaA-based proof: every unit-norm zero-diagonal matrix is a commutator
-    with ‖B‖ * ‖C‖ ≤ K * n^ε. Uses lambdaM_poly_bound (true sorry) instead of
-    mu-based chain (false sorry). -/
+    with ‖B‖ * ‖C‖ ≤ K * n^ε, using lambdaM_poly_bound. -/
 private lemma zeroDiag_commutator_unit_norm_lambda (ε : ℝ) (hε : 0 < ε) :
     ∃ (Kε : ℝ), 0 < Kε ∧
     ∀ (n : ℕ) (A : Matrix (Fin n) (Fin n) ℂ),

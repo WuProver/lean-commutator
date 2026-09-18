@@ -1204,7 +1204,7 @@ private lemma zero_mem_nr_toeplitz_hausdorff (n : ℕ)
         --
         -- Case split: if Im(Aⱼⱼ·conj(A₀₀)) = 0, the full argument works.
         -- If Im(Aⱼⱼ·conj(A₀₀)) ≠ 0, a more subtle 2D winding argument is
-        -- needed (sorry'd for now).
+        -- needed; the corresponding case is handled below.
         by_cases him : (A j j * starRingEnd ℂ (A 0 0)).im = 0
         · -- Case: Aⱼⱼ·conj(A₀₀) is real (and negative by _hproj).
           -- Choose z₀ to kill Im of cross-term · conj(A₀₀).

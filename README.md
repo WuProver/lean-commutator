@@ -5,7 +5,7 @@ All norms below are Euclidean operator norms, and both factors have the same siz
 
 ## Explicit refinement: K = 2^3200
 
-The referee's simultaneous elimination replaces the iterated outside-block shears.
+The simultaneous elimination in Proposition 2.6 replaces the iterated outside-block shears.
 The strengthened theorem is
 [`NoEpsilon.commutator_bound_two_pow_3200`](CommutatorTheorem/NoEpsilon/ExplicitBound.lean):
 for every traceless complex matrix, same-size factors satisfy
@@ -60,8 +60,8 @@ For the MSS statement and Appendix A, use these precise public declarations:
 
 For the appendix, prioritize these theorem signatures, the
 `Matrix.Norms.L2Operator` norm convention, the dependency descriptions, and the
-commands below. Generic definitions of `lp`, `Matrix.vecMulVec`, and
-`Matrix.diagonal` need not be reproduced. State positivity, normalization, purity,
+commands below. The appendix retains the definitions of `lp`, `Matrix.vecMulVec`,
+and `Matrix.diagonal`. State positivity, normalization, purity,
 and the faithful diagonal representation are described in
 [`KadisonSinger/README.md`](KadisonSinger/README.md).
 

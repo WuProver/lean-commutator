@@ -87,7 +87,8 @@ theorem simultaneousBudget_fixed_ge_one :
 
 set_option maxHeartbeats 2000000 in
 -- Retain the original elaboration budget locally for this declaration.
-/-- The high-trace-mass branch has the bound stated in the referee's estimate. -/
+/-- The high-trace-mass branch has an explicit bound from the simultaneous elimination
+in Proposition 2.6. -/
 theorem highMassNormBudget_fixed_le :
     highMassNormBudget (2 / (2 : ℝ) ^ 26) ≤ (2 : ℝ) ^ 3153 := by
   have heq : highMassNormBudget (2 / (2 : ℝ) ^ 26) =

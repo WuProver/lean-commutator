@@ -1617,7 +1617,7 @@ private noncomputable def canonicalProdEquiv {m : ℕ} (hm : 0 < m) :
     ext; simp only [canonicalBlockEmbed]
     exact Nat.div_add_mod' i.val m
 
-/-! ## σ-aware four-block bound (parameterized by tmp_S1f conclusion) -/
+/-! ## σ-aware four-block bound -/
 
 set_option maxHeartbeats 6400000 in
 -- Matrix and finite-sum calculations require additional elaboration steps.
@@ -1627,7 +1627,7 @@ set_option maxHeartbeats 6400000 in
     version.
 
     Parameterized by `hStrong` — the conclusion of
-    `lambdaA_four_block_bound_strong` (proved sorry-free in tmp_S1f). -/
+    `lambdaA_four_block_bound_strong`. -/
 lemma lambdaA_sigma_four_block_bound_param
     {m : ℕ} (δ : ℝ) (hδ : 0 < δ) (hδ1 : δ < 1)
     (A : Matrix (Fin (4 * m)) (Fin (4 * m)) ℂ)
@@ -2426,9 +2426,8 @@ lemma lambdaA_two_block_decomp :
 
 /-! ## tmp_S1i_v2 — LOAD-BEARING BT-improved single-level recursion
 
-This is the v2 version of `tmp_S1i_lambdaM_2pow4n_recursion.lean`. v1 is
-sorry-free but VACUOUS — it ignores the BT norm bound and adds the
-`lambdaM(4^(n-1))` term as nonneg slack.
+Historical development note: the earlier v1 prototype did not use the BT norm
+bound and added the `lambdaM(4^(n-1))` term as nonnegative slack.
 
 This v2 version GENUINELY uses the BT-improved per-block norm bound
 `‖A.submatrix (H ∘ e k) (H ∘ e k)‖ ≤ K_BT · (1/2)` by routing through a

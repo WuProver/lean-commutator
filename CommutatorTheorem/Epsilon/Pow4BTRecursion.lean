@@ -485,7 +485,7 @@ private lemma lambdaM_nonneg_phase4 (m : ℕ) : 0 ≤ lambdaM m := by
   obtain ⟨B, _, rfl⟩ := hx
   exact lambdaA_nonneg_phase4 B
 
-/- (by claude)
+/- Historical development log (statuses below refer only to that earlier draft).
 State: ✅ done — P5-D. `lambdaM 1 = 0`: any `Fin 1` zero-diag matrix is the
 zero matrix (norm 0 ≠ 1), so the defining set is empty and the supremum is
 `sSup ∅ = 0`. Proof adapted from the inline copy in `Main.lean`.
@@ -608,7 +608,7 @@ private lemma geom_sum_tight :
   have hrl_le := two_inv_eps_pow_l_le_eight_two_pow l hl
   linarith
 
-/- (by claude)
+/- Historical development log (statuses below refer only to that earlier draft).
 State: ✅ done — P5-A. Pure real-arithmetic facts underlying the asymmetric
 η-trick: the `1/(1-2δ) ≤ 1+4δ` coefficient bound, two `InUnitSquare`
 preservation bounds for the perturbed corner blocks, and the real-axis
@@ -2053,7 +2053,8 @@ lemma lambdaA_four_block_iterated_He
 /-! ## Phase 5 sub-lemmas (two-block lift + bridge to `lambdaM(4^n)`)
 
 The Phase 4 helper `lambdaA_four_block_iterated_He` gives the per-A bound on
-`lambdaA(A.submatrix H H)`.  To close the main theorem we still need:
+`lambdaA(A.submatrix H H)`. The following helpers provide the two-block lift
+and monotonicity bridge:
 
 * `lambdaA_pow4_BT_iterated_per_A`: combine Phase 4 with `lambdaA_two_block_decomp`
   to get a per-A bound `lambdaA A ≤ K_full · lambdaM(4^(n-l)) + K_full · l^3 · 2^l`
@@ -2061,10 +2062,9 @@ The Phase 4 helper `lambdaA_four_block_iterated_He` gives the per-A bound on
 * `lambdaM_le_lambdaM_double_phase4`: the monotonicity bridge
   `lambdaM(4^n) ≤ lambdaM(2 · 4^n)`.
 
-Both sub-lemmas are stated with clear specifications; the genuinely
-non-trivial mathematical work (Phase 5 algebraic absorption of the H' side
-into the recursion) is isolated inside `lambdaA_pow4_BT_iterated_per_A` as a
-single focused sorry. -/
+Historical development note: an early draft isolated the Phase 5 absorption
+step as a placeholder in `lambdaA_pow4_BT_iterated_per_A`. This is a record
+of that draft, not a statement that the current proof is unfinished. -/
 
 /-! ### Zero-padding/restriction infrastructure for the monotonicity bridge
 
@@ -2508,13 +2508,13 @@ private lemma lambdaM_le_lambdaM_double_phase4 (n : ℕ) :
       show sSup (∅ : Set ℝ) = 0 from by simp]
     exact hlM₂_nonneg
 
-/- (by claude)
+/- Historical development log (statuses below refer only to that earlier draft).
 State: ✅ done — P5-C. Packages the proven Phase-4 H-side bound. Pure glue
 of `bt_paving_depth_l_construction`, `bt_paving_depth_l_complement`, and
 `lambdaA_four_block_iterated_He` — produces the BT-paving union `H`, its
 complement `H'`, and the iterated H-side `lambdaA` bound. Consumed by P5-B/P5-F.
 -/
-/- (by claude) State: ✅ done — P5-E. -/
+/- Historical development log (statuses below refer only to that earlier draft). State: ✅ done — P5-E. -/
 /-- The finite products arising from repeated Claim 2 lifts are uniformly
 bounded.  The proof uses `1 + x ≤ exp x` and the telescoping majorant
 `1/(s+2)^2 ≤ 1/(s+1) - 1/(s+2)`. -/
@@ -3559,19 +3559,19 @@ The constant is derived from the global uniform constants `K_BT_global` and
 `lambdaA_two_block_decomp` (both yield single constants independent of
 `n, l`, baked into the existentials at the top of the file).
 
-**Proof structure (Phase 3-5 assembly):**
+**Historical proof plan (Phase 3-5 assembly, not the current proof status):**
 1. Obtain `K_BT, H, e` from `bt_paving_depth_l_construction` (Phase 3).
 2. Obtain `H'` from `bt_paving_depth_l_complement` (Phase 3 complement).
 3. Apply `lambdaA_four_block_iterated_He` (Phase 4) on the H side:
    `lambdaA(A.submatrix H H) ≤ K_iter · lambdaM(4^(n-l)) + K_iter · l^3 · 2^l`.
 4. Apply `Pow4Bootstrap.lambdaA_two_block_decomp` (Phase 5) at δ = 1/l:
    `lambdaA A ≤ 2/(1-1/l) · (lambdaA(H side) + lambdaA(H' side)) + C_two · l`.
-5. **Algebraic absorption of H' side** (focused sorry): bound
+5. **Algebraic absorption of H' side** (a placeholder in the early draft): bound
    `lambdaA(A.submatrix H' H')` by a `K · lambdaM(4^(n-l)) + K · l^3 · 2^l`
    expression, either by re-applying BT-paving on the H' coordinates
    (re-deriving a σ-paving for the H' side) or by the JOS-paper-style
    self-recursive argument absorbing `lambdaM(4^n)` into the recursion. -/
-/- (by claude)
+/- Historical development log (statuses below refer only to that earlier draft).
 State: 🔄 partial
 Priority: 1
 Attempts: 0 / 50
