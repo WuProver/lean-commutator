@@ -1,16 +1,7 @@
-# A dimension-independent commutator bound via trace-mass splitting
+# [A Dimension-Independent Commutator Bound](https://arxiv.org/abs/2609.09938)
 
 Lean 4 formalizations of two commutator theorems for traceless complex matrices.
 All norms below are Euclidean operator norms, and both factors have the same size as the input.
-
-## Explicit refinement: K = 2^3200
-
-The simultaneous elimination in Proposition 2.6 replaces the iterated outside-block shears.
-The strengthened theorem is
-[`NoEpsilon.commutator_bound_two_pow_3200`](CommutatorTheorem/NoEpsilon/ExplicitBound.lean):
-for every traceless complex matrix, same-size factors satisfy
-`A = B * C - C * B` and `‖B‖ * ‖C‖ ≤ (2 : ℝ)^3200 * ‖A‖`.
-The accompanying `_euclideanOperatorNorm` theorem spells out `Matrix.toEuclideanCLM`.
 
 ## Main theorem correspondence
 The following lists the Lean entry points corresponding to the paper's results. The main theorem statements agree with the manuscript. Some intermediate results use different formulations or quantitative bounds.
@@ -38,7 +29,7 @@ The following lists the Lean entry points corresponding to the paper's results. 
 ## Formal statement alignment for the revised manuscript
 
 The numbering in the table above follows
-`A_dimension_independent_commutator_boundvia_trace_mass_splitting (14).pdf`.
+[A Dimension-Independent Commutator Bound](https://arxiv.org/abs/2609.09938).
 The following public declarations clarify the MSS and Kadison–Singer formulations:
 
 - `NoEpsilon.MSSFinite.finite_mss_supported` retains the hypotheses of `finite_mss`
