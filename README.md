@@ -17,7 +17,7 @@ The following lists the Lean entry points corresponding to the paper's results. 
 | Lemma 2.3 | Identity-corner commutator representation. | [NoEpsilon.identityCorner_bounded_from_whole_norm](CommutatorTheorem/NoEpsilon/CoreTheorem.lean) |
 | Lemma 2.4 | Rectangular Sylvester equation with separated scalar centers. | [NoEpsilon.exists_sylvester_solution](CommutatorTheorem/NoEpsilon/Sylvester.lean) |
 | Proposition 2.6 | Finite-shear absorption of external diagonal blocks. | [NoEpsilon.Absorption.identity_corner_absorption](CommutatorTheorem/NoEpsilon/AbsorptionCore.lean) |
-| Theorem 3.1 | MSS vector selection with positive marginal support and positive joint weight. | [NoEpsilon.MSSFinite.finite_mss_supported](CommutatorTheorem/NoEpsilon/MSSFinite.lean); `finite_mss_positive_probability` |
+| Theorem 3.1 | MSS vector selection with positive marginal support and positive joint weight. | [NoEpsilon.MSSFinite.finite_mss_supported](CommutatorTheorem/NoEpsilon/MSSFinite.lean); [finite_mss_positive_probability](CommutatorTheorem/NoEpsilon/MSSFinite.lean) |
 | Lemma 3.4 | Numerical-range disk in low-codimension compressions. | [NoEpsilon.highMass_compression_contains_disk](CommutatorTheorem/NoEpsilon/HighMassCompression.lean) |
 | Lemma 3.5 | Unit vector with zero expectation and large image norm. | [NoEpsilon.exists_unit_neutral_large_image_of_numericalRange](CommutatorTheorem/NoEpsilon/HighMassGeometry.lean) |
 | Proposition 3.6 | High-trace-mass branch. | [NoEpsilon.highMass_bounded_commutator](CommutatorTheorem/NoEpsilon/HighMassTheorem.lean) |
@@ -33,12 +33,12 @@ The following lists the Lean entry points corresponding to the paper's results. 
 The numbering in the table above follows the paper linked above.
 The following public declarations clarify the MSS and Kadison–Singer formulations:
 
-- `NoEpsilon.MSSFinite.finite_mss_supported` retains the hypotheses of `finite_mss`
+- [NoEpsilon.MSSFinite.finite_mss_supported](CommutatorTheorem/NoEpsilon/MSSFinite.lean) retains the hypotheses of `finite_mss`
   and concludes that the selected outcome satisfies `∀ i, 0 < p i (q i)`, together
   with the same Euclidean operator norm bound. Zero-weight vector values are replaced
   by values from positive support before applying `finite_mss`; all weighted
   covariances and expected energies are unchanged. The corollary
-  `finite_mss_positive_probability` gives `0 < ∏ i, p i (q i)`, the probability of
+  [finite_mss_positive_probability](CommutatorTheorem/NoEpsilon/MSSFinite.lean) gives `0 < ∏ i, p i (q i)`, the probability of
   that outcome under the finite independent product law. The original `finite_mss`
   remains available. In the paired selection used by Lemma 3.8, all four outcomes
   already have weight `1 / 4` (`MSSPaired.lean`).
