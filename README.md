@@ -13,7 +13,7 @@ for every traceless complex matrix, same-size factors satisfy
 The accompanying `_euclideanOperatorNorm` theorem spells out `Matrix.toEuclideanCLM`.
 
 ## Main theorem correspondence
-The following gives a one-to-one correspondence between the paper's theorems and the Lean code. The statements labeled **Theorem** are aligned with the paper. The **Lemma** and **Proposition** statements are not yet fully aligned because of some technical gaps, but they are broadly aligned overall.
+The following lists the Lean entry points corresponding to the paper's results. The main theorem statements agree with the manuscript. Some intermediate results use different formulations or quantitative bounds.
 
 | Paper result | Content | Lean entry point |
 |---|---|---|
@@ -39,7 +39,7 @@ The following gives a one-to-one correspondence between the paper's theorems and
 
 The numbering in the table above follows
 `A_dimension_independent_commutator_boundvia_trace_mass_splitting (14).pdf`.
-For the MSS statement and Appendix A, use these precise public declarations:
+The following public declarations clarify the MSS and Kadison–Singer formulations:
 
 - `NoEpsilon.MSSFinite.finite_mss_supported` retains the hypotheses of `finite_mss`
   and concludes that the selected outcome satisfies `∀ i, 0 < p i (q i)`, together
@@ -55,12 +55,11 @@ For the MSS statement and Appendix A, use these precise public declarations:
   ψ.val (diagonalRepresentation d) = φ.val d`, assuming only that `φ` is pure.
   Uniqueness ranges over **all states**, with no purity condition on `ψ`.
   The existing `kadison_singer` follows by proving that this unique extension is
-  pure; its uniqueness quantifier alone ranges over pure extensions. Display
-  `kadison_singer_state_extension` in Appendix A to match the introduction.
+  pure; its uniqueness quantifier alone ranges over pure extensions. Appendix A
+  correctly displays `kadison_singer` and explains the stronger all-state extension result.
 
-For the appendix, prioritize these theorem signatures, the
-`Matrix.Norms.L2Operator` norm convention, the dependency descriptions, and the
-commands below. The appendix retains the definitions of `lp`, `Matrix.vecMulVec`,
+The commands below check the declarations and their axiom dependencies.
+Appendix A uses the `Matrix.Norms.L2Operator` norm convention and retains the definitions of `lp`, `Matrix.vecMulVec`,
 and `Matrix.diagonal`. State positivity, normalization, purity,
 and the faithful diagonal representation are described in
 [`KadisonSinger/README.md`](KadisonSinger/README.md).
